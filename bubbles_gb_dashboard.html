@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bubbles GB - Tactical Interest & Hobby Leaderboard</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonts: Rajdhani for tactical HUD headings & Inter for body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        operator: {
+                            bg: '#0a0d12',
+                            panel: '#11161d',
+                            card: '#161d26',
+                            border: '#232f3e',
+                            green: '#00ff88',
+                            cyan: '#00f0ff',
+                            amber: '#ffb700',
+                            crimson: '#ff3366',
+                        }
+                    },
+                    fontFamily: {
+                        hud: ['Rajdhani', 'sans-serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0a0d12;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.05) 0%, transparent 70%),
+                linear-gradient(rgba(22, 29, 38, 0.4) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(22, 29, 38, 0.4) 1px, transparent 1px);
+            background-size: 100% 100%, 32px 32px, 32px 32px;
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .hud-font {
+            font-family: 'Rajdhani', sans-serif;
+            letter-spacing: 0.05em;
+        }
+
+        .hud-glow-green {
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.25);
+            text-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
+        }
+
+        .hud-glow-cyan {
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.25);
+            text-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
+        }
+
+        .hud-glow-amber {
+            box-shadow: 0 0 15px rgba(255, 183, 0, 0.3);
+            text-shadow: 0 0 8px rgba(255, 183, 0, 0.6);
+        }
+
+        .glass-panel {
+            background: rgba(17, 22, 29, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 240, 255, 0.15);
+        }
+
+        .operator-active {
+            border-color: rgba(255, 183, 0, 0.6) !important;
+            box-shadow: 0 0 20px rgba(255, 183, 0, 0.15);
+        }
+
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0d12;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #232f3e;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00f0ff;
+        }
+
+        /* Drag handle feedback */
+        .dragging {
+            opacity: 0.4;
+            transform: scale(0.98);
+            border: 2px dashed #ffb700 !important;
+        }
+
+        .drag-over {
+            border-top: 3px solid #00f0ff !important;
+        }
+
+        /* Scanline effect */
+        .scanlines {
+            position: relative;
+            overflow: hidden;
+        }
+        .scanlines::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 4px;
+            z-index: 2;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-cyan-500 selection:text-black">
+
+    <div id="app" class="scanlines min-h-screen flex flex-col">
+        <!-- Top HUD Header -->
+        <header class="border-b border-operator-border glass-panel sticky top-0 z-30 px-4 py-3 sm:px-6">
+            <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-4">
+                
+                <!-- Logo & Title -->
+                <div class="flex items-center gap-3 w-full lg:w-auto justify-between lg:justify-start">
+                    <div class="flex items-center gap-3">
+                        <div class="relative flex items-center justify-center w-10 h-10 rounded-lg bg-black border border-operator-cyan/50 text-operator-cyan hud-glow-cyan">
+                            <i data-lucide="target" class="w-6 h-6 animate-pulse"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h1 class="hud-font text-2xl font-bold tracking-wider text-white">BUBBLES GB</h1>
+                                <span id="statusBadge" class="text-xs px-2 py-0.5 rounded font-mono uppercase bg-operator-green/10 text-operator-green border border-operator-green/30">
+                                    LIVE MONITORING
+                                </span>
+                            </div>
+                            <p class="text-xs text-slate-400 font-mono">TACTICAL INTEREST & HOBBY RANKING SYSTEM</p>
+                        </div>
+                    </div>
+
+                    <!-- Mobile Operator Mode Quick Indicator -->
+                    <div class="lg:hidden">
+                        <button id="mobileOperatorToggle" onclick="toggleOperatorMode()" class="px-3 py-1.5 rounded text-xs font-mono font-bold flex items-center gap-1.5 bg-operator-card border border-operator-border text-slate-300">
+                            <i data-lucide="sliders" class="w-4 h-4"></i>
+                            <span id="mobileOpBtnText">OPERATOR</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Live Metrics Display -->
+                <div class="flex items-center justify-around w-full lg:w-auto gap-4 py-1 px-3 rounded-lg bg-black/40 border border-operator-border font-mono text-xs">
+                    <div class="text-center sm:text-left">
+                        <div class="text-slate-500 text-[10px] uppercase">TRACKED ITEMS</div>
+                        <div id="metricTotalCount" class="text-operator-cyan font-bold text-sm">0</div>
+                    </div>
+                    <div class="h-6 w-px bg-operator-border"></div>
+                    <div class="text-center sm:text-left">
+                        <div class="text-slate-500 text-[10px] uppercase">LAST MISSION LOG</div>
+                        <div id="metricLastSaved" class="text-slate-200 font-semibold">NEVER</div>
+                    </div>
+                    <div class="h-6 w-px bg-operator-border"></div>
+                    <div class="text-center sm:text-left">
+                        <div class="text-slate-500 text-[10px] uppercase">ELAPSED TIME</div>
+                        <div id="metricElapsedTime" class="text-operator-green font-semibold">--:--:--</div>
+                    </div>
+                </div>
+
+                <!-- Desktop Tactical Actions -->
+                <div class="hidden lg:flex items-center gap-2">
+                    <button id="operatorToggleBtn" onclick="toggleOperatorMode()" class="px-3 py-2 rounded-lg font-mono text-xs font-bold flex items-center gap-2 bg-operator-card border border-operator-border hover:border-operator-amber text-slate-200 transition-all">
+                        <i data-lucide="shield-alert" class="w-4 h-4 text-operator-amber"></i>
+                        <span>OPERATOR MODE</span>
+                    </button>
+
+                    <button onclick="openSaveMissionModal()" class="px-3 py-2 rounded-lg font-mono text-xs font-bold flex items-center gap-2 bg-operator-green/20 border border-operator-green text-operator-green hover:bg-operator-green hover:text-black transition-all hud-glow-green">
+                        <i data-lucide="save" class="w-4 h-4"></i>
+                        <span>SAVE MISSION</span>
+                    </button>
+
+                    <button onclick="openVaultModal()" class="px-3 py-2 rounded-lg font-mono text-xs font-bold flex items-center gap-2 bg-operator-card border border-operator-border hover:border-operator-cyan text-slate-200 transition-all">
+                        <i data-lucide="history" class="w-4 h-4 text-operator-cyan"></i>
+                        <span>VAULT</span>
+                    </button>
+
+                    <button onclick="openExportModal()" class="px-3 py-2 rounded-lg font-mono text-xs font-bold flex items-center gap-2 bg-operator-card border border-operator-border hover:border-slate-400 text-slate-300 transition-all">
+                        <i data-lucide="file-json" class="w-4 h-4"></i>
+                        <span>DATA</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Action Bar -->
+            <div class="flex lg:hidden items-center justify-between gap-2 mt-3 pt-3 border-t border-operator-border/50">
+                <button onclick="openSaveMissionModal()" class="flex-1 py-1.5 rounded font-mono text-xs font-bold flex items-center justify-center gap-1.5 bg-operator-green/20 border border-operator-green text-operator-green">
+                    <i data-lucide="save" class="w-3.5 h-3.5"></i>
+                    <span>SAVE LOG</span>
+                </button>
+                <button onclick="openVaultModal()" class="flex-1 py-1.5 rounded font-mono text-xs font-bold flex items-center justify-center gap-1.5 bg-operator-card border border-operator-border text-slate-200">
+                    <i data-lucide="history" class="w-3.5 h-3.5 text-operator-cyan"></i>
+                    <span>VAULT</span>
+                </button>
+                <button onclick="openExportModal()" class="py-1.5 px-3 rounded font-mono text-xs font-bold flex items-center justify-center bg-operator-card border border-operator-border text-slate-300">
+                    <i data-lucide="file-json" class="w-3.5 h-3.5"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Dashboard Body -->
+        <main class="max-w-7xl mx-auto px-4 py-6 sm:px-6 flex-1 w-full flex flex-col gap-6">
+            
+            <!-- Operator Active Warning Bar (Visible in Operator Mode) -->
+            <div id="operatorBanner" class="hidden rounded-xl p-4 bg-operator-amber/10 border border-operator-amber/40 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="p-2 rounded-lg bg-operator-amber/20 text-operator-amber animate-bounce">
+                        <i data-lucide="wrench" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h2 class="hud-font font-bold text-operator-amber text-lg tracking-wide">OPERATOR OVERRIDE ACTIVE</h2>
+                        <p class="text-xs text-slate-300">Drag cards or use direction arrows to re-rank. Add or edit items directly. Remember to hit <span class="text-operator-green font-mono font-bold">SAVE MISSION</span> when finished.</p>
+                    </div>
+                </div>
+                <button onclick="openAddModal()" class="w-full sm:w-auto px-4 py-2 rounded-lg font-mono text-xs font-bold bg-operator-amber text-black hover:bg-yellow-400 flex items-center justify-center gap-2 transition-all">
+                    <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                    <span>ADD NEW INTEREST</span>
+                </button>
+            </div>
+
+            <!-- Controls & Filters Toolbar -->
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pb-2 border-b border-operator-border">
+                <!-- Search & Category Filters -->
+                <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+                    <div class="relative flex-1 sm:w-64">
+                        <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2.5 text-slate-500"></i>
+                        <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Search interests..." class="w-full bg-operator-card border border-operator-border rounded-lg pl-9 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-operator-cyan font-mono">
+                    </div>
+                    
+                    <select id="categoryFilter" onchange="handleFilter()" class="bg-operator-card border border-operator-border rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-operator-cyan font-mono">
+                        <option value="ALL">ALL CATEGORIES</option>
+                        <option value="ATHLETICS">ATHLETICS & FITNESS</option>
+                        <option value="GAMING">GAMING & STRATEGY</option>
+                        <option value="TECH">TECH & DEV</option>
+                        <option value="CREATIVE">CREATIVE & MEDIA</option>
+                        <option value="OUTDOORS">OUTDOORS & ADVENTURE</option>
+                        <option value="OTHER">OTHER</option>
+                    </select>
+                </div>
+
+                <!-- Sort & Display Stats -->
+                <div class="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-4 text-xs font-mono text-slate-400">
+                    <div class="flex items-center gap-2">
+                        <span>SORT BY:</span>
+                        <select id="sortSelect" onchange="handleSort()" class="bg-operator-card border border-operator-border rounded-lg px-2 py-1 text-xs text-operator-cyan focus:outline-none">
+                            <option value="RANK">CURRENT RANK</option>
+                            <option value="DELTA">BIGGEST CLIMBERS</option>
+                            <option value="TITLE">ALPHABETICAL</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dynamic Leaderboard Cards Container -->
+            <div id="leaderboardList" class="flex flex-col gap-3">
+                <!-- Cards will be populated dynamically via JavaScript -->
+            </div>
+
+            <!-- Empty State Display -->
+            <div id="emptyState" class="hidden flex-col items-center justify-center py-16 text-center border border-dashed border-operator-border rounded-2xl bg-operator-panel/30">
+                <i data-lucide="ghost" class="w-12 h-12 text-slate-600 mb-3"></i>
+                <h3 class="hud-font text-lg text-slate-300 font-bold">NO INTERESTS FOUND</h3>
+                <p class="text-xs text-slate-500 max-w-sm mt-1 mb-4">No matching interests found for the selected search or filter.</p>
+                <button onclick="resetFilters()" class="px-3 py-1.5 rounded bg-operator-card border border-operator-border text-xs text-operator-cyan font-mono">
+                    RESET FILTERS
+                </button>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="border-t border-operator-border/60 py-4 px-6 glass-panel mt-8">
+            <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono text-slate-500">
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-operator-green inline-block animate-ping"></span>
+                    <span>BUBBLES GB OPERATOR FRAMEWORK v3.2</span>
+                </div>
+                <div>AUTONOMOUS SNAPSHOT & RANK DELTA CALCULATOR</div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Save Mission Modal -->
+    <div id="saveMissionModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel border-operator-green/40 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+            <div class="flex items-center justify-between border-b border-operator-border pb-3 mb-4">
+                <div class="flex items-center gap-2 text-operator-green">
+                    <i data-lucide="shield-check" class="w-5 h-5"></i>
+                    <h3 class="hud-font font-bold text-lg text-white">SAVE MISSION SNAPSHOT</h3>
+                </div>
+                <button onclick="closeModal('saveMissionModal')" class="text-slate-400 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-mono text-slate-400 mb-1">MISSION DATE & TIME</label>
+                    <input type="datetime-local" id="missionDatePicker" class="w-full bg-operator-card border border-operator-border rounded-lg px-3 py-2 text-sm text-white focus:border-operator-green focus:outline-none font-mono">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-mono text-slate-400 mb-1">MISSION CODENAME / TITLE</label>
+                    <input type="text" id="missionTitleInput" placeholder="e.g. Operation Autumn Ascent" class="w-full bg-operator-card border border-operator-border rounded-lg px-3 py-2 text-sm text-white focus:border-operator-green focus:outline-none font-mono">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-mono text-slate-400 mb-1">MISSION LOG NOTES (OPTIONAL)</label>
+                    <textarea id="missionNotesInput" rows="3" placeholder="Brief notes regarding key rank shifts or focus changes..." class="w-full bg-operator-card border border-operator-border rounded-lg px-3 py-2 text-xs text-white focus:border-operator-green focus:outline-none font-sans"></textarea>
+                </div>
+
+                <div class="bg-black/50 p-3 rounded-lg border border-operator-border text-xs font-mono space-y-1">
+                    <div class="text-slate-400">CURRENT TOP 3 HIGHLIGHTS:</div>
+                    <div id="saveModalTop3" class="text-operator-cyan font-semibold">--</div>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-end gap-3 mt-6 pt-3 border-t border-operator-border">
+                <button onclick="closeModal('saveMissionModal')" class="px-4 py-2 rounded-lg font-mono text-xs text-slate-400 hover:text-white">
+                    CANCEL
+                </button>
+                <button onclick="executeSaveMission()" class="px-4 py-2 rounded-lg font-mono text-xs font-bold bg-operator-green text-black hover:bg-emerald-400 flex items-center gap-2 hud-glow-green">
+                    <i data-lucide="check" class="w-4 h-4"></i>
+                    <span>CONFIRM SNAPSHOT</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit/Add Interest Modal -->
+    <div id="editInterestModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel border-operator-cyan/40 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+            <div class="flex items-center justify-between border-b border-operator-border pb-3 mb-4">
+                <div class="flex items-center gap-2 text-operator-cyan">
+                    <i data-lucide="edit-3" class="w-5 h-5"></i>
+                    <h3 id="editModalHeader" class="hud-font font-bold text-lg text-white">EDIT INTEREST</h3>
+                </div>
+                <button onclick="closeModal('editInterestModal')" class="text-slate-400 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <form id="interestForm" onsubmit="handleSaveInterest(event)" class="space-y-4">
+                <input type="hidden" id="editItemId">
+
+                <div>
+                    <label class="block text-xs font-mono text-slate-400 mb-1">INTEREST TITLE *</label>
+                    <input type="text" id="itemTitleInput" required placeholder="e.g. Calisthenics & Strength" class="w-full bg-operator-card border border-operator-border rounded-lg px-3 py-2 text-sm text-white focus:border-operator-cyan focus:outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-mono text-slate-400 mb-1">CATEGORY</label>
+                    <select id="itemCategoryInput" class="w-full bg-operator-card border border-operator-border rounded-lg px-3 py-2 text-xs text-white focus:border-operator-cyan focus:outline-none font-mono">
+                        <option value="ATHLETICS">ATHLETICS & FITNESS</option>
+                        <option value="GAMING">GAMING & STRATEGY</option>
+                        <option value="TECH">TECH & DEV</option>
+                        <option value="CREATIVE">CREATIVE & MEDIA</option>
+                        <option value="OUTDOORS">OUTDOORS & ADVENTURE</option>
+                        <option value="OTHER">OTHER</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-mono text-slate-400 mb-1">TACTICAL DESCRIPTION / NOTES</label>
+                    <textarea id="itemDescInput" rows="3" placeholder="Why do you enjoy this? What are your active targets or milestones?" class="w-full bg-operator-card border border-operator-border rounded-lg px-3 py-2 text-xs text-white focus:border-operator-cyan focus:outline-none"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-mono text-slate-400 mb-1">ENJOYABILITY SCORE (1-100)</label>
+                    <div class="flex items-center gap-3">
+                        <input type="range" id="itemScoreInput" min="1" max="100" value="85" oninput="document.getElementById('scoreVal').innerText = this.value" class="w-full accent-operator-cyan">
+                        <span id="scoreVal" class="font-mono text-sm font-bold text-operator-cyan w-8 text-right">85</span>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between pt-3 border-t border-operator-border">
+                    <button type="button" id="deleteItemBtn" onclick="handleDeleteItem()" class="px-3 py-1.5 rounded text-xs font-mono text-operator-crimson hover:bg-operator-crimson/10 flex items-center gap-1">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        <span>DELETE</span>
+                    </button>
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="closeModal('editInterestModal')" class="px-4 py-2 rounded-lg font-mono text-xs text-slate-400 hover:text-white">
+                            CANCEL
+                        </button>
+                        <button type="submit" class="px-4 py-2 rounded-lg font-mono text-xs font-bold bg-operator-cyan text-black hover:bg-cyan-400 flex items-center gap-1.5 hud-glow-cyan">
+                            <i data-lucide="save" class="w-4 h-4"></i>
+                            <span>SAVE ITEM</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Mission Vault & Snapshot History Modal -->
+    <div id="vaultModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel border-operator-cyan/40 rounded-2xl max-w-2xl w-full p-6 shadow-2xl relative flex flex-col max-h-[85vh]">
+            <div class="flex items-center justify-between border-b border-operator-border pb-3 mb-4">
+                <div class="flex items-center gap-2 text-operator-cyan">
+                    <i data-lucide="archive" class="w-5 h-5"></i>
+                    <h3 class="hud-font font-bold text-lg text-white">MISSION HISTORY VAULT</h3>
+                </div>
+                <button onclick="closeModal('vaultModal')" class="text-slate-400 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto pr-1 space-y-3" id="vaultHistoryList">
+                <!-- Populated dynamically -->
+            </div>
+
+            <div class="pt-4 border-t border-operator-border flex items-center justify-between text-xs font-mono text-slate-400">
+                <span>TOTAL SAVED SNAPSHOTS: <span id="vaultTotalCount" class="text-white">0</span></span>
+                <button onclick="closeModal('vaultModal')" class="px-4 py-1.5 rounded bg-operator-card border border-operator-border text-slate-200">
+                    CLOSE
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export / Import & Sync Modal -->
+    <div id="exportModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel border-slate-500/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative">
+            <div class="flex items-center justify-between border-b border-operator-border pb-3 mb-4">
+                <div class="flex items-center gap-2 text-slate-200">
+                    <i data-lucide="database" class="w-5 h-5 text-operator-cyan"></i>
+                    <h3 class="hud-font font-bold text-lg text-white">PORTABLE DATA SYNC</h3>
+                </div>
+                <button onclick="closeModal('exportModal')" class="text-slate-400 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="space-y-4">
+                <p class="text-xs text-slate-300">
+                    Transfer your entire ranking system and mission snapshots to another browser or device using JSON data files.
+                </p>
+
+                <div class="p-4 rounded-xl bg-operator-card border border-operator-border space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-mono font-bold text-slate-200">DOWNLOAD BACKUP FILE</span>
+                        <button onclick="downloadJsonBackup()" class="px-3 py-1.5 rounded font-mono text-xs font-bold bg-operator-cyan text-black hover:bg-cyan-400 flex items-center gap-1.5">
+                            <i data-lucide="download" class="w-4 h-4"></i>
+                            <span>EXPORT .JSON</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="p-4 rounded-xl bg-operator-card border border-operator-border space-y-3">
+                    <div class="text-xs font-mono font-bold text-slate-200">RESTORE / IMPORT DATA</div>
+                    <input type="file" id="importFileInput" accept=".json" class="block w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-mono file:bg-operator-panel file:text-operator-cyan hover:file:bg-operator-border">
+                    <button onclick="importJsonBackup()" class="w-full py-2 rounded-lg font-mono text-xs font-bold bg-operator-green/20 border border-operator-green text-operator-green hover:bg-operator-green hover:text-black flex items-center justify-center gap-1.5 transition-all">
+                        <i data-lucide="upload" class="w-4 h-4"></i>
+                        <span>IMPORT SNAPSHOT DATA FILE</span>
+                    </button>
+                </div>
+
+                <div class="pt-2 text-center">
+                    <button onclick="confirmResetDefaults()" class="text-xs font-mono text-operator-crimson hover:underline">
+                        RESET BOARD TO DEFAULT INITIAL SEED
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast Container -->
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- Firebase App Modules -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global Application State
+        window.BubblesGB = {
+            db: null,
+            auth: null,
+            appId: typeof __app_id !== 'undefined' ? __app_id : 'bubbles-gb-app',
+            isOperatorMode: false,
+            items: [],
+            missionHistory: [],
+            draggedItemId: null,
+            draggedIndex: null,
+            lastSavedTimestamp: null
+        };
+
+        // Default Starter Seed Data
+        const DEFAULT_SEED_ITEMS = [
+            {
+                id: 'hobby-1',
+                title: 'Calisthenics & Strength Training',
+                category: 'ATHLETICS',
+                description: 'Weighted muscle-ups, handstands, ring workouts, and functional bodyweight mastery.',
+                score: 95
+            },
+            {
+                id: 'hobby-2',
+                title: 'Grand Strategy & Geopolitical Sims',
+                category: 'GAMING',
+                description: 'Hearts of Iron, Stellaris, and deep tactical campaign simulations.',
+                score: 91
+            },
+            {
+                id: 'hobby-3',
+                title: 'Web Development & UI Architecture',
+                category: 'TECH',
+                description: 'Building high-performance interactive interfaces, WebGL, and modern frontend tools.',
+                score: 88
+            },
+            {
+                id: 'hobby-4',
+                title: 'Ice Hockey & Speed Skating',
+                category: 'ATHLETICS',
+                description: 'Competitive recreational games, power skating drills, and puck handling.',
+                score: 84
+            },
+            {
+                id: 'hobby-5',
+                title: 'Wilderness & Outdoor Exploration',
+                category: 'OUTDOORS',
+                description: 'Multi-day backcountry hiking, navigation, bushcraft skills, and camping.',
+                score: 80
+            },
+            {
+                id: 'hobby-6',
+                title: 'Video Editing & Creative Media',
+                category: 'CREATIVE',
+                description: 'Cinematic color grading, sound design, and motion graphics editing.',
+                score: 75
+            }
+        ];
+
+        async function initFirebase() {
+            try {
+                let firebaseConfig = null;
+                if (typeof __firebase_config !== 'undefined') {
+                    firebaseConfig = JSON.parse(__firebase_config);
+                }
+
+                if (firebaseConfig) {
+                    const app = initializeApp(firebaseConfig);
+                    const auth = getAuth(app);
+                    const db = getFirestore(app);
+
+                    window.BubblesGB.db = db;
+                    window.BubblesGB.auth = auth;
+
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+
+                    onAuthStateChanged(auth, (user) => {
+                        if (user) {
+                            listenToCloudData();
+                        }
+                    });
+                } else {
+                    loadLocalData();
+                }
+            } catch (err) {
+                console.warn("Firebase fallback active, using browser storage:", err);
+                loadLocalData();
+            }
+        }
+
+        // Listen to Firestore updates
+        function listenToCloudData() {
+            const { db, appId } = window.BubblesGB;
+            if (!db) return;
+
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'bubbles_dashboard', 'main_state');
+            onSnapshot(docRef, (snap) => {
+                if (snap.exists()) {
+                    const data = snap.data();
+                    if (data.items) window.BubblesGB.items = data.items;
+                    if (data.missionHistory) window.BubblesGB.missionHistory = data.missionHistory;
+                    if (data.lastSavedTimestamp) window.BubblesGB.lastSavedTimestamp = data.lastSavedTimestamp;
+                    renderApp();
+                } else {
+                    // Seed initial state
+                    saveStateToCloudAndLocal();
+                }
+            }, (error) => {
+                console.warn("Firestore snapshot error, reading local:", error);
+                loadLocalData();
+            });
+        }
+
+        function loadLocalData() {
+            const saved = localStorage.getItem('bubbles_gb_data');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    window.BubblesGB.items = parsed.items || DEFAULT_SEED_ITEMS;
+                    window.BubblesGB.missionHistory = parsed.missionHistory || [];
+                    window.BubblesGB.lastSavedTimestamp = parsed.lastSavedTimestamp || null;
+                } catch (e) {
+                    window.BubblesGB.items = DEFAULT_SEED_ITEMS;
+                }
+            } else {
+                window.BubblesGB.items = DEFAULT_SEED_ITEMS;
+            }
+            renderApp();
+        }
+
+        window.saveStateToCloudAndLocal = async function() {
+            const stateObj = {
+                items: window.BubblesGB.items,
+                missionHistory: window.BubblesGB.missionHistory,
+                lastSavedTimestamp: window.BubblesGB.lastSavedTimestamp,
+                updatedAt: new Date().toISOString()
+            };
+
+            // Save to LocalStorage
+            localStorage.setItem('bubbles_gb_data', JSON.stringify(stateObj));
+
+            // Save to Firestore if available
+            const { db, appId } = window.BubblesGB;
+            if (db) {
+                try {
+                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'bubbles_dashboard', 'main_state');
+                    await setDoc(docRef, stateObj, { merge: true });
+                } catch (e) {
+                    console.error("Cloud save error:", e);
+                }
+            }
+        };
+
+        // Initialize Firebase on load
+        window.addEventListener('DOMContentLoaded', () => {
+            initFirebase();
+            setInterval(updateElapsedTimer, 1000);
+        });
+    </script>
+
+    <script>
+        // Core Render Function
+        function renderApp() {
+            const state = window.BubblesGB;
+            
+            // Re-initialize Lucide Icons after render
+            setTimeout(() => {
+                if (window.lucide) lucide.createIcons();
+            }, 50);
+
+            // 1. Update Metrics
+            document.getElementById('metricTotalCount').innerText = state.items.length;
+            
+            if (state.lastSavedTimestamp) {
+                const dateObj = new Date(state.lastSavedTimestamp);
+                document.getElementById('metricLastSaved').innerText = formatDateShort(dateObj);
+            } else {
+                document.getElementById('metricLastSaved').innerText = 'INITIAL BASELINE';
+            }
+
+            // 2. Filter & Sort Items for Display
+            const searchVal = (document.getElementById('searchInput')?.value || '').toLowerCase();
+            const catVal = document.getElementById('categoryFilter')?.value || 'ALL';
+            const sortVal = document.getElementById('sortSelect')?.value || 'RANK';
+
+            let filtered = state.items.filter(item => {
+                const matchesSearch = item.title.toLowerCase().includes(searchVal) || item.description.toLowerCase().includes(searchVal);
+                const matchesCat = catVal === 'ALL' || item.category === catVal;
+                return matchesSearch && matchesCat;
+            });
+
+            // Calculate Deltas vs Previous Mission
+            const latestMission = state.missionHistory.length > 0 ? state.missionHistory[state.missionHistory.length - 1] : null;
+
+            filtered = filtered.map((item, index) => {
+                const currentRank = state.items.findIndex(i => i.id === item.id) + 1;
+                let delta = 0;
+                let isNew = false;
+
+                if (latestMission && latestMission.snapshotRanks) {
+                    const prevRank = latestMission.snapshotRanks[item.id];
+                    if (prevRank !== undefined) {
+                        // Delta = Previous Position - Current Position
+                        // E.g., WAS #3, NOW #1 -> 3 - 1 = +2 (Climbed up)
+                        delta = prevRank - currentRank;
+                    } else {
+                        isNew = true;
+                    }
+                }
+
+                return { ...item, currentRank, delta, isNew };
+            });
+
+            // Sort Logic
+            if (sortVal === 'DELTA') {
+                filtered.sort((a, b) => b.delta - a.delta);
+            } else if (sortVal === 'TITLE') {
+                filtered.sort((a, b) => a.title.localeCompare(b.title));
+            } else {
+                // Default: Current Rank order
+                filtered.sort((a, b) => a.currentRank - b.currentRank);
+            }
+
+            const container = document.getElementById('leaderboardList');
+            const emptyState = document.getElementById('emptyState');
+
+            if (filtered.length === 0) {
+                container.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                emptyState.classList.add('flex');
+            } else {
+                emptyState.classList.add('hidden');
+                emptyState.classList.remove('flex');
+
+                container.innerHTML = filtered.map((item, idx) => {
+                    return renderCardHTML(item, state.isOperatorMode);
+                }).join('');
+            }
+
+            // Update Operator Mode UI state
+            const banner = document.getElementById('operatorBanner');
+            const toggleBtn = document.getElementById('operatorToggleBtn');
+            const statusBadge = document.getElementById('statusBadge');
+
+            if (state.isOperatorMode) {
+                banner.classList.remove('hidden');
+                toggleBtn.classList.add('operator-active', 'bg-operator-amber/20', 'text-operator-amber');
+                statusBadge.innerText = 'OPERATOR MODE ACTIVE';
+                statusBadge.className = 'text-xs px-2 py-0.5 rounded font-mono uppercase bg-operator-amber/20 text-operator-amber border border-operator-amber/40 animate-pulse';
+            } else {
+                banner.classList.add('hidden');
+                toggleBtn.classList.remove('operator-active', 'bg-operator-amber/20', 'text-operator-amber');
+                statusBadge.innerText = 'LIVE MONITORING';
+                statusBadge.className = 'text-xs px-2 py-0.5 rounded font-mono uppercase bg-operator-green/10 text-operator-green border border-operator-green/30';
+            }
+        }
+
+        function renderCardHTML(item, isOperator) {
+            // Rank Number Badge Visual Style
+            let rankBadgeStyle = "bg-black/60 border-operator-border text-slate-300";
+            if (item.currentRank === 1) {
+                rankBadgeStyle = "bg-operator-green/20 border-operator-green text-operator-green hud-glow-green font-bold";
+            } else if (item.currentRank === 2) {
+                rankBadgeStyle = "bg-operator-cyan/20 border-operator-cyan text-operator-cyan hud-glow-cyan font-bold";
+            } else if (item.currentRank === 3) {
+                rankBadgeStyle = "bg-operator-amber/20 border-operator-amber text-operator-amber hud-glow-amber font-bold";
+            }
+
+            // Delta Badge Visual
+            let deltaHTML = '';
+            if (item.isNew) {
+                deltaHTML = `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-operator-cyan/20 text-operator-cyan border border-operator-cyan/40">✨ NEW</span>`;
+            } else if (item.delta > 0) {
+                deltaHTML = `<span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-operator-green/20 text-operator-green border border-operator-green/40 flex items-center gap-1">▲ +${item.delta}</span>`;
+            } else if (item.delta < 0) {
+                deltaHTML = `<span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-operator-crimson/20 text-operator-crimson border border-operator-crimson/40 flex items-center gap-1">▼ ${item.delta}</span>`;
+            } else {
+                deltaHTML = `<span class="px-2 py-0.5 rounded text-xs font-mono text-slate-500 bg-black/40 border border-operator-border flex items-center gap-1">━ 0</span>`;
+            }
+
+            // Category tag style
+            const catLabel = getCategoryLabel(item.category);
+
+            return `
+                <div 
+                    class="glass-panel rounded-xl p-4 transition-all duration-200 relative group flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border ${isOperator ? 'border-dashed border-operator-amber/50 hover:border-operator-amber' : 'border-operator-border hover:border-operator-cyan/40'}"
+                    draggable="${isOperator}"
+                    ondragstart="handleDragStart(event, '${item.id}')"
+                    ondragover="handleDragOver(event)"
+                    ondrop="handleDrop(event, '${item.id}')"
+                    ondragend="handleDragEnd(event)"
+                >
+                    <div class="flex items-start sm:items-center gap-4 w-full">
+                        
+                        <!-- Drag Handle (Operator Mode) -->
+                        ${isOperator ? `
+                            <div class="cursor-grab active:cursor-grabbing p-2 text-operator-amber hover:text-white rounded bg-operator-card border border-operator-border flex-shrink-0 self-center">
+                                <i data-lucide="grip-vertical" class="w-5 h-5"></i>
+                            </div>
+                        ` : ''}
+
+                        <!-- Rank Badge -->
+                        <div class="flex flex-col items-center justify-center min-w-[48px] h-12 rounded-xl border ${rankBadgeStyle} font-mono">
+                            <span class="text-[10px] opacity-60 leading-none">RANK</span>
+                            <span class="hud-font text-lg leading-none mt-0.5">#${item.currentRank}</span>
+                        </div>
+
+                        <!-- Info Column -->
+                        <div class="flex-1 min-w-0">
+                            <div class="flex flex-wrap items-center gap-2 mb-1">
+                                <h3 class="hud-font text-lg font-bold text-white truncate tracking-wide">${escapeHTML(item.title)}</h3>
+                                <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-operator-card text-slate-400 border border-operator-border">${catLabel}</span>
+                                ${deltaHTML}
+                            </div>
+                            <p class="text-xs text-slate-400 line-clamp-2 leading-relaxed">${escapeHTML(item.description || 'No specific tactical notes provided.')}</p>
+                            
+                            <!-- Score bar -->
+                            <div class="mt-2 flex items-center gap-2 max-w-xs">
+                                <div class="text-[10px] font-mono text-slate-500">ENJOYABILITY</div>
+                                <div class="flex-1 h-1.5 rounded-full bg-black/60 overflow-hidden border border-operator-border">
+                                    <div class="h-full bg-gradient-to-r from-operator-cyan to-operator-green rounded-full" style="width: ${item.score || 80}%"></div>
+                                </div>
+                                <div class="text-[10px] font-mono font-bold text-operator-cyan">${item.score || 80}%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Operator Mode Reorder & Edit Buttons -->
+                    ${isOperator ? `
+                        <div class="flex items-center gap-1.5 self-end sm:self-center w-full sm:w-auto justify-end pt-2 sm:pt-0 border-t sm:border-t-0 border-operator-border">
+                            <button onclick="moveItem('${item.id}', -1)" title="Move Up" class="p-2 rounded bg-operator-card border border-operator-border text-slate-300 hover:text-operator-green hover:border-operator-green transition-all">
+                                <i data-lucide="arrow-up" class="w-4 h-4"></i>
+                            </button>
+                            <button onclick="moveItem('${item.id}', 1)" title="Move Down" class="p-2 rounded bg-operator-card border border-operator-border text-slate-300 hover:text-operator-crimson hover:border-operator-crimson transition-all">
+                                <i data-lucide="arrow-down" class="w-4 h-4"></i>
+                            </button>
+                            <button onclick="openEditModal('${item.id}')" title="Edit Item" class="p-2 rounded bg-operator-card border border-operator-border text-slate-300 hover:text-operator-cyan hover:border-operator-cyan transition-all">
+                                <i data-lucide="edit-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        function toggleOperatorMode() {
+            window.BubblesGB.isOperatorMode = !window.BubblesGB.isOperatorMode;
+            renderApp();
+            showToast(window.BubblesGB.isOperatorMode ? 'OPERATOR OVERRIDE ENGAGED' : 'LIVE MONITORING MODE ACTIVE', 'info');
+        }
+
+        function moveItem(id, direction) {
+            const items = window.BubblesGB.items;
+            const index = items.findIndex(i => i.id === id);
+            if (index === -1) return;
+
+            const targetIndex = index + direction;
+            if (targetIndex < 0 || targetIndex >= items.length) return;
+
+            // Swap positions
+            const temp = items[index];
+            items[index] = items[targetIndex];
+            items[targetIndex] = temp;
+
+            window.saveStateToCloudAndLocal();
+            renderApp();
+        }
+
+        // HTML5 Drag and Drop handlers
+        function handleDragStart(e, id) {
+            window.BubblesGB.draggedItemId = id;
+            e.currentTarget.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+        }
+
+        function handleDragOver(e) {
+            if (e.preventDefault) e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            return false;
+        }
+
+        function handleDrop(e, targetId) {
+            if (e.stopPropagation) e.stopPropagation();
+            const draggedId = window.BubblesGB.draggedItemId;
+            if (!draggedId || draggedId === targetId) return;
+
+            const items = window.BubblesGB.items;
+            const draggedIndex = items.findIndex(i => i.id === draggedId);
+            const targetIndex = items.findIndex(i => i.id === targetId);
+
+            if (draggedIndex > -1 && targetIndex > -1) {
+                // Reorder array
+                const [removed] = items.splice(draggedIndex, 1);
+                items.splice(targetIndex, 0, removed);
+
+                window.saveStateToCloudAndLocal();
+                renderApp();
+                showToast('RANK POSITION REORDERED', 'success');
+            }
+            return false;
+        }
+
+        function handleDragEnd(e) {
+            e.currentTarget.classList.remove('dragging');
+            window.BubblesGB.draggedItemId = null;
+        }
+
+        function openSaveMissionModal() {
+            const now = new Date();
+            // Format datetime-local input string YYYY-MM-DDTHH:mm
+            const isoLocal = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+            document.getElementById('missionDatePicker').value = isoLocal;
+            document.getElementById('missionTitleInput').value = `Mission Snapshot #${window.BubblesGB.missionHistory.length + 1}`;
+            document.getElementById('missionNotesInput').value = '';
+
+            // Top 3 preview
+            const top3 = window.BubblesGB.items.slice(0, 3).map((item, i) => `#${i+1} ${item.title}`).join(' | ');
+            document.getElementById('saveModalTop3').innerText = top3 || 'None';
+
+            openModal('saveMissionModal');
+        }
+
+        function executeSaveMission() {
+            const dateVal = document.getElementById('missionDatePicker').value;
+            const titleVal = document.getElementById('missionTitleInput').value.trim() || 'Untitled Mission';
+            const notesVal = document.getElementById('missionNotesInput').value.trim();
+
+            const timestamp = dateVal ? new Date(dateVal).getTime() : Date.now();
+
+            // Build Rank Mapping Snapshot { [itemId]: rankNumber }
+            const snapshotRanks = {};
+            window.BubblesGB.items.forEach((item, index) => {
+                snapshotRanks[item.id] = index + 1;
+            });
+
+            const newMission = {
+                id: 'mission-' + Date.now(),
+                title: titleVal,
+                timestamp: timestamp,
+                notes: notesVal,
+                snapshotRanks: snapshotRanks,
+                itemCount: window.BubblesGB.items.length
+            };
+
+            window.BubblesGB.missionHistory.push(newMission);
+            window.BubblesGB.lastSavedTimestamp = timestamp;
+
+            window.saveStateToCloudAndLocal();
+            closeModal('saveMissionModal');
+            renderApp();
+
+            showToast(`MISSION LOG "${titleVal.toUpperCase()}" SAVED`, 'success');
+        }
+
+        function updateElapsedTimer() {
+            const lastTs = window.BubblesGB.lastSavedTimestamp;
+            const el = document.getElementById('metricElapsedTime');
+            if (!el) return;
+
+            if (!lastTs) {
+                el.innerText = 'NO LOGS';
+                return;
+            }
+
+            const diff = Date.now() - lastTs;
+            if (diff < 0) {
+                el.innerText = 'FUTURE LOG';
+                return;
+            }
+
+            const seconds = Math.floor((diff / 1000) % 60);
+            const minutes = Math.floor((diff / (1000 * 60)) % 60);
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+            if (days > 0) {
+                el.innerText = `${days}d ${hours}h ${minutes}m ago`;
+            } else {
+                el.innerText = `${padZero(hours)}:${padZero(minutes)}:${padZero(seconds)}`;
+            }
+        }
+
+        function openVaultModal() {
+            const history = window.BubblesGB.missionHistory;
+            const listEl = document.getElementById('vaultHistoryList');
+            document.getElementById('vaultTotalCount').innerText = history.length;
+
+            if (history.length === 0) {
+                listEl.innerHTML = `
+                    <div class="text-center py-8 text-slate-500 font-mono text-xs">
+                        NO SAVED MISSION LOGS FOUND. CLICK "SAVE MISSION" TO CREATE YOUR FIRST SNAPSHOT.
+                    </div>
+                `;
+            } else {
+                // Show sorted by timestamp descending
+                const sorted = [...history].sort((a, b) => b.timestamp - a.timestamp);
+                
+                listEl.innerHTML = sorted.map((mission, idx) => {
+                    const dateStr = new Date(mission.timestamp).toLocaleString();
+                    return `
+                        <div class="p-4 rounded-xl bg-operator-card border border-operator-border hover:border-operator-cyan/50 transition-all flex flex-col gap-2">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-operator-green"></span>
+                                    <h4 class="hud-font font-bold text-white text-base">${escapeHTML(mission.title)}</h4>
+                                </div>
+                                <span class="text-xs font-mono text-operator-cyan">${dateStr}</span>
+                            </div>
+                            
+                            ${mission.notes ? `<p class="text-xs text-slate-300 italic bg-black/30 p-2 rounded">${escapeHTML(mission.notes)}</p>` : ''}
+                            
+                            <div class="flex items-center justify-between text-[11px] font-mono text-slate-400 pt-2 border-t border-operator-border/50">
+                                <span>ITEMS TRACKED: ${mission.itemCount || Object.keys(mission.snapshotRanks || {}).length}</span>
+                                <button onclick="loadMissionSnapshot('${mission.id}')" class="text-operator-green hover:underline">
+                                    INSPECT SNAPSHOT
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            openModal('vaultModal');
+        }
+
+        function loadMissionSnapshot(missionId) {
+            const mission = window.BubblesGB.missionHistory.find(m => m.id === missionId);
+            if (!mission) return;
+
+            showToast(`LOADED HISTORICAL SNAPSHOT: ${mission.title}`, 'info');
+            closeModal('vaultModal');
+        }
+
+        function openAddModal() {
+            document.getElementById('editItemId').value = '';
+            document.getElementById('editModalHeader').innerText = 'ADD NEW INTEREST';
+            document.getElementById('itemTitleInput').value = '';
+            document.getElementById('itemCategoryInput').value = 'ATHLETICS';
+            document.getElementById('itemDescInput').value = '';
+            document.getElementById('itemScoreInput').value = 85;
+            document.getElementById('scoreVal').innerText = 85;
+            document.getElementById('deleteItemBtn').classList.add('hidden');
+
+            openModal('editInterestModal');
+        }
+
+        function openEditModal(id) {
+            const item = window.BubblesGB.items.find(i => i.id === id);
+            if (!item) return;
+
+            document.getElementById('editItemId').value = item.id;
+            document.getElementById('editModalHeader').innerText = 'EDIT INTEREST';
+            document.getElementById('itemTitleInput').value = item.title;
+            document.getElementById('itemCategoryInput').value = item.category || 'OTHER';
+            document.getElementById('itemDescInput').value = item.description || '';
+            document.getElementById('itemScoreInput').value = item.score || 85;
+            document.getElementById('scoreVal').innerText = item.score || 85;
+            document.getElementById('deleteItemBtn').classList.remove('hidden');
+
+            openModal('editInterestModal');
+        }
+
+        function handleSaveInterest(e) {
+            e.preventDefault();
+            const id = document.getElementById('editItemId').value;
+            const title = document.getElementById('itemTitleInput').value.trim();
+            const category = document.getElementById('itemCategoryInput').value;
+            const description = document.getElementById('itemDescInput').value.trim();
+            const score = parseInt(document.getElementById('itemScoreInput').value, 10);
+
+            if (!title) return;
+
+            if (id) {
+                // Update existing
+                const index = window.BubblesGB.items.findIndex(i => i.id === id);
+                if (index > -1) {
+                    window.BubblesGB.items[index] = {
+                        ...window.BubblesGB.items[index],
+                        title, category, description, score
+                    };
+                    showToast('INTEREST UPDATED', 'success');
+                }
+            } else {
+                // Create new
+                const newItem = {
+                    id: 'hobby-' + Date.now(),
+                    title, category, description, score
+                };
+                window.BubblesGB.items.push(newItem);
+                showToast('NEW INTEREST ADDED TO BOARD', 'success');
+            }
+
+            window.saveStateToCloudAndLocal();
+            closeModal('editInterestModal');
+            renderApp();
+        }
+
+        function handleDeleteItem() {
+            const id = document.getElementById('editItemId').value;
+            if (!id) return;
+
+            window.BubblesGB.items = window.BubblesGB.items.filter(i => i.id !== id);
+            window.saveStateToCloudAndLocal();
+            closeModal('editInterestModal');
+            renderApp();
+            showToast('ITEM REMOVED FROM DASHBOARD', 'info');
+        }
+
+        function openExportModal() {
+            openModal('exportModal');
+        }
+
+        function downloadJsonBackup() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({
+                items: window.BubblesGB.items,
+                missionHistory: window.BubblesGB.missionHistory,
+                lastSavedTimestamp: window.BubblesGB.lastSavedTimestamp,
+                exportedAt: new Date().toISOString()
+            }, null, 2));
+
+            const dlAnchor = document.createElement('a');
+            dlAnchor.setAttribute("href", dataStr);
+            dlAnchor.setAttribute("download", `Bubbles_GB_Backup_${new Date().toISOString().slice(0,10)}.json`);
+            document.body.appendChild(dlAnchor);
+            dlAnchor.click();
+            dlAnchor.remove();
+
+            showToast('JSON DATA BACKUP DOWNLOADED', 'success');
+        }
+
+        function importJsonBackup() {
+            const fileInput = document.getElementById('importFileInput');
+            if (!fileInput.files || fileInput.files.length === 0) {
+                showToast('PLEASE SELECT A JSON FILE', 'warning');
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                try {
+                    const parsed = JSON.parse(e.target.result);
+                    if (parsed.items && Array.isArray(parsed.items)) {
+                        window.BubblesGB.items = parsed.items;
+                        window.BubblesGB.missionHistory = parsed.missionHistory || [];
+                        window.BubblesGB.lastSavedTimestamp = parsed.lastSavedTimestamp || null;
+
+                        window.saveStateToCloudAndLocal();
+                        closeModal('exportModal');
+                        renderApp();
+                        showToast('DATA SNAPSHOT IMPORTED SUCCESSFULLY', 'success');
+                    } else {
+                        showToast('INVALID DATA FORMAT', 'error');
+                    }
+                } catch (err) {
+                    showToast('FAILED TO PARSE JSON FILE', 'error');
+                }
+            };
+
+            reader.readAsText(file);
+        }
+
+        function confirmResetDefaults() {
+            window.BubblesGB.items = [
+                { id: 'hobby-1', title: 'Calisthenics & Strength Training', category: 'ATHLETICS', description: 'Weighted muscle-ups, handstands, ring workouts.', score: 95 },
+                { id: 'hobby-2', title: 'Grand Strategy & Geopolitical Sims', category: 'GAMING', description: 'Hearts of Iron, Stellaris tactical simulations.', score: 91 },
+                { id: 'hobby-3', title: 'Web Development & UI Architecture', category: 'TECH', description: 'Building interactive web apps and engines.', score: 88 }
+            ];
+            window.BubblesGB.missionHistory = [];
+            window.BubblesGB.lastSavedTimestamp = null;
+
+            window.saveStateToCloudAndLocal();
+            closeModal('exportModal');
+            renderApp();
+            showToast('RESET TO DEFAULT INITIAL SEED', 'info');
+        }
+
+        function handleSearch() {
+            renderApp();
+        }
+
+        function handleFilter() {
+            renderApp();
+        }
+
+        function handleSort() {
+            renderApp();
+        }
+
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('categoryFilter').value = 'ALL';
+            document.getElementById('sortSelect').value = 'RANK';
+            renderApp();
+        }
+
+        function openModal(id) {
+            document.getElementById(id)?.classList.remove('hidden');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id)?.classList.add('hidden');
+        }
+
+        function getCategoryLabel(cat) {
+            const map = {
+                'ATHLETICS': 'ATHLETICS',
+                'GAMING': 'GAMING',
+                'TECH': 'TECH & DEV',
+                'CREATIVE': 'CREATIVE',
+                'OUTDOORS': 'OUTDOORS',
+                'OTHER': 'OTHER'
+            };
+            return map[cat] || 'OTHER';
+        }
+
+        function formatDateShort(date) {
+            return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+        }
+
+        function padZero(n) {
+            return n < 10 ? '0' + n : n;
+        }
+
+        function escapeHTML(str) {
+            if (!str) return '';
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            if (!container) return;
+
+            const toast = document.createElement('div');
+            let typeStyle = 'bg-operator-card border-operator-cyan text-operator-cyan';
+            let icon = 'info';
+
+            if (type === 'success') {
+                typeStyle = 'bg-operator-card border-operator-green text-operator-green';
+                icon = 'check-circle';
+            } else if (type === 'warning') {
+                typeStyle = 'bg-operator-card border-operator-amber text-operator-amber';
+                icon = 'alert-triangle';
+            } else if (type === 'error') {
+                typeStyle = 'bg-operator-card border-operator-crimson text-operator-crimson';
+                icon = 'alert-octagone';
+            }
+
+            toast.className = `p-3 rounded-xl border ${typeStyle} font-mono text-xs shadow-xl flex items-center gap-2 transform transition-all duration-300 translate-y-2 opacity-0 pointer-events-auto`;
+            toast.innerHTML = `<i data-lucide="${icon}" class="w-4 h-4"></i> <span>${escapeHTML(message)}</span>`;
+
+            container.appendChild(toast);
+            if (window.lucide) lucide.createIcons();
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
