@@ -1,82 +1,127 @@
-// CODE: <!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bubbles GB - Tactical Interest & Hobby Leaderboard</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonts: Rajdhani for tactical HUD headings & Inter for body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        operator: {
+                            bg: '#0a0d12',
+                            panel: '#11161d',
+                            card: '#161d26',
+                            border: '#232f3e',
+                            green: '#00ff88',
+                            cyan: '#00f0ff',
+                            amber: '#ffb700',
+                            crimson: '#ff3366',
+                        }
+                    },
+                    fontFamily: {
+                        hud: ['Rajdhani', 'sans-serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0a0d12;
+            background-image: radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.05) 0%, transparent 70%), linear-gradient(rgba(22, 29, 38, 0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(22, 29, 38, 0.4) 1px, transparent 1px);
+            background-size: 100% 100%, 32px 32px, 32px 32px;
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+        }
+        .hud-font {
+            font-family: 'Rajdhani', sans-serif;
+            letter-spacing: 0.05em;
+        }
 
-<html lang="en" class="dark"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Bubbles GB - Tactical Interest & Hobby Leaderboard</title> <!-- Tailwind CSS --> <script src="https://cdn.tailwindcss.com"></script> <!-- Fonts: Rajdhani for tactical HUD headings & Inter for body --> <link rel="preconnect" href="https://fonts.googleapis.com"> <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet"> <!-- Lucide Icons --> <script src="https://unpkg.com/lucide@latest"></script> <script> tailwind.config = { darkMode: 'class', theme: { extend: { colors: { operator: { bg: '#0a0d12', panel: '#11161d', card: '#161d26', border: '#232f3e', green: '#00ff88', cyan: '#00f0ff', amber: '#ffb700', crimson: '#ff3366', } }, fontFamily: { hud: ['Rajdhani', 'sans-serif'], sans: ['Inter', 'sans-serif'], } } } } </script> <style> body { background-color: #0a0d12; background-image: radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.05) 0%, transparent 70%), linear-gradient(rgba(22, 29, 38, 0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(22, 29, 38, 0.4) 1px, transparent 1px); background-size: 100% 100%, 32px 32px, 32px 32px; color: #e2e8f0; font-family: 'Inter', sans-serif; }
-    .hud-font {
-        font-family: 'Rajdhani', sans-serif;
-        letter-spacing: 0.05em;
-    }
+        .hud-glow-green {
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.25);
+            text-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
+        }
 
-    .hud-glow-green {
-        box-shadow: 0 0 15px rgba(0, 255, 136, 0.25);
-        text-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
-    }
+        .hud-glow-cyan {
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.25);
+            text-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
+        }
 
-    .hud-glow-cyan {
-        box-shadow: 0 0 15px rgba(0, 240, 255, 0.25);
-        text-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
-    }
+        .hud-glow-amber {
+            box-shadow: 0 0 15px rgba(255, 183, 0, 0.3);
+            text-shadow: 0 0 8px rgba(255, 183, 0, 0.6);
+        }
 
-    .hud-glow-amber {
-        box-shadow: 0 0 15px rgba(255, 183, 0, 0.3);
-        text-shadow: 0 0 8px rgba(255, 183, 0, 0.6);
-    }
+        .glass-panel {
+            background: rgba(17, 22, 29, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 240, 255, 0.15);
+        }
 
-    .glass-panel {
-        background: rgba(17, 22, 29, 0.75);
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(0, 240, 255, 0.15);
-    }
+        .operator-active {
+            border-color: rgba(255, 183, 0, 0.6) !important;
+            box-shadow: 0 0 20px rgba(255, 183, 0, 0.15);
+        }
 
-    .operator-active {
-        border-color: rgba(255, 183, 0, 0.6) !important;
-        box-shadow: 0 0 20px rgba(255, 183, 0, 0.15);
-    }
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0d12;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #232f3e;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00f0ff;
+        }
 
-    /* Custom Scrollbars */
-    ::-webkit-scrollbar {
-        width: 6px;
-        height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-        background: #0a0d12;
-    }
-    ::-webkit-scrollbar-thumb {
-        background: #232f3e;
-        border-radius: 3px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-        background: #00f0ff;
-    }
+        /* Drag handle feedback */
+        .dragging {
+            opacity: 0.4;
+            transform: scale(0.98);
+            border: 2px dashed #ffb700 !important;
+        }
 
-    /* Drag handle feedback */
-    .dragging {
-        opacity: 0.4;
-        transform: scale(0.98);
-        border: 2px dashed #ffb700 !important;
-    }
+        .drag-over {
+            border-top: 3px solid #00f0ff !important;
+        }
 
-    .drag-over {
-        border-top: 3px solid #00f0ff !important;
-    }
-
-    /* Scanline effect */
-    .scanlines {
-        position: relative;
-        overflow: hidden;
-    }
-    .scanlines::before {
-        content: " ";
-        display: block;
-        position: absolute;
-        top: 0; left: 0; bottom: 0; right: 0;
-        background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
-        background-size: 100% 4px;
-        z-index: 2;
-        pointer-events: none;
-        opacity: 0.3;
-    }
-</style>
-</head> <body class="min-h-screen flex flex-col justify-between selection:bg-cyan-500 selection:text-black">
+        /* Scanline effect */
+        .scanlines {
+            position: relative;
+            overflow: hidden;
+        }
+        .scanlines::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 4px;
+            z-index: 2;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-cyan-500 selection:text-black">
 <div id="app" class="scanlines min-h-screen flex flex-col">
     <!-- Top HUD Header -->
     <header class="border-b border-operator-border glass-panel sticky top-0 z-30 px-4 py-3 sm:px-6">
@@ -245,6 +290,38 @@
             <div>AUTONOMOUS SNAPSHOT & RANK DELTA CALCULATOR</div>
         </div>
     </footer>
+</div>
+
+<!-- Operator Authentication Security Modal -->
+<div id="operatorAuthModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="glass-panel border-operator-amber/40 rounded-2xl max-w-sm w-full p-6 shadow-2xl relative">
+        <div class="flex items-center justify-between border-b border-operator-border pb-3 mb-4">
+            <div class="flex items-center gap-2 text-operator-amber">
+                <i data-lucide="shield-alert" class="w-5 h-5"></i>
+                <h3 class="hud-font font-bold text-lg text-white">OPERATOR AUTHENTICATION</h3>
+            </div>
+            <button onclick="closeModal('operatorAuthModal')" class="text-slate-400 hover:text-white">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+
+        <div class="space-y-4">
+            <p class="text-xs text-slate-300">Enter security clearance password to engage Operator Mode override:</p>
+            <div>
+                <input type="password" id="operatorPasswordInput" placeholder="Enter password..." class="w-full bg-operator-card border border-operator-border rounded-lg px-3 py-2 text-sm text-white focus:border-operator-amber focus:outline-none font-mono" onkeypress="if(event.key==='Enter') verifyOperatorPassword()">
+            </div>
+
+            <div class="flex items-center justify-end gap-3 pt-2">
+                <button onclick="closeModal('operatorAuthModal')" class="px-3 py-1.5 rounded text-xs font-mono text-slate-400 hover:text-white">
+                    CANCEL
+                </button>
+                <button onclick="verifyOperatorPassword()" class="px-4 py-2 rounded-lg font-mono text-xs font-bold bg-operator-amber text-black hover:bg-yellow-400 flex items-center gap-1.5">
+                    <i data-lucide="key" class="w-4 h-4"></i>
+                    <span>AUTHENTICATE</span>
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Save Mission Modal -->
@@ -646,8 +723,6 @@
             if (latestMission && latestMission.snapshotRanks) {
                 const prevRank = latestMission.snapshotRanks[item.id];
                 if (prevRank !== undefined) {
-                    // Delta = Previous Position - Current Position
-                    // E.g., WAS #3, NOW #1 -> 3 - 1 = +2 (Climbed up)
                     delta = prevRank - currentRank;
                 } else {
                     isNew = true;
@@ -663,7 +738,6 @@
         } else if (sortVal === 'TITLE') {
             filtered.sort((a, b) => a.title.localeCompare(b.title));
         } else {
-            // Default: Current Rank order
             filtered.sort((a, b) => a.currentRank - b.currentRank);
         }
 
@@ -702,7 +776,6 @@
     }
 
     function renderCardHTML(item, isOperator) {
-        // Rank Number Badge Visual Style
         let rankBadgeStyle = "bg-black/60 border-operator-border text-slate-300";
         if (item.currentRank === 1) {
             rankBadgeStyle = "bg-operator-green/20 border-operator-green text-operator-green hud-glow-green font-bold";
@@ -712,7 +785,6 @@
             rankBadgeStyle = "bg-operator-amber/20 border-operator-amber text-operator-amber hud-glow-amber font-bold";
         }
 
-        // Delta Badge Visual
         let deltaHTML = '';
         if (item.isNew) {
             deltaHTML = `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-operator-cyan/20 text-operator-cyan border border-operator-cyan/40">✨ NEW</span>`;
@@ -724,7 +796,6 @@
             deltaHTML = `<span class="px-2 py-0.5 rounded text-xs font-mono text-slate-500 bg-black/40 border border-operator-border flex items-center gap-1">━ 0</span>`;
         }
 
-        // Category tag style
         const catLabel = getCategoryLabel(item.category);
 
         return `
@@ -738,20 +809,17 @@
             >
                 <div class="flex items-start sm:items-center gap-4 w-full">
                     
-                    <!-- Drag Handle (Operator Mode) -->
                     ${isOperator ? `
                         <div class="cursor-grab active:cursor-grabbing p-2 text-operator-amber hover:text-white rounded bg-operator-card border border-operator-border flex-shrink-0 self-center">
                             <i data-lucide="grip-vertical" class="w-5 h-5"></i>
                         </div>
                     ` : ''}
 
-                    <!-- Rank Badge -->
                     <div class="flex flex-col items-center justify-center min-w-[48px] h-12 rounded-xl border ${rankBadgeStyle} font-mono">
                         <span class="text-[10px] opacity-60 leading-none">RANK</span>
                         <span class="hud-font text-lg leading-none mt-0.5">#${item.currentRank}</span>
                     </div>
 
-                    <!-- Info Column -->
                     <div class="flex-1 min-w-0">
                         <div class="flex flex-wrap items-center gap-2 mb-1">
                             <h3 class="hud-font text-lg font-bold text-white truncate tracking-wide">${escapeHTML(item.title)}</h3>
@@ -760,7 +828,6 @@
                         </div>
                         <p class="text-xs text-slate-400 line-clamp-2 leading-relaxed">${escapeHTML(item.description || 'No specific tactical notes provided.')}</p>
                         
-                        <!-- Score bar -->
                         <div class="mt-2 flex items-center gap-2 max-w-xs">
                             <div class="text-[10px] font-mono text-slate-500">ENJOYABILITY</div>
                             <div class="flex-1 h-1.5 rounded-full bg-black/60 overflow-hidden border border-operator-border">
@@ -771,7 +838,6 @@
                     </div>
                 </div>
 
-                <!-- Operator Mode Reorder & Edit Buttons -->
                 ${isOperator ? `
                     <div class="flex items-center gap-1.5 self-end sm:self-center w-full sm:w-auto justify-end pt-2 sm:pt-0 border-t sm:border-t-0 border-operator-border">
                         <button onclick="moveItem('${item.id}', -1)" title="Move Up" class="p-2 rounded bg-operator-card border border-operator-border text-slate-300 hover:text-operator-green hover:border-operator-green transition-all">
@@ -790,9 +856,30 @@
     }
 
     function toggleOperatorMode() {
-        window.BubblesGB.isOperatorMode = !window.BubblesGB.isOperatorMode;
-        renderApp();
-        showToast(window.BubblesGB.isOperatorMode ? 'OPERATOR OVERRIDE ENGAGED' : 'LIVE MONITORING MODE ACTIVE', 'info');
+        if (!window.BubblesGB.isOperatorMode) {
+            // Require password verification to enter operator mode
+            document.getElementById('operatorPasswordInput').value = '';
+            openModal('operatorAuthModal');
+            setTimeout(() => document.getElementById('operatorPasswordInput').focus(), 100);
+        } else {
+            // Toggle off directly if already active
+            window.BubblesGB.isOperatorMode = false;
+            renderApp();
+            showToast('LIVE MONITORING MODE ACTIVE', 'info');
+        }
+    }
+
+    function verifyOperatorPassword() {
+        const passwordInput = document.getElementById('operatorPasswordInput').value;
+        if (passwordInput === 'boogieis15') {
+            window.BubblesGB.isOperatorMode = true;
+            closeModal('operatorAuthModal');
+            renderApp();
+            showToast('OPERATOR OVERRIDE ENGAGED', 'success');
+        } else {
+            showToast('ACCESS DENIED: INVALID SECURITY PASSWORD', 'error');
+            document.getElementById('operatorPasswordInput').value = '';
+        }
     }
 
     function moveItem(id, direction) {
@@ -803,7 +890,6 @@
         const targetIndex = index + direction;
         if (targetIndex < 0 || targetIndex >= items.length) return;
 
-        // Swap positions
         const temp = items[index];
         items[index] = items[targetIndex];
         items[targetIndex] = temp;
@@ -812,7 +898,6 @@
         renderApp();
     }
 
-    // HTML5 Drag and Drop handlers
     function handleDragStart(e, id) {
         window.BubblesGB.draggedItemId = id;
         e.currentTarget.classList.add('dragging');
@@ -835,7 +920,6 @@
         const targetIndex = items.findIndex(i => i.id === targetId);
 
         if (draggedIndex > -1 && targetIndex > -1) {
-            // Reorder array
             const [removed] = items.splice(draggedIndex, 1);
             items.splice(targetIndex, 0, removed);
 
@@ -853,13 +937,11 @@
 
     function openSaveMissionModal() {
         const now = new Date();
-        // Format datetime-local input string YYYY-MM-DDTHH:mm
         const isoLocal = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
         document.getElementById('missionDatePicker').value = isoLocal;
         document.getElementById('missionTitleInput').value = `Mission Snapshot #${window.BubblesGB.missionHistory.length + 1}`;
         document.getElementById('missionNotesInput').value = '';
 
-        // Top 3 preview
         const top3 = window.BubblesGB.items.slice(0, 3).map((item, i) => `#${i+1} ${item.title}`).join(' | ');
         document.getElementById('saveModalTop3').innerText = top3 || 'None';
 
@@ -873,7 +955,6 @@
 
         const timestamp = dateVal ? new Date(dateVal).getTime() : Date.now();
 
-        // Build Rank Mapping Snapshot { [itemId]: rankNumber }
         const snapshotRanks = {};
         window.BubblesGB.items.forEach((item, index) => {
             snapshotRanks[item.id] = index + 1;
@@ -938,7 +1019,6 @@
                 </div>
             `;
         } else {
-            // Show sorted by timestamp descending
             const sorted = [...history].sort((a, b) => b.timestamp - a.timestamp);
             
             listEl.innerHTML = sorted.map((mission, idx) => {
@@ -1017,7 +1097,6 @@
         if (!title) return;
 
         if (id) {
-            // Update existing
             const index = window.BubblesGB.items.findIndex(i => i.id === id);
             if (index > -1) {
                 window.BubblesGB.items[index] = {
@@ -1027,7 +1106,6 @@
                 showToast('INTEREST UPDATED', 'success');
             }
         } else {
-            // Create new
             const newItem = {
                 id: 'hobby-' + Date.now(),
                 title, category, description, score
@@ -1192,7 +1270,7 @@
             icon = 'alert-triangle';
         } else if (type === 'error') {
             typeStyle = 'bg-operator-card border-operator-crimson text-operator-crimson';
-            icon = 'alert-octagone';
+            icon = 'alert-octagon';
         }
 
         toast.className = `p-3 rounded-xl border ${typeStyle} font-mono text-xs shadow-xl flex items-center gap-2 transform transition-all duration-300 translate-y-2 opacity-0 pointer-events-auto`;
@@ -1211,4 +1289,5 @@
         }, 3000);
     }
 </script>
-</body> </html>
+</body>
+</html>
