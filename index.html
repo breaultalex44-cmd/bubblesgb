@@ -123,91 +123,109 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between selection:bg-cyan-500 selection:text-black">
 <div id="app" class="scanlines min-h-screen flex flex-col">
-    <!-- Top HUD Header -->
-    <header class="border-b border-operator-border glass-panel sticky top-0 z-30 px-4 py-3 sm:px-6">
-        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-4">
-            
-            <!-- Logo & Title -->
-            <div class="flex items-center gap-3 w-full lg:w-auto justify-between lg:justify-start">
-                <div class="flex items-center gap-3">
-                    <div class="relative flex items-center justify-center w-10 h-10 rounded-lg bg-black border border-operator-cyan/50 text-operator-cyan hud-glow-cyan">
-                        <i data-lucide="target" class="w-6 h-6 animate-pulse"></i>
-                    </div>
-                    <div>
-                        <div class="flex items-center gap-2">
-                            <h1 class="hud-font text-2xl font-bold tracking-wider text-white">BUBBLES GB</h1>
-                            <span id="statusBadge" class="text-xs px-2 py-0.5 rounded font-mono uppercase bg-operator-green/10 text-operator-green border border-operator-green/30">
-                                LIVE MONITORING
-                            </span>
+    <!-- Remade Top HUD Header & Tooltip Banner -->
+    <header class="border-b border-operator-cyan/30 bg-operator-bg/90 backdrop-blur-xl sticky top-0 z-30 px-4 py-4 sm:px-8 shadow-2xl">
+        <div class="max-w-7xl mx-auto flex flex-col gap-3">
+            <div class="flex flex-col lg:flex-row items-center justify-between gap-4">
+                
+                <!-- Brand / Logo Section -->
+                <div class="flex items-center justify-between w-full lg:w-auto">
+                    <div class="flex items-center gap-3.5">
+                        <div class="relative flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-operator-panel to-black border border-operator-cyan text-operator-cyan hud-glow-cyan shadow-inner">
+                            <i data-lucide="cpu" class="w-6 h-6 animate-pulse"></i>
+                            <div class="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-operator-green animate-ping"></div>
                         </div>
-                        <p class="text-xs text-slate-400 font-mono">TACTICAL INTEREST & HOBBY RANKING SYSTEM</p>
+                        <div>
+                            <div class="flex items-center gap-2.5">
+                                <h1 class="hud-font text-3xl font-extrabold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-white via-operator-cyan to-operator-green">BUBBLES GB</h1>
+                                <span id="statusBadge" class="text-[10px] px-2.5 py-0.5 rounded-full font-mono uppercase bg-operator-green/15 text-operator-green border border-operator-green/40 tracking-widest font-bold">
+                                    SYSTEM ONLINE
+                                </span>
+                            </div>
+                            <p class="text-xs text-slate-400 font-mono tracking-wide">TACTICAL HOBBY MATRIX & LEADERBOARD PROTOCOL</p>
+                        </div>
+                    </div>
+
+                    <!-- Mobile Operator Toggle -->
+                    <div class="lg:hidden">
+                        <button id="mobileOperatorToggle" onclick="toggleOperatorMode()" class="px-3 py-1.5 rounded-lg text-xs font-mono font-bold flex items-center gap-1.5 bg-operator-card border border-operator-border text-slate-300">
+                            <i data-lucide="sliders" class="w-4 h-4 text-operator-amber"></i>
+                            <span id="mobileOpBtnText">OPERATOR</span>
+                        </button>
                     </div>
                 </div>
 
-                <!-- Mobile Operator Mode Quick Indicator -->
-                <div class="lg:hidden">
-                    <button id="mobileOperatorToggle" onclick="toggleOperatorMode()" class="px-3 py-1.5 rounded text-xs font-mono font-bold flex items-center gap-1.5 bg-operator-card border border-operator-border text-slate-300">
-                        <i data-lucide="sliders" class="w-4 h-4"></i>
-                        <span id="mobileOpBtnText">OPERATOR</span>
+                <!-- Live Telemetry Metrics Bar -->
+                <div class="grid grid-cols-3 gap-2 sm:flex sm:items-center w-full lg:w-auto p-2 rounded-xl bg-operator-panel/80 border border-operator-border font-mono text-xs shadow-lg">
+                    <div class="px-3 py-1 text-center sm:text-left">
+                        <div class="text-slate-500 text-[9px] uppercase tracking-wider">TRACKED ITEMS</div>
+                        <div id="metricTotalCount" class="text-operator-cyan font-bold text-sm">0</div>
+                    </div>
+                    <div class="hidden sm:block h-6 w-px bg-operator-border"></div>
+                    <div class="px-3 py-1 text-center sm:text-left border-l sm:border-l-0 border-operator-border">
+                        <div class="text-slate-500 text-[9px] uppercase tracking-wider">LAST MISSION</div>
+                        <div id="metricLastSaved" class="text-slate-200 font-semibold text-xs truncate max-w-[120px]">NEVER</div>
+                    </div>
+                    <div class="hidden sm:block h-6 w-px bg-operator-border"></div>
+                    <div class="px-3 py-1 text-center sm:text-left border-l sm:border-l-0 border-operator-border">
+                        <div class="text-slate-500 text-[9px] uppercase tracking-wider">ELAPSED TIME</div>
+                        <div id="metricElapsedTime" class="text-operator-green font-semibold text-xs">--:--:--</div>
+                    </div>
+                </div>
+
+                <!-- Action Controls (Desktop) -->
+                <div class="hidden lg:flex items-center gap-2.5">
+                    <button id="operatorToggleBtn" onclick="toggleOperatorMode()" class="px-3.5 py-2 rounded-xl font-mono text-xs font-bold flex items-center gap-2 bg-operator-card border border-operator-border hover:border-operator-amber text-slate-200 transition-all shadow">
+                        <i data-lucide="shield-alert" class="w-4 h-4 text-operator-amber"></i>
+                        <span>OPERATOR</span>
+                    </button>
+
+                    <button onclick="openSaveMissionModal()" class="px-3.5 py-2 rounded-xl font-mono text-xs font-bold flex items-center gap-2 bg-operator-green/15 border border-operator-green/60 text-operator-green hover:bg-operator-green hover:text-black transition-all hud-glow-green shadow">
+                        <i data-lucide="save" class="w-4 h-4"></i>
+                        <span>SAVE LOG</span>
+                    </button>
+
+                    <button onclick="openVaultModal()" class="px-3.5 py-2 rounded-xl font-mono text-xs font-bold flex items-center gap-2 bg-operator-card border border-operator-border hover:border-operator-cyan text-slate-200 transition-all shadow">
+                        <i data-lucide="history" class="w-4 h-4 text-operator-cyan"></i>
+                        <span>VAULT</span>
+                    </button>
+
+                    <button onclick="openExportModal()" class="px-3.5 py-2 rounded-xl font-mono text-xs font-bold flex items-center gap-2 bg-operator-card border border-operator-border hover:border-slate-300 text-slate-200 transition-all shadow">
+                        <i data-lucide="database" class="w-4 h-4 text-operator-amber"></i>
+                        <span>DATA</span>
                     </button>
                 </div>
             </div>
 
-            <!-- Live Metrics Display -->
-            <div class="flex items-center justify-around w-full lg:w-auto gap-4 py-1 px-3 rounded-lg bg-black/40 border border-operator-border font-mono text-xs">
-                <div class="text-center sm:text-left">
-                    <div class="text-slate-500 text-[10px] uppercase">TRACKED ITEMS</div>
-                    <div id="metricTotalCount" class="text-operator-cyan font-bold text-sm">0</div>
+            <!-- Tooltip Banner about the DATA tab -->
+            <div class="mt-2 flex items-center justify-between gap-3 px-3.5 py-2 rounded-lg bg-operator-cyan/10 border border-operator-cyan/30 text-xs font-mono text-slate-300 shadow-sm">
+                <div class="flex items-center gap-2.5">
+                    <div class="p-1 rounded bg-operator-cyan/20 text-operator-cyan">
+                        <i data-lucide="info" class="w-4 h-4"></i>
+                    </div>
+                    <span><strong class="text-operator-cyan">PRO TIP:</strong> Use the <span class="text-operator-amber font-bold">DATA</span> tab to export backups or start constructing your own custom list today for free!</span>
                 </div>
-                <div class="h-6 w-px bg-operator-border"></div>
-                <div class="text-center sm:text-left">
-                    <div class="text-slate-500 text-[10px] uppercase">LAST MISSION LOG</div>
-                    <div id="metricLastSaved" class="text-slate-200 font-semibold">NEVER</div>
-                </div>
-                <div class="h-6 w-px bg-operator-border"></div>
-                <div class="text-center sm:text-left">
-                    <div class="text-slate-500 text-[10px] uppercase">ELAPSED TIME</div>
-                    <div id="metricElapsedTime" class="text-operator-green font-semibold">--:--:--</div>
+                <div class="hidden sm:flex items-center gap-1 text-[10px] text-slate-400">
+                    <span class="w-1.5 h-1.5 rounded-full bg-operator-cyan"></span>
+                    <span>SECURE STORAGE</span>
                 </div>
             </div>
 
-            <!-- Desktop Tactical Actions -->
-            <div class="hidden lg:flex items-center gap-2">
-                <button id="operatorToggleBtn" onclick="toggleOperatorMode()" class="px-3 py-2 rounded-lg font-mono text-xs font-bold flex items-center gap-2 bg-operator-card border border-operator-border hover:border-operator-amber text-slate-200 transition-all">
-                    <i data-lucide="shield-alert" class="w-4 h-4 text-operator-amber"></i>
-                    <span>OPERATOR MODE</span>
+            <!-- Mobile Action Bar -->
+            <div class="flex lg:hidden items-center justify-between gap-2 pt-2 border-t border-operator-border/60">
+                <button onclick="openSaveMissionModal()" class="flex-1 py-2 rounded-lg font-mono text-xs font-bold flex items-center justify-center gap-1.5 bg-operator-green/15 border border-operator-green/60 text-operator-green">
+                    <i data-lucide="save" class="w-3.5 h-3.5"></i>
+                    <span>SAVE LOG</span>
                 </button>
-
-                <button onclick="openSaveMissionModal()" class="px-3 py-2 rounded-lg font-mono text-xs font-bold flex items-center gap-2 bg-operator-green/20 border border-operator-green text-operator-green hover:bg-operator-green hover:text-black transition-all hud-glow-green">
-                    <i data-lucide="save" class="w-4 h-4"></i>
-                    <span>SAVE MISSION</span>
-                </button>
-
-                <button onclick="openVaultModal()" class="px-3 py-2 rounded-lg font-mono text-xs font-bold flex items-center gap-2 bg-operator-card border border-operator-border hover:border-operator-cyan text-slate-200 transition-all">
-                    <i data-lucide="history" class="w-4 h-4 text-operator-cyan"></i>
+                <button onclick="openVaultModal()" class="flex-1 py-2 rounded-lg font-mono text-xs font-bold flex items-center justify-center gap-1.5 bg-operator-card border border-operator-border text-slate-200">
+                    <i data-lucide="history" class="w-3.5 h-3.5 text-operator-cyan"></i>
                     <span>VAULT</span>
                 </button>
-
-                <button onclick="openExportModal()" class="px-3 py-2 rounded-lg font-mono text-xs font-bold flex items-center gap-2 bg-operator-card border border-operator-border hover:border-slate-400 text-slate-300 transition-all">
-                    <i data-lucide="file-json" class="w-4 h-4"></i>
+                <button onclick="openExportModal()" class="flex-1 py-2 rounded-lg font-mono text-xs font-bold flex items-center justify-center gap-1.5 bg-operator-card border border-operator-border text-operator-amber">
+                    <i data-lucide="database" class="w-3.5 h-3.5"></i>
                     <span>DATA</span>
                 </button>
             </div>
-        </div>
-
-        <!-- Mobile Action Bar -->
-        <div class="flex lg:hidden items-center justify-between gap-2 mt-3 pt-3 border-t border-operator-border/50">
-            <button onclick="openSaveMissionModal()" class="flex-1 py-1.5 rounded font-mono text-xs font-bold flex items-center justify-center gap-1.5 bg-operator-green/20 border border-operator-green text-operator-green">
-                <i data-lucide="save" class="w-3.5 h-3.5"></i>
-                <span>SAVE LOG</span>
-            </button>
-            <button onclick="openVaultModal()" class="flex-1 py-1.5 rounded font-mono text-xs font-bold flex items-center justify-center gap-1.5 bg-operator-card border border-operator-border text-slate-200">
-                <i data-lucide="history" class="w-3.5 h-3.5 text-operator-cyan"></i>
-                <span>VAULT</span>
-            </button>
-            <button onclick="openExportModal()" class="py-1.5 px-3 rounded font-mono text-xs font-bold flex items-center justify-center bg-operator-card border border-operator-border text-slate-300">
-                <i data-lucide="file-json" class="w-3.5 h-3.5"></i>
-            </button>
         </div>
     </header>
 
@@ -279,17 +297,6 @@
             </button>
         </div>
     </main>
-
-    <!-- Footer -->
-    <footer class="border-t border-operator-border/60 py-4 px-6 glass-panel mt-8">
-        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono text-slate-500">
-            <div class="flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-operator-green inline-block animate-ping"></span>
-                <span>BUBBLES GB OPERATOR FRAMEWORK v3.2</span>
-            </div>
-            <div>AUTONOMOUS SNAPSHOT & RANK DELTA CALCULATOR</div>
-        </div>
-    </footer>
 </div>
 
 <!-- Operator Authentication Security Modal -->
@@ -766,12 +773,12 @@
             banner.classList.remove('hidden');
             toggleBtn.classList.add('operator-active', 'bg-operator-amber/20', 'text-operator-amber');
             statusBadge.innerText = 'OPERATOR MODE ACTIVE';
-            statusBadge.className = 'text-xs px-2 py-0.5 rounded font-mono uppercase bg-operator-amber/20 text-operator-amber border border-operator-amber/40 animate-pulse';
+            statusBadge.className = 'text-[10px] px-2.5 py-0.5 rounded-full font-mono uppercase bg-operator-amber/20 text-operator-amber border border-operator-amber/40 animate-pulse tracking-widest font-bold';
         } else {
             banner.classList.add('hidden');
             toggleBtn.classList.remove('operator-active', 'bg-operator-amber/20', 'text-operator-amber');
-            statusBadge.innerText = 'LIVE MONITORING';
-            statusBadge.className = 'text-xs px-2 py-0.5 rounded font-mono uppercase bg-operator-green/10 text-operator-green border border-operator-green/30';
+            statusBadge.innerText = 'SYSTEM ONLINE';
+            statusBadge.className = 'text-[10px] px-2.5 py-0.5 rounded-full font-mono uppercase bg-operator-green/15 text-operator-green border border-operator-green/40 tracking-widest font-bold';
         }
     }
 
