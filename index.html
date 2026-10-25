@@ -2,14 +2,14 @@
 <html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bubbles GB - Tactical Interest & Hobby Leaderboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bubbles GB — Cybernetic Matrix & Tactical Interest Leaderboard</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Fonts: Rajdhani for tactical HUD headings & Inter for body -->
+    <!-- Google Fonts: Orbitron for Sci-Fi HUD headers, Inter for crisp data readability -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@500;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
@@ -18,20 +18,23 @@
             theme: {
                 extend: {
                     colors: {
-                        operator: {
-                            bg: '#0a0d12',
-                            panel: '#11161d',
-                            card: '#161d26',
-                            border: '#232f3e',
-                            green: '#00ff88',
-                            cyan: '#00f0ff',
-                            amber: '#ffb700',
-                            crimson: '#ff3366',
+                        cyber: {
+                            bg: '#030712',
+                            panel: '#0B101D',
+                            card: '#111827',
+                            border: '#1F293D',
+                            neonCyan: '#00F0FF',
+                            neonMagenta: '#FF007A',
+                            neonEmerald: '#00FF88',
+                            neonAmber: '#FFB800',
+                            neonPurple: '#A855F7',
+                            glass: 'rgba(11, 16, 29, 0.75)',
                         }
                     },
                     fontFamily: {
-                        hud: ['Rajdhani', 'sans-serif'],
+                        orbitron: ['Orbitron', 'sans-serif'],
                         sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
                     }
                 }
             }
@@ -39,189 +42,257 @@
     </script>
     <style>
         body {
-            background-color: #0a0d12;
-            background-image: radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.05) 0%, transparent 70%), linear-gradient(rgba(22, 29, 38, 0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(22, 29, 38, 0.4) 1px, transparent 1px);
-            background-size: 100% 100%, 32px 32px, 32px 32px;
-            color: #e2e8f0;
+            background-color: #030712;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.08) 0%, transparent 65%),
+                radial-gradient(circle at 100% 100%, rgba(255, 0, 122, 0.05) 0%, transparent 50%),
+                linear-gradient(rgba(31, 41, 61, 0.3) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(31, 41, 61, 0.3) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+            color: #F3F4F6;
             font-family: 'Inter', sans-serif;
-        }
-        .hud-font {
-            font-family: 'Rajdhani', sans-serif;
-            letter-spacing: 0.05em;
+            overflow-x: hidden;
         }
 
-        .hud-glow-green {
-            box-shadow: 0 0 15px rgba(0, 255, 136, 0.25);
-            text-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
+        .font-hud {
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 0.08em;
         }
 
-        .hud-glow-cyan {
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.25);
-            text-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
+        /* Holographic & Glow Effects */
+        .glow-cyan {
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
         }
 
-        .hud-glow-amber {
-            box-shadow: 0 0 15px rgba(255, 183, 0, 0.3);
-            text-shadow: 0 0 8px rgba(255, 183, 0, 0.6);
+        .glow-magenta {
+            box-shadow: 0 0 20px rgba(255, 0, 122, 0.3);
+            text-shadow: 0 0 10px rgba(255, 0, 122, 0.6);
         }
 
-        .glass-panel {
-            background: rgba(17, 22, 29, 0.75);
+        .glow-emerald {
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.6);
+        }
+
+        .glow-amber {
+            box-shadow: 0 0 20px rgba(255, 184, 0, 0.3);
+            text-shadow: 0 0 10px rgba(255, 184, 0, 0.6);
+        }
+
+        .cyber-panel {
+            background: rgba(11, 16, 29, 0.8);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        .cyber-card {
+            background: rgba(17, 24, 39, 0.7);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(0, 240, 255, 0.15);
+            border: 1px solid rgba(31, 41, 61, 0.8);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .operator-active {
-            border-color: rgba(255, 183, 0, 0.6) !important;
-            box-shadow: 0 0 20px rgba(255, 183, 0, 0.15);
+        .cyber-card:hover {
+            border-color: rgba(0, 240, 255, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(0, 240, 255, 0.12);
         }
 
-        /* Custom Scrollbars */
+        .cyber-card-matrix {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .cyber-card-compact {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        /* Custom Animated Grid Scanlines */
+        .scanline-overlay {
+            position: relative;
+            overflow: hidden;
+        }
+        .scanline-overlay::after {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%);
+            background-size: 100% 4px;
+            z-index: 2;
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        /* Drag & Drop Feedback */
+        .dragging {
+            opacity: 0.3;
+            transform: scale(0.97);
+            border: 2px dashed #FFB800 !important;
+        }
+
+        /* Radial Radar Target Circle */
+        .radar-sweep {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: conic-gradient(from 0deg, transparent 0deg, transparent 300deg, rgba(0, 240, 255, 0.15) 360deg);
+            border-radius: 50%;
+            animation: radarSpin 4s linear infinite;
+        }
+
+        @keyframes radarSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
         }
         ::-webkit-scrollbar-track {
-            background: #0a0d12;
+            background: #030712;
         }
         ::-webkit-scrollbar-thumb {
-            background: #232f3e;
+            background: #1F293D;
             border-radius: 3px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #00f0ff;
+            background: #00F0FF;
         }
 
-        /* Drag handle feedback */
-        .dragging {
-            opacity: 0.4;
-            transform: scale(0.98);
-            border: 2px dashed #ffb700 !important;
+        /* Pulse Animations */
+        @keyframes cyberPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.98); }
         }
-
-        .drag-over {
-            border-top: 3px solid #00f0ff !important;
-        }
-
-        /* Scanline effect */
-        .scanlines {
-            position: relative;
-            overflow: hidden;
-        }
-        .scanlines::before {
-            content: " ";
-            display: block;
-            position: absolute;
-            top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
-            background-size: 100% 4px;
-            z-index: 2;
-            pointer-events: none;
-            opacity: 0.3;
+        .pulse-subtle {
+            animation: cyberPulse 3s infinite ease-in-out;
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between selection:bg-cyan-500 selection:text-black">
-<div id="app" class="scanlines min-h-screen flex flex-col">
-    <!-- Remade Top HUD Header & Tooltip Banner -->
-    <header class="border-b border-operator-cyan/30 bg-operator-bg/90 backdrop-blur-xl sticky top-0 z-30 px-4 py-4 sm:px-8 shadow-2xl">
+<body class="min-h-screen flex flex-col justify-between selection:bg-cyber-neonCyan selection:text-black">
+<div id="app" class="scanline-overlay min-h-screen flex flex-col">
+    
+    <!-- Cybernetic Header HUD -->
+    <header class="border-b border-cyber-neonCyan/30 bg-cyber-bg/95 backdrop-blur-2xl sticky top-0 z-40 px-4 py-3 sm:px-8 shadow-2xl">
         <div class="max-w-7xl mx-auto flex flex-col gap-3">
             <div class="flex flex-col lg:flex-row items-center justify-between gap-4">
                 
-                <!-- Brand / Logo Section -->
+                <!-- Branding & Core Status Indicator -->
                 <div class="flex items-center justify-between w-full lg:w-auto">
                     <div class="flex items-center gap-3.5">
-                        <div class="relative flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-operator-panel to-black border border-operator-cyan text-operator-cyan hud-glow-cyan shadow-inner">
-                            <i data-lucide="cpu" class="w-6 h-6 animate-pulse"></i>
-                            <div class="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-operator-green animate-ping"></div>
+                        <div class="relative flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-cyber-panel to-black border border-cyber-neonCyan text-cyber-neonCyan glow-cyan shadow-inner overflow-hidden">
+                            <div class="radar-sweep"></div>
+                            <i data-lucide="crosshair" class="w-6 h-6 z-10 animate-spin-slow"></i>
                         </div>
                         <div>
                             <div class="flex items-center gap-2.5">
-                                <h1 class="hud-font text-3xl font-extrabold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-white via-operator-cyan to-operator-green">BUBBLES GB</h1>
-                                <span id="statusBadge" class="text-[10px] px-2.5 py-0.5 rounded-full font-mono uppercase bg-operator-green/15 text-operator-green border border-operator-green/40 tracking-widest font-bold">
-                                    SYSTEM ONLINE
+                                <h1 class="font-hud text-2xl sm:text-3xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-white via-cyber-neonCyan to-cyber-neonMagenta">BUBBLES GB</h1>
+                                <span id="statusBadge" class="text-[9px] px-2.5 py-0.5 rounded-full font-mono uppercase bg-cyber-neonEmerald/15 text-cyber-neonEmerald border border-cyber-neonEmerald/40 tracking-widest font-bold">
+                                    CORE ONLINE
                                 </span>
                             </div>
-                            <p class="text-xs text-slate-400 font-mono tracking-wide">TACTICAL HOBBY MATRIX & LEADERBOARD PROTOCOL</p>
+                            <p class="text-[11px] text-slate-400 font-mono tracking-wider flex items-center gap-2">
+                                <span class="text-cyber-neonCyan font-bold">TACTICAL MATRIX v3.0</span>
+                                <span class="text-slate-600">|</span>
+                                <span>HOBBY RANKING PROTOCOL</span>
+                            </p>
                         </div>
                     </div>
 
-                    <!-- Mobile Operator Toggle -->
+                    <!-- Mobile Operator Mode Toggle Button -->
                     <div class="lg:hidden">
-                        <button id="mobileOperatorToggle" onclick="toggleOperatorMode()" class="px-3 py-1.5 rounded-lg text-xs font-mono font-bold flex items-center gap-1.5 bg-operator-card border border-operator-border text-slate-300">
-                            <i data-lucide="sliders" class="w-4 h-4 text-operator-amber"></i>
-                            <span id="mobileOpBtnText">OPERATOR</span>
+                        <button id="mobileOperatorToggle" onclick="toggleOperatorMode()" class="px-3 py-1.5 rounded-lg text-xs font-mono font-bold flex items-center gap-1.5 bg-cyber-card border border-cyber-border text-slate-200">
+                            <i data-lucide="shield-alert" class="w-4 h-4 text-cyber-neonAmber"></i>
+                            <span id="mobileOpBtnText">OVERRIDE</span>
                         </button>
                     </div>
                 </div>
 
-                <!-- Live Telemetry Metrics Bar -->
-                <div class="grid grid-cols-3 gap-2 sm:flex sm:items-center w-full lg:w-auto p-2 rounded-xl bg-operator-panel/80 border border-operator-border font-mono text-xs shadow-lg">
+                <!-- Live Matrix Telemetry Display -->
+                <div class="grid grid-cols-3 gap-2 sm:flex sm:items-center w-full lg:w-auto p-2 rounded-xl bg-cyber-panel/90 border border-cyber-border font-mono text-xs shadow-lg">
                     <div class="px-3 py-1 text-center sm:text-left">
-                        <div class="text-slate-500 text-[9px] uppercase tracking-wider">TRACKED ITEMS</div>
-                        <div id="metricTotalCount" class="text-operator-cyan font-bold text-sm">0</div>
+                        <div class="text-slate-500 text-[9px] uppercase tracking-wider font-bold">TRACKED NODES</div>
+                        <div id="metricTotalCount" class="text-cyber-neonCyan font-black text-sm">0</div>
                     </div>
-                    <div class="hidden sm:block h-6 w-px bg-operator-border"></div>
-                    <div class="px-3 py-1 text-center sm:text-left border-l sm:border-l-0 border-operator-border">
-                        <div class="text-slate-500 text-[9px] uppercase tracking-wider">LAST MISSION</div>
+                    <div class="hidden sm:block h-6 w-px bg-cyber-border"></div>
+                    <div class="px-3 py-1 text-center sm:text-left border-l sm:border-l-0 border-cyber-border">
+                        <div class="text-slate-500 text-[9px] uppercase tracking-wider font-bold">LAST SNAPSHOT</div>
                         <div id="metricLastSaved" class="text-slate-200 font-semibold text-xs truncate max-w-[120px]">NEVER</div>
                     </div>
-                    <div class="hidden sm:block h-6 w-px bg-operator-border"></div>
-                    <div class="px-3 py-1 text-center sm:text-left border-l sm:border-l-0 border-operator-border">
-                        <div class="text-slate-500 text-[9px] uppercase tracking-wider">ELAPSED TIME</div>
-                        <div id="metricElapsedTime" class="text-operator-green font-semibold text-xs">--:--:--</div>
+                    <div class="hidden sm:block h-6 w-px bg-cyber-border"></div>
+                    <div class="px-3 py-1 text-center sm:text-left border-l sm:border-l-0 border-cyber-border">
+                        <div class="text-slate-500 text-[9px] uppercase tracking-wider font-bold">ELAPSED CLOCK</div>
+                        <div id="metricElapsedTime" class="text-cyber-neonEmerald font-semibold text-xs">--:--:--</div>
                     </div>
                 </div>
 
-                <!-- Action Controls (Desktop) -->
-                <div class="hidden lg:flex items-center gap-2.5">
-                    <button id="operatorToggleBtn" onclick="toggleOperatorMode()" class="px-3.5 py-2 rounded-xl font-mono text-xs font-bold flex items-center gap-2 bg-operator-card border border-operator-border hover:border-operator-amber text-slate-200 transition-all shadow">
-                        <i data-lucide="shield-alert" class="w-4 h-4 text-operator-amber"></i>
+                <!-- Action Toolbar (Desktop) -->
+                <div class="hidden lg:flex items-center gap-2">
+                    <button id="operatorToggleBtn" onclick="toggleOperatorMode()" class="px-3.5 py-2 rounded-xl font-mono text-xs font-bold flex items-center gap-2 bg-cyber-card border border-cyber-border hover:border-cyber-neonAmber text-slate-200 transition-all shadow">
+                        <i data-lucide="shield-alert" class="w-4 h-4 text-cyber-neonAmber"></i>
                         <span>OPERATOR</span>
                     </button>
 
-                    <button onclick="openSaveMissionModal()" class="px-3.5 py-2 rounded-xl font-mono text-xs font-bold flex items-center gap-2 bg-operator-green/15 border border-operator-green/60 text-operator-green hover:bg-operator-green hover:text-black transition-all hud-glow-green shadow">
+                    <button onclick="openSaveMissionModal()" class="px-3.5 py-2 rounded-xl font-mono text-xs font-bold flex items-center gap-2 bg-cyber-neonEmerald/15 border border-cyber-neonEmerald/60 text-cyber-neonEmerald hover:bg-cyber-neonEmerald hover:text-black transition-all glow-emerald shadow">
                         <i data-lucide="save" class="w-4 h-4"></i>
                         <span>SAVE LOG</span>
                     </button>
 
-                    <button onclick="openVaultModal()" class="px-3.5 py-2 rounded-xl font-mono text-xs font-bold flex items-center gap-2 bg-operator-card border border-operator-border hover:border-operator-cyan text-slate-200 transition-all shadow">
-                        <i data-lucide="history" class="w-4 h-4 text-operator-cyan"></i>
+                    <button onclick="openAnalyticsModal()" class="px-3.5 py-2 rounded-xl font-mono text-xs font-bold flex items-center gap-2 bg-cyber-card border border-cyber-border hover:border-cyber-neonMagenta text-cyber-neonMagenta transition-all shadow">
+                        <i data-lucide="activity" class="w-4 h-4"></i>
+                        <span>ANALYTICS</span>
+                    </button>
+
+                    <button onclick="openVaultModal()" class="px-3.5 py-2 rounded-xl font-mono text-xs font-bold flex items-center gap-2 bg-cyber-card border border-cyber-border hover:border-cyber-neonCyan text-slate-200 transition-all shadow">
+                        <i data-lucide="archive" class="w-4 h-4 text-cyber-neonCyan"></i>
                         <span>VAULT</span>
                     </button>
 
-                    <button onclick="openExportModal()" class="px-3.5 py-2 rounded-xl font-mono text-xs font-bold flex items-center gap-2 bg-operator-card border border-operator-border hover:border-slate-300 text-slate-200 transition-all shadow">
-                        <i data-lucide="database" class="w-4 h-4 text-operator-amber"></i>
+                    <button onclick="openExportModal()" class="px-3.5 py-2 rounded-xl font-mono text-xs font-bold flex items-center gap-2 bg-cyber-card border border-cyber-border hover:border-slate-300 text-slate-200 transition-all shadow">
+                        <i data-lucide="database" class="w-4 h-4 text-cyber-neonAmber"></i>
                         <span>DATA</span>
                     </button>
                 </div>
             </div>
 
-            <!-- Tooltip Banner about the DATA tab -->
-            <div class="mt-2 flex items-center justify-between gap-3 px-3.5 py-2 rounded-lg bg-operator-cyan/10 border border-operator-cyan/30 text-xs font-mono text-slate-300 shadow-sm">
-                <div class="flex items-center gap-2.5">
-                    <div class="p-1 rounded bg-operator-cyan/20 text-operator-cyan">
-                        <i data-lucide="info" class="w-4 h-4"></i>
+            <!-- Pro Tip Telemetry Banner -->
+            <div class="flex items-center justify-between gap-3 px-3.5 py-1.5 rounded-lg bg-cyber-neonCyan/10 border border-cyber-neonCyan/30 text-xs font-mono text-slate-300 shadow-sm">
+                <div class="flex items-center gap-2.5 truncate">
+                    <div class="p-1 rounded bg-cyber-neonCyan/20 text-cyber-neonCyan shrink-0">
+                        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
                     </div>
-                    <span><strong class="text-operator-cyan">PRO TIP:</strong> Use the <span class="text-operator-amber font-bold">DATA</span> tab to export backups or start constructing your own custom list today for free!</span>
+                    <span class="truncate"><strong class="text-cyber-neonCyan">TACTICAL TIP:</strong> Toggle <span class="text-cyber-neonAmber font-bold">OPERATOR</span> mode with passcode <code class="px-1 py-0.5 rounded bg-black text-cyber-neonAmber border border-cyber-neonAmber/30 font-bold">boogieis15</code> to drag, re-rank, or add custom nodes!</span>
                 </div>
-                <div class="hidden sm:flex items-center gap-1 text-[10px] text-slate-400">
-                    <span class="w-1.5 h-1.5 rounded-full bg-operator-cyan"></span>
-                    <span>SECURE STORAGE</span>
+                <div class="hidden md:flex items-center gap-2 text-[10px] text-slate-400 shrink-0">
+                    <span class="w-2 h-2 rounded-full bg-cyber-neonEmerald animate-ping"></span>
+                    <span>ACTIVE SYNC</span>
                 </div>
             </div>
 
             <!-- Mobile Action Bar -->
-            <div class="flex lg:hidden items-center justify-between gap-2 pt-2 border-t border-operator-border/60">
-                <button onclick="openSaveMissionModal()" class="flex-1 py-2 rounded-lg font-mono text-xs font-bold flex items-center justify-center gap-1.5 bg-operator-green/15 border border-operator-green/60 text-operator-green">
+            <div class="flex lg:hidden items-center justify-between gap-1.5 pt-1 border-t border-cyber-border">
+                <button onclick="openSaveMissionModal()" class="flex-1 py-2 rounded-lg font-mono text-[11px] font-bold flex items-center justify-center gap-1 bg-cyber-neonEmerald/15 border border-cyber-neonEmerald/60 text-cyber-neonEmerald">
                     <i data-lucide="save" class="w-3.5 h-3.5"></i>
-                    <span>SAVE LOG</span>
+                    <span>SAVE</span>
                 </button>
-                <button onclick="openVaultModal()" class="flex-1 py-2 rounded-lg font-mono text-xs font-bold flex items-center justify-center gap-1.5 bg-operator-card border border-operator-border text-slate-200">
-                    <i data-lucide="history" class="w-3.5 h-3.5 text-operator-cyan"></i>
+                <button onclick="openAnalyticsModal()" class="flex-1 py-2 rounded-lg font-mono text-[11px] font-bold flex items-center justify-center gap-1 bg-cyber-card border border-cyber-border text-cyber-neonMagenta">
+                    <i data-lucide="activity" class="w-3.5 h-3.5"></i>
+                    <span>STATS</span>
+                </button>
+                <button onclick="openVaultModal()" class="flex-1 py-2 rounded-lg font-mono text-[11px] font-bold flex items-center justify-center gap-1 bg-cyber-card border border-cyber-border text-cyber-neonCyan">
+                    <i data-lucide="archive" class="w-3.5 h-3.5"></i>
                     <span>VAULT</span>
                 </button>
-                <button onclick="openExportModal()" class="flex-1 py-2 rounded-lg font-mono text-xs font-bold flex items-center justify-center gap-1.5 bg-operator-card border border-operator-border text-operator-amber">
+                <button onclick="openExportModal()" class="flex-1 py-2 rounded-lg font-mono text-[11px] font-bold flex items-center justify-center gap-1 bg-cyber-card border border-cyber-border text-cyber-neonAmber">
                     <i data-lucide="database" class="w-3.5 h-3.5"></i>
                     <span>DATA</span>
                 </button>
@@ -229,36 +300,37 @@
         </div>
     </header>
 
-    <!-- Main Dashboard Body -->
+    <!-- Main Operational Workspace -->
     <main class="max-w-7xl mx-auto px-4 py-6 sm:px-6 flex-1 w-full flex flex-col gap-6">
         
-        <!-- Operator Active Warning Bar (Visible in Operator Mode) -->
-        <div id="operatorBanner" class="hidden rounded-xl p-4 bg-operator-amber/10 border border-operator-amber/40 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div class="flex items-center gap-3">
-                <div class="p-2 rounded-lg bg-operator-amber/20 text-operator-amber animate-bounce">
-                    <i data-lucide="wrench" class="w-5 h-5"></i>
+        <!-- Operator Override Banner -->
+        <div id="operatorBanner" class="hidden rounded-2xl p-4 bg-cyber-neonAmber/10 border border-cyber-neonAmber/50 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
+            <div class="flex items-center gap-3.5">
+                <div class="p-2.5 rounded-xl bg-cyber-neonAmber/20 text-cyber-neonAmber glow-amber animate-bounce">
+                    <i data-lucide="wrench" class="w-6 h-6"></i>
                 </div>
                 <div>
-                    <h2 class="hud-font font-bold text-operator-amber text-lg tracking-wide">OPERATOR OVERRIDE ACTIVE</h2>
-                    <p class="text-xs text-slate-300">Drag cards or use direction arrows to re-rank. Add or edit items directly. Remember to hit <span class="text-operator-green font-mono font-bold">SAVE MISSION</span> when finished.</p>
+                    <h2 class="font-hud font-bold text-cyber-neonAmber text-lg tracking-wider">OPERATOR OVERRIDE ACTIVE</h2>
+                    <p class="text-xs text-slate-300">Drag items to adjust ranks, use movement arrows, or add custom nodes. Remember to hit <span class="text-cyber-neonEmerald font-mono font-bold">SAVE LOG</span> when done.</p>
                 </div>
             </div>
-            <button onclick="openAddModal()" class="w-full sm:w-auto px-4 py-2 rounded-lg font-mono text-xs font-bold bg-operator-amber text-black hover:bg-yellow-400 flex items-center justify-center gap-2 transition-all">
+            <button onclick="openAddModal()" class="w-full sm:w-auto px-4 py-2.5 rounded-xl font-mono text-xs font-bold bg-cyber-neonAmber text-black hover:bg-yellow-400 flex items-center justify-center gap-2 transition-all glow-amber shrink-0">
                 <i data-lucide="plus-circle" class="w-4 h-4"></i>
-                <span>ADD NEW INTEREST</span>
+                <span>ADD NEW NODE</span>
             </button>
         </div>
 
-        <!-- Controls & Filters Toolbar -->
-        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pb-2 border-b border-operator-border">
+        <!-- Controls, Filters & Layout Toggle Matrix -->
+        <div class="flex flex-col md:flex-row items-center justify-between gap-4 pb-3 border-b border-cyber-border">
+            
             <!-- Search & Category Filters -->
-            <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+            <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
                 <div class="relative flex-1 sm:w-64">
                     <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2.5 text-slate-500"></i>
-                    <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Search interests..." class="w-full bg-operator-card border border-operator-border rounded-lg pl-9 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-operator-cyan font-mono">
+                    <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Search interest matrix..." class="w-full bg-cyber-card border border-cyber-border rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyber-neonCyan font-mono">
                 </div>
                 
-                <select id="categoryFilter" onchange="handleFilter()" class="bg-operator-card border border-operator-border rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-operator-cyan font-mono">
+                <select id="categoryFilter" onchange="handleFilter()" class="bg-cyber-card border border-cyber-border rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyber-neonCyan font-mono">
                     <option value="ALL">ALL CATEGORIES</option>
                     <option value="ATHLETICS">ATHLETICS & FITNESS</option>
                     <option value="GAMING">GAMING & STRATEGY</option>
@@ -269,43 +341,55 @@
                 </select>
             </div>
 
-            <!-- Sort & Display Stats -->
-            <div class="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-4 text-xs font-mono text-slate-400">
+            <!-- Layout Options, Sort & View Modes -->
+            <div class="flex flex-wrap items-center justify-between md:justify-end w-full md:w-auto gap-3 text-xs font-mono text-slate-400">
+                
+                <!-- View Mode Toggle (Grid vs Compact List) -->
+                <div class="flex items-center bg-cyber-card border border-cyber-border rounded-xl p-1">
+                    <button id="viewGridBtn" onclick="setLayoutMode('grid')" title="Grid View" class="p-1.5 rounded-lg text-cyber-neonCyan bg-cyber-panel border border-cyber-neonCyan/40">
+                        <i data-lucide="grid" class="w-4 h-4"></i>
+                    </button>
+                    <button id="viewListBtn" onclick="setLayoutMode('list')" title="List View" class="p-1.5 rounded-lg text-slate-500 hover:text-white">
+                        <i data-lucide="list" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
                 <div class="flex items-center gap-2">
-                    <span>SORT BY:</span>
-                    <select id="sortSelect" onchange="handleSort()" class="bg-operator-card border border-operator-border rounded-lg px-2 py-1 text-xs text-operator-cyan focus:outline-none">
-                        <option value="RANK">CURRENT RANK</option>
+                    <span class="text-slate-500">SORT:</span>
+                    <select id="sortSelect" onchange="handleSort()" class="bg-cyber-card border border-cyber-border rounded-xl px-2.5 py-1.5 text-xs text-cyber-neonCyan focus:outline-none font-mono">
+                        <option value="RANK">RANK ORDER</option>
                         <option value="DELTA">BIGGEST CLIMBERS</option>
                         <option value="TITLE">ALPHABETICAL</option>
+                        <option value="SCORE">HIGHEST SCORE</option>
                     </select>
                 </div>
             </div>
         </div>
 
-        <!-- Dynamic Leaderboard Cards Container -->
-        <div id="leaderboardList" class="flex flex-col gap-3">
-            <!-- Cards will be populated dynamically via JavaScript -->
+        <!-- Dynamic Leaderboard Matrix Container -->
+        <div id="leaderboardList" class="cyber-card-matrix">
+            <!-- Populated via JavaScript -->
         </div>
 
-        <!-- Empty State Display -->
-        <div id="emptyState" class="hidden flex-col items-center justify-center py-16 text-center border border-dashed border-operator-border rounded-2xl bg-operator-panel/30">
-            <i data-lucide="ghost" class="w-12 h-12 text-slate-600 mb-3"></i>
-            <h3 class="hud-font text-lg text-slate-300 font-bold">NO INTERESTS FOUND</h3>
-            <p class="text-xs text-slate-500 max-w-sm mt-1 mb-4">No matching interests found for the selected search or filter.</p>
-            <button onclick="resetFilters()" class="px-3 py-1.5 rounded bg-operator-card border border-operator-border text-xs text-operator-cyan font-mono">
-                RESET FILTERS
+        <!-- Empty State Container -->
+        <div id="emptyState" class="hidden flex-col items-center justify-center py-20 text-center border border-dashed border-cyber-border rounded-2xl bg-cyber-panel/40">
+            <i data-lucide="ghost" class="w-12 h-12 text-slate-600 mb-3 animate-pulse"></i>
+            <h3 class="font-hud text-lg text-slate-300 font-bold">NO MATCHING MATRIX NODES</h3>
+            <p class="text-xs text-slate-500 max-w-sm mt-1 mb-4 font-mono">Adjust search terms or category filters to display node data.</p>
+            <button onclick="resetFilters()" class="px-4 py-2 rounded-xl bg-cyber-card border border-cyber-border text-xs text-cyber-neonCyan font-mono font-bold hover:border-cyber-neonCyan">
+                RESET MATRIX FILTERS
             </button>
         </div>
     </main>
 </div>
 
-<!-- Operator Authentication Security Modal -->
-<div id="operatorAuthModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-    <div class="glass-panel border-operator-amber/40 rounded-2xl max-w-sm w-full p-6 shadow-2xl relative">
-        <div class="flex items-center justify-between border-b border-operator-border pb-3 mb-4">
-            <div class="flex items-center gap-2 text-operator-amber">
+<!-- Operator Authentication Modal -->
+<div id="operatorAuthModal" class="fixed inset-0 bg-black/85 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4">
+    <div class="cyber-panel border-cyber-neonAmber/50 rounded-2xl max-w-sm w-full p-6 shadow-2xl relative">
+        <div class="flex items-center justify-between border-b border-cyber-border pb-3 mb-4">
+            <div class="flex items-center gap-2 text-cyber-neonAmber">
                 <i data-lucide="shield-alert" class="w-5 h-5"></i>
-                <h3 class="hud-font font-bold text-lg text-white">OPERATOR AUTHENTICATION</h3>
+                <h3 class="font-hud font-bold text-lg text-white">OPERATOR CLEARANCE</h3>
             </div>
             <button onclick="closeModal('operatorAuthModal')" class="text-slate-400 hover:text-white">
                 <i data-lucide="x" class="w-5 h-5"></i>
@@ -313,16 +397,16 @@
         </div>
 
         <div class="space-y-4">
-            <p class="text-xs text-slate-300">Enter security clearance password to engage Operator Mode override:</p>
+            <p class="text-xs text-slate-300 leading-relaxed font-sans">Enter security clearance password to engage Operator Mode override:</p>
             <div>
-                <input type="password" id="operatorPasswordInput" placeholder="Enter password..." class="w-full bg-operator-card border border-operator-border rounded-lg px-3 py-2 text-sm text-white focus:border-operator-amber focus:outline-none font-mono" onkeypress="if(event.key==='Enter') verifyOperatorPassword()">
+                <input type="password" id="operatorPasswordInput" placeholder="Enter security passcode..." class="w-full bg-cyber-card border border-cyber-border rounded-xl px-3.5 py-2.5 text-sm text-white focus:border-cyber-neonAmber focus:outline-none font-mono" onkeypress="if(event.key==='Enter') verifyOperatorPassword()">
             </div>
 
             <div class="flex items-center justify-end gap-3 pt-2">
-                <button onclick="closeModal('operatorAuthModal')" class="px-3 py-1.5 rounded text-xs font-mono text-slate-400 hover:text-white">
+                <button onclick="closeModal('operatorAuthModal')" class="px-3.5 py-2 rounded-xl text-xs font-mono text-slate-400 hover:text-white">
                     CANCEL
                 </button>
-                <button onclick="verifyOperatorPassword()" class="px-4 py-2 rounded-lg font-mono text-xs font-bold bg-operator-amber text-black hover:bg-yellow-400 flex items-center gap-1.5">
+                <button onclick="verifyOperatorPassword()" class="px-4 py-2 rounded-xl font-mono text-xs font-bold bg-cyber-neonAmber text-black hover:bg-yellow-400 flex items-center gap-1.5 glow-amber">
                     <i data-lucide="key" class="w-4 h-4"></i>
                     <span>AUTHENTICATE</span>
                 </button>
@@ -332,12 +416,12 @@
 </div>
 
 <!-- Save Mission Modal -->
-<div id="saveMissionModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-    <div class="glass-panel border-operator-green/40 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
-        <div class="flex items-center justify-between border-b border-operator-border pb-3 mb-4">
-            <div class="flex items-center gap-2 text-operator-green">
+<div id="saveMissionModal" class="fixed inset-0 bg-black/85 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4">
+    <div class="cyber-panel border-cyber-neonEmerald/50 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+        <div class="flex items-center justify-between border-b border-cyber-border pb-3 mb-4">
+            <div class="flex items-center gap-2 text-cyber-neonEmerald">
                 <i data-lucide="shield-check" class="w-5 h-5"></i>
-                <h3 class="hud-font font-bold text-lg text-white">SAVE MISSION SNAPSHOT</h3>
+                <h3 class="font-hud font-bold text-lg text-white">SAVE MISSION SNAPSHOT</h3>
             </div>
             <button onclick="closeModal('saveMissionModal')" class="text-slate-400 hover:text-white">
                 <i data-lucide="x" class="w-5 h-5"></i>
@@ -347,30 +431,30 @@
         <div class="space-y-4">
             <div>
                 <label class="block text-xs font-mono text-slate-400 mb-1">MISSION DATE & TIME</label>
-                <input type="datetime-local" id="missionDatePicker" class="w-full bg-operator-card border border-operator-border rounded-lg px-3 py-2 text-sm text-white focus:border-operator-green focus:outline-none font-mono">
+                <input type="datetime-local" id="missionDatePicker" class="w-full bg-cyber-card border border-cyber-border rounded-xl px-3.5 py-2 text-sm text-white focus:border-cyber-neonEmerald focus:outline-none font-mono">
             </div>
 
             <div>
                 <label class="block text-xs font-mono text-slate-400 mb-1">MISSION CODENAME / TITLE</label>
-                <input type="text" id="missionTitleInput" placeholder="e.g. Operation Autumn Ascent" class="w-full bg-operator-card border border-operator-border rounded-lg px-3 py-2 text-sm text-white focus:border-operator-green focus:outline-none font-mono">
+                <input type="text" id="missionTitleInput" placeholder="e.g. Operation Autumn Ascent" class="w-full bg-cyber-card border border-cyber-border rounded-xl px-3.5 py-2 text-sm text-white focus:border-cyber-neonEmerald focus:outline-none font-mono">
             </div>
 
             <div>
                 <label class="block text-xs font-mono text-slate-400 mb-1">MISSION LOG NOTES (OPTIONAL)</label>
-                <textarea id="missionNotesInput" rows="3" placeholder="Brief notes regarding key rank shifts or focus changes..." class="w-full bg-operator-card border border-operator-border rounded-lg px-3 py-2 text-xs text-white focus:border-operator-green focus:outline-none font-sans"></textarea>
+                <textarea id="missionNotesInput" rows="3" placeholder="Brief tactical notes regarding key rank shifts or focus changes..." class="w-full bg-cyber-card border border-cyber-border rounded-xl px-3.5 py-2 text-xs text-white focus:border-cyber-neonEmerald focus:outline-none font-sans"></textarea>
             </div>
 
-            <div class="bg-black/50 p-3 rounded-lg border border-operator-border text-xs font-mono space-y-1">
+            <div class="bg-black/60 p-3.5 rounded-xl border border-cyber-border text-xs font-mono space-y-1">
                 <div class="text-slate-400">CURRENT TOP 3 HIGHLIGHTS:</div>
-                <div id="saveModalTop3" class="text-operator-cyan font-semibold">--</div>
+                <div id="saveModalTop3" class="text-cyber-neonCyan font-semibold truncate">--</div>
             </div>
         </div>
 
-        <div class="flex items-center justify-end gap-3 mt-6 pt-3 border-t border-operator-border">
-            <button onclick="closeModal('saveMissionModal')" class="px-4 py-2 rounded-lg font-mono text-xs text-slate-400 hover:text-white">
+        <div class="flex items-center justify-end gap-3 mt-6 pt-3 border-t border-cyber-border">
+            <button onclick="closeModal('saveMissionModal')" class="px-4 py-2 rounded-xl font-mono text-xs text-slate-400 hover:text-white">
                 CANCEL
             </button>
-            <button onclick="executeSaveMission()" class="px-4 py-2 rounded-lg font-mono text-xs font-bold bg-operator-green text-black hover:bg-emerald-400 flex items-center gap-2 hud-glow-green">
+            <button onclick="executeSaveMission()" class="px-4 py-2 rounded-xl font-mono text-xs font-bold bg-cyber-neonEmerald text-black hover:bg-emerald-400 flex items-center gap-2 glow-emerald">
                 <i data-lucide="check" class="w-4 h-4"></i>
                 <span>CONFIRM SNAPSHOT</span>
             </button>
@@ -378,13 +462,13 @@
     </div>
 </div>
 
-<!-- Edit/Add Interest Modal -->
-<div id="editInterestModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-    <div class="glass-panel border-operator-cyan/40 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
-        <div class="flex items-center justify-between border-b border-operator-border pb-3 mb-4">
-            <div class="flex items-center gap-2 text-operator-cyan">
+<!-- Edit / Add Node Modal -->
+<div id="editInterestModal" class="fixed inset-0 bg-black/85 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4">
+    <div class="cyber-panel border-cyber-neonCyan/50 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+        <div class="flex items-center justify-between border-b border-cyber-border pb-3 mb-4">
+            <div class="flex items-center gap-2 text-cyber-neonCyan">
                 <i data-lucide="edit-3" class="w-5 h-5"></i>
-                <h3 id="editModalHeader" class="hud-font font-bold text-lg text-white">EDIT INTEREST</h3>
+                <h3 id="editModalHeader" class="font-hud font-bold text-lg text-white">EDIT INTEREST NODE</h3>
             </div>
             <button onclick="closeModal('editInterestModal')" class="text-slate-400 hover:text-white">
                 <i data-lucide="x" class="w-5 h-5"></i>
@@ -396,12 +480,12 @@
 
             <div>
                 <label class="block text-xs font-mono text-slate-400 mb-1">INTEREST TITLE *</label>
-                <input type="text" id="itemTitleInput" required placeholder="e.g. Calisthenics & Strength" class="w-full bg-operator-card border border-operator-border rounded-lg px-3 py-2 text-sm text-white focus:border-operator-cyan focus:outline-none">
+                <input type="text" id="itemTitleInput" required placeholder="e.g. Calisthenics & Strength" class="w-full bg-cyber-card border border-cyber-border rounded-xl px-3.5 py-2.5 text-sm text-white focus:border-cyber-neonCyan focus:outline-none">
             </div>
 
             <div>
                 <label class="block text-xs font-mono text-slate-400 mb-1">CATEGORY</label>
-                <select id="itemCategoryInput" class="w-full bg-operator-card border border-operator-border rounded-lg px-3 py-2 text-xs text-white focus:border-operator-cyan focus:outline-none font-mono">
+                <select id="itemCategoryInput" class="w-full bg-cyber-card border border-cyber-border rounded-xl px-3.5 py-2.5 text-xs text-white focus:border-cyber-neonCyan focus:outline-none font-mono">
                     <option value="ATHLETICS">ATHLETICS & FITNESS</option>
                     <option value="GAMING">GAMING & STRATEGY</option>
                     <option value="TECH">TECH & DEV</option>
@@ -413,29 +497,29 @@
 
             <div>
                 <label class="block text-xs font-mono text-slate-400 mb-1">TACTICAL DESCRIPTION / NOTES</label>
-                <textarea id="itemDescInput" rows="3" placeholder="Why do you enjoy this? What are your active targets or milestones?" class="w-full bg-operator-card border border-operator-border rounded-lg px-3 py-2 text-xs text-white focus:border-operator-cyan focus:outline-none"></textarea>
+                <textarea id="itemDescInput" rows="3" placeholder="Why do you enjoy this? What are your active targets or milestones?" class="w-full bg-cyber-card border border-cyber-border rounded-xl px-3.5 py-2.5 text-xs text-white focus:border-cyber-neonCyan focus:outline-none"></textarea>
             </div>
 
             <div>
                 <label class="block text-xs font-mono text-slate-400 mb-1">ENJOYABILITY SCORE (1-100)</label>
                 <div class="flex items-center gap-3">
-                    <input type="range" id="itemScoreInput" min="1" max="100" value="85" oninput="document.getElementById('scoreVal').innerText = this.value" class="w-full accent-operator-cyan">
-                    <span id="scoreVal" class="font-mono text-sm font-bold text-operator-cyan w-8 text-right">85</span>
+                    <input type="range" id="itemScoreInput" min="1" max="100" value="85" oninput="document.getElementById('scoreVal').innerText = this.value" class="w-full accent-cyber-neonCyan">
+                    <span id="scoreVal" class="font-mono text-sm font-bold text-cyber-neonCyan w-8 text-right">85</span>
                 </div>
             </div>
 
-            <div class="flex items-center justify-between pt-3 border-t border-operator-border">
-                <button type="button" id="deleteItemBtn" onclick="handleDeleteItem()" class="px-3 py-1.5 rounded text-xs font-mono text-operator-crimson hover:bg-operator-crimson/10 flex items-center gap-1">
+            <div class="flex items-center justify-between pt-3 border-t border-cyber-border">
+                <button type="button" id="deleteItemBtn" onclick="handleDeleteItem()" class="px-3 py-1.5 rounded-lg text-xs font-mono text-cyber-neonMagenta hover:bg-cyber-neonMagenta/10 flex items-center gap-1">
                     <i data-lucide="trash-2" class="w-4 h-4"></i>
                     <span>DELETE</span>
                 </button>
                 <div class="flex items-center gap-2">
-                    <button type="button" onclick="closeModal('editInterestModal')" class="px-4 py-2 rounded-lg font-mono text-xs text-slate-400 hover:text-white">
+                    <button type="button" onclick="closeModal('editInterestModal')" class="px-4 py-2 rounded-xl font-mono text-xs text-slate-400 hover:text-white">
                         CANCEL
                     </button>
-                    <button type="submit" class="px-4 py-2 rounded-lg font-mono text-xs font-bold bg-operator-cyan text-black hover:bg-cyan-400 flex items-center gap-1.5 hud-glow-cyan">
+                    <button type="submit" class="px-4 py-2 rounded-xl font-mono text-xs font-bold bg-cyber-neonCyan text-black hover:bg-cyan-400 flex items-center gap-1.5 glow-cyan">
                         <i data-lucide="save" class="w-4 h-4"></i>
-                        <span>SAVE ITEM</span>
+                        <span>SAVE NODE</span>
                     </button>
                 </div>
             </div>
@@ -443,13 +527,48 @@
     </div>
 </div>
 
+<!-- Analytics & Category Breakdown Modal -->
+<div id="analyticsModal" class="fixed inset-0 bg-black/85 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4">
+    <div class="cyber-panel border-cyber-neonMagenta/50 rounded-2xl max-w-xl w-full p-6 shadow-2xl relative flex flex-col max-h-[85vh]">
+        <div class="flex items-center justify-between border-b border-cyber-border pb-3 mb-4">
+            <div class="flex items-center gap-2 text-cyber-neonMagenta">
+                <i data-lucide="activity" class="w-5 h-5"></i>
+                <h3 class="font-hud font-bold text-lg text-white">INTEREST MATRIX ANALYTICS</h3>
+            </div>
+            <button onclick="closeModal('analyticsModal')" class="text-slate-400 hover:text-white">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto space-y-4 pr-1">
+            <div class="p-4 rounded-xl bg-cyber-card border border-cyber-border space-y-3">
+                <h4 class="text-xs font-mono font-bold text-cyber-neonCyan uppercase tracking-wider">CATEGORY DISTRIBUTION</h4>
+                <div id="analyticsCatList" class="space-y-2">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
+            <div class="p-4 rounded-xl bg-cyber-card border border-cyber-border space-y-2">
+                <h4 class="text-xs font-mono font-bold text-cyber-neonAmber uppercase tracking-wider">HIGHEST SCORE NODE</h4>
+                <div id="analyticsTopNode" class="text-sm font-bold text-white">--</div>
+            </div>
+        </div>
+
+        <div class="pt-4 border-t border-cyber-border flex items-center justify-end">
+            <button onclick="closeModal('analyticsModal')" class="px-4 py-2 rounded-xl bg-cyber-card border border-cyber-border text-xs font-mono text-slate-200 hover:border-slate-400">
+                CLOSE ANALYTICS
+            </button>
+        </div>
+    </div>
+</div>
+
 <!-- Mission Vault & Snapshot History Modal -->
-<div id="vaultModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-    <div class="glass-panel border-operator-cyan/40 rounded-2xl max-w-2xl w-full p-6 shadow-2xl relative flex flex-col max-h-[85vh]">
-        <div class="flex items-center justify-between border-b border-operator-border pb-3 mb-4">
-            <div class="flex items-center gap-2 text-operator-cyan">
+<div id="vaultModal" class="fixed inset-0 bg-black/85 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4">
+    <div class="cyber-panel border-cyber-neonCyan/50 rounded-2xl max-w-2xl w-full p-6 shadow-2xl relative flex flex-col max-h-[85vh]">
+        <div class="flex items-center justify-between border-b border-cyber-border pb-3 mb-4">
+            <div class="flex items-center gap-2 text-cyber-neonCyan">
                 <i data-lucide="archive" class="w-5 h-5"></i>
-                <h3 class="hud-font font-bold text-lg text-white">MISSION HISTORY VAULT</h3>
+                <h3 class="font-hud font-bold text-lg text-white">MISSION HISTORY VAULT</h3>
             </div>
             <button onclick="closeModal('vaultModal')" class="text-slate-400 hover:text-white">
                 <i data-lucide="x" class="w-5 h-5"></i>
@@ -460,9 +579,9 @@
             <!-- Populated dynamically -->
         </div>
 
-        <div class="pt-4 border-t border-operator-border flex items-center justify-between text-xs font-mono text-slate-400">
+        <div class="pt-4 border-t border-cyber-border flex items-center justify-between text-xs font-mono text-slate-400">
             <span>TOTAL SAVED SNAPSHOTS: <span id="vaultTotalCount" class="text-white">0</span></span>
-            <button onclick="closeModal('vaultModal')" class="px-4 py-1.5 rounded bg-operator-card border border-operator-border text-slate-200">
+            <button onclick="closeModal('vaultModal')" class="px-4 py-2 rounded-xl bg-cyber-card border border-cyber-border text-slate-200 hover:border-slate-400">
                 CLOSE
             </button>
         </div>
@@ -470,12 +589,12 @@
 </div>
 
 <!-- Export / Import & Sync Modal -->
-<div id="exportModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-    <div class="glass-panel border-slate-500/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative">
-        <div class="flex items-center justify-between border-b border-operator-border pb-3 mb-4">
+<div id="exportModal" class="fixed inset-0 bg-black/85 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4">
+    <div class="cyber-panel border-slate-500/50 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative">
+        <div class="flex items-center justify-between border-b border-cyber-border pb-3 mb-4">
             <div class="flex items-center gap-2 text-slate-200">
-                <i data-lucide="database" class="w-5 h-5 text-operator-cyan"></i>
-                <h3 class="hud-font font-bold text-lg text-white">PORTABLE DATA SYNC</h3>
+                <i data-lucide="database" class="w-5 h-5 text-cyber-neonCyan"></i>
+                <h3 class="font-hud font-bold text-lg text-white">PORTABLE DATA SYNC</h3>
             </div>
             <button onclick="closeModal('exportModal')" class="text-slate-400 hover:text-white">
                 <i data-lucide="x" class="w-5 h-5"></i>
@@ -483,31 +602,31 @@
         </div>
 
         <div class="space-y-4">
-            <p class="text-xs text-slate-300">
+            <p class="text-xs text-slate-300 leading-relaxed font-sans">
                 Transfer your entire ranking system and mission snapshots to another browser or device using JSON data files.
             </p>
 
-            <div class="p-4 rounded-xl bg-operator-card border border-operator-border space-y-3">
+            <div class="p-4 rounded-xl bg-cyber-card border border-cyber-border space-y-3">
                 <div class="flex items-center justify-between">
                     <span class="text-xs font-mono font-bold text-slate-200">DOWNLOAD BACKUP FILE</span>
-                    <button onclick="downloadJsonBackup()" class="px-3 py-1.5 rounded font-mono text-xs font-bold bg-operator-cyan text-black hover:bg-cyan-400 flex items-center gap-1.5">
+                    <button onclick="downloadJsonBackup()" class="px-3.5 py-2 rounded-xl font-mono text-xs font-bold bg-cyber-neonCyan text-black hover:bg-cyan-400 flex items-center gap-1.5 glow-cyan">
                         <i data-lucide="download" class="w-4 h-4"></i>
                         <span>EXPORT .JSON</span>
                     </button>
                 </div>
             </div>
 
-            <div class="p-4 rounded-xl bg-operator-card border border-operator-border space-y-3">
+            <div class="p-4 rounded-xl bg-cyber-card border border-cyber-border space-y-3">
                 <div class="text-xs font-mono font-bold text-slate-200">RESTORE / IMPORT DATA</div>
-                <input type="file" id="importFileInput" accept=".json" class="block w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-mono file:bg-operator-panel file:text-operator-cyan hover:file:bg-operator-border">
-                <button onclick="importJsonBackup()" class="w-full py-2 rounded-lg font-mono text-xs font-bold bg-operator-green/20 border border-operator-green text-operator-green hover:bg-operator-green hover:text-black flex items-center justify-center gap-1.5 transition-all">
+                <input type="file" id="importFileInput" accept=".json" class="block w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-mono file:bg-cyber-panel file:text-cyber-neonCyan hover:file:bg-cyber-border">
+                <button onclick="importJsonBackup()" class="w-full py-2.5 rounded-xl font-mono text-xs font-bold bg-cyber-neonEmerald/20 border border-cyber-neonEmerald text-cyber-neonEmerald hover:bg-cyber-neonEmerald hover:text-black flex items-center justify-center gap-1.5 transition-all">
                     <i data-lucide="upload" class="w-4 h-4"></i>
                     <span>IMPORT SNAPSHOT DATA FILE</span>
                 </button>
             </div>
 
             <div class="pt-2 text-center">
-                <button onclick="confirmResetDefaults()" class="text-xs font-mono text-operator-crimson hover:underline">
+                <button onclick="confirmResetDefaults()" class="text-xs font-mono text-cyber-neonMagenta hover:underline">
                     RESET BOARD TO DEFAULT INITIAL SEED
                 </button>
             </div>
@@ -518,22 +637,22 @@
 <!-- Notification Toast Container -->
 <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
-<!-- Firebase App Modules -->
+<!-- Firebase & Application Script -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
     import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-    // Global Application State
+    // Application State Object
     window.BubblesGB = {
         db: null,
         auth: null,
         appId: typeof __app_id !== 'undefined' ? __app_id : 'bubbles-gb-app',
         isOperatorMode: false,
+        layoutMode: 'grid', // 'grid' or 'list'
         items: [],
         missionHistory: [],
         draggedItemId: null,
-        draggedIndex: null,
         lastSavedTimestamp: null
     };
 
@@ -543,43 +662,43 @@
             id: 'hobby-1',
             title: 'Calisthenics & Strength Training',
             category: 'ATHLETICS',
-            description: 'Weighted muscle-ups, handstands, ring workouts, and functional bodyweight mastery.',
-            score: 95
+            description: 'Weighted muscle-ups, full back levers, ring dips, wall handstands, and explosive pull-ups.',
+            score: 98
         },
         {
             id: 'hobby-2',
-            title: 'Grand Strategy & Geopolitical Sims',
+            title: 'Geopolitical & Strategy Simulators',
             category: 'GAMING',
-            description: 'Hearts of Iron, Stellaris, and deep tactical campaign simulations.',
-            score: 91
+            description: 'Eversim Power & Revolution, Geopolitical Simulator 5, and deep tactical sandbox campaigns.',
+            score: 94
         },
         {
             id: 'hobby-3',
-            title: 'Web Development & UI Architecture',
+            title: 'Single-File Web Apps & UI Architecture',
             category: 'TECH',
-            description: 'Building high-performance interactive interfaces, WebGL, and modern frontend tools.',
-            score: 88
+            description: 'Designing hyper-polished reactive web suites using HTML5, CSS3, Tailwind, and JavaScript.',
+            score: 91
         },
         {
             id: 'hobby-4',
-            title: 'Ice Hockey & Speed Skating',
+            title: 'Montreal Canadiens & Pro Hockey Analysis',
             category: 'ATHLETICS',
-            description: 'Competitive recreational games, power skating drills, and puck handling.',
-            score: 84
+            description: 'Roster tracking, advanced power index analytics, and live game telemetry.',
+            score: 87
         },
         {
             id: 'hobby-5',
-            title: 'Wilderness & Outdoor Exploration',
-            category: 'OUTDOORS',
-            description: 'Multi-day backcountry hiking, navigation, bushcraft skills, and camping.',
-            score: 80
+            title: 'Grand Theft Auto V Modding & ENB Tweaking',
+            category: 'GAMING',
+            description: 'OpenIV script hooking, TrainerV customization, graphics presets, and vehicle modding.',
+            score: 84
         },
         {
             id: 'hobby-6',
-            title: 'Video Editing & Creative Media',
+            title: 'DaVinci Resolve Video Editing & Motion FX',
             category: 'CREATIVE',
-            description: 'Cinematic color grading, sound design, and motion graphics editing.',
-            score: 75
+            description: 'Cinematic color grading, audio mixing, timelines, and motion graphics production.',
+            score: 79
         }
     ];
 
@@ -613,12 +732,11 @@
                 loadLocalData();
             }
         } catch (err) {
-            console.warn("Firebase fallback active, using browser storage:", err);
+            console.warn("Firebase fallback active, reading browser storage:", err);
             loadLocalData();
         }
     }
 
-    // Listen to Firestore updates
     function listenToCloudData() {
         const { db, appId } = window.BubblesGB;
         if (!db) return;
@@ -632,7 +750,6 @@
                 if (data.lastSavedTimestamp) window.BubblesGB.lastSavedTimestamp = data.lastSavedTimestamp;
                 renderApp();
             } else {
-                // Seed initial state
                 saveStateToCloudAndLocal();
             }
         }, (error) => {
@@ -666,10 +783,8 @@
             updatedAt: new Date().toISOString()
         };
 
-        // Save to LocalStorage
         localStorage.setItem('bubbles_gb_data', JSON.stringify(stateObj));
 
-        // Save to Firestore if available
         const { db, appId } = window.BubblesGB;
         if (db) {
             try {
@@ -681,7 +796,6 @@
         }
     };
 
-    // Initialize Firebase on load
     window.addEventListener('DOMContentLoaded', () => {
         initFirebase();
         setInterval(updateElapsedTimer, 1000);
@@ -689,26 +803,25 @@
 </script>
 
 <script>
-    // Core Render Function
+    // Main UI Render Pipeline
     function renderApp() {
         const state = window.BubblesGB;
         
-        // Re-initialize Lucide Icons after render
         setTimeout(() => {
             if (window.lucide) lucide.createIcons();
         }, 50);
 
-        // 1. Update Metrics
+        // 1. Telemetry Metrics
         document.getElementById('metricTotalCount').innerText = state.items.length;
         
         if (state.lastSavedTimestamp) {
             const dateObj = new Date(state.lastSavedTimestamp);
             document.getElementById('metricLastSaved').innerText = formatDateShort(dateObj);
         } else {
-            document.getElementById('metricLastSaved').innerText = 'INITIAL BASELINE';
+            document.getElementById('metricLastSaved').innerText = 'INITIAL SEED';
         }
 
-        // 2. Filter & Sort Items for Display
+        // 2. Filter & Sort Items
         const searchVal = (document.getElementById('searchInput')?.value || '').toLowerCase();
         const catVal = document.getElementById('categoryFilter')?.value || 'ALL';
         const sortVal = document.getElementById('sortSelect')?.value || 'RANK';
@@ -719,10 +832,9 @@
             return matchesSearch && matchesCat;
         });
 
-        // Calculate Deltas vs Previous Mission
         const latestMission = state.missionHistory.length > 0 ? state.missionHistory[state.missionHistory.length - 1] : null;
 
-        filtered = filtered.map((item, index) => {
+        filtered = filtered.map(item => {
             const currentRank = state.items.findIndex(i => i.id === item.id) + 1;
             let delta = 0;
             let isNew = false;
@@ -739,17 +851,26 @@
             return { ...item, currentRank, delta, isNew };
         });
 
-        // Sort Logic
+        // Sorting
         if (sortVal === 'DELTA') {
             filtered.sort((a, b) => b.delta - a.delta);
         } else if (sortVal === 'TITLE') {
             filtered.sort((a, b) => a.title.localeCompare(b.title));
+        } else if (sortVal === 'SCORE') {
+            filtered.sort((a, b) => (b.score || 0) - (a.score || 0));
         } else {
             filtered.sort((a, b) => a.currentRank - b.currentRank);
         }
 
         const container = document.getElementById('leaderboardList');
         const emptyState = document.getElementById('emptyState');
+
+        // Apply Layout Classes
+        if (state.layoutMode === 'list') {
+            container.className = 'cyber-card-compact';
+        } else {
+            container.className = 'cyber-card-matrix';
+        }
 
         if (filtered.length === 0) {
             container.innerHTML = '';
@@ -759,120 +880,133 @@
             emptyState.classList.add('hidden');
             emptyState.classList.remove('flex');
 
-            container.innerHTML = filtered.map((item, idx) => {
-                return renderCardHTML(item, state.isOperatorMode);
+            container.innerHTML = filtered.map(item => {
+                return renderCardHTML(item, state.isOperatorMode, state.layoutMode);
             }).join('');
         }
 
-        // Update Operator Mode UI state
+        // Operator Mode Banner
         const banner = document.getElementById('operatorBanner');
         const toggleBtn = document.getElementById('operatorToggleBtn');
         const statusBadge = document.getElementById('statusBadge');
 
         if (state.isOperatorMode) {
             banner.classList.remove('hidden');
-            toggleBtn.classList.add('operator-active', 'bg-operator-amber/20', 'text-operator-amber');
-            statusBadge.innerText = 'OPERATOR MODE ACTIVE';
-            statusBadge.className = 'text-[10px] px-2.5 py-0.5 rounded-full font-mono uppercase bg-operator-amber/20 text-operator-amber border border-operator-amber/40 animate-pulse tracking-widest font-bold';
+            toggleBtn.classList.add('glow-amber', 'bg-cyber-neonAmber/20', 'text-cyber-neonAmber', 'border-cyber-neonAmber');
+            statusBadge.innerText = 'OVERRIDE ENGAGED';
+            statusBadge.className = 'text-[9px] px-2.5 py-0.5 rounded-full font-mono uppercase bg-cyber-neonAmber/20 text-cyber-neonAmber border border-cyber-neonAmber/40 animate-pulse tracking-widest font-bold';
         } else {
             banner.classList.add('hidden');
-            toggleBtn.classList.remove('operator-active', 'bg-operator-amber/20', 'text-operator-amber');
-            statusBadge.innerText = 'SYSTEM ONLINE';
-            statusBadge.className = 'text-[10px] px-2.5 py-0.5 rounded-full font-mono uppercase bg-operator-green/15 text-operator-green border border-operator-green/40 tracking-widest font-bold';
+            toggleBtn.classList.remove('glow-amber', 'bg-cyber-neonAmber/20', 'text-cyber-neonAmber', 'border-cyber-neonAmber');
+            statusBadge.innerText = 'CORE ONLINE';
+            statusBadge.className = 'text-[9px] px-2.5 py-0.5 rounded-full font-mono uppercase bg-cyber-neonEmerald/15 text-cyber-neonEmerald border border-cyber-neonEmerald/40 tracking-widest font-bold';
         }
     }
 
-    function renderCardHTML(item, isOperator) {
-        let rankBadgeStyle = "bg-black/60 border-operator-border text-slate-300";
+    function renderCardHTML(item, isOperator, layoutMode) {
+        let rankBadgeStyle = "bg-black/60 border-cyber-border text-slate-300";
         if (item.currentRank === 1) {
-            rankBadgeStyle = "bg-operator-green/20 border-operator-green text-operator-green hud-glow-green font-bold";
+            rankBadgeStyle = "bg-cyber-neonEmerald/20 border-cyber-neonEmerald text-cyber-neonEmerald glow-emerald font-bold";
         } else if (item.currentRank === 2) {
-            rankBadgeStyle = "bg-operator-cyan/20 border-operator-cyan text-operator-cyan hud-glow-cyan font-bold";
+            rankBadgeStyle = "bg-cyber-neonCyan/20 border-cyber-neonCyan text-cyber-neonCyan glow-cyan font-bold";
         } else if (item.currentRank === 3) {
-            rankBadgeStyle = "bg-operator-amber/20 border-operator-amber text-operator-amber hud-glow-amber font-bold";
+            rankBadgeStyle = "bg-cyber-neonAmber/20 border-cyber-neonAmber text-cyber-neonAmber glow-amber font-bold";
         }
 
         let deltaHTML = '';
         if (item.isNew) {
-            deltaHTML = `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-operator-cyan/20 text-operator-cyan border border-operator-cyan/40">✨ NEW</span>`;
+            deltaHTML = `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyber-neonCyan/20 text-cyber-neonCyan border border-cyber-neonCyan/40">✨ NEW</span>`;
         } else if (item.delta > 0) {
-            deltaHTML = `<span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-operator-green/20 text-operator-green border border-operator-green/40 flex items-center gap-1">▲ +${item.delta}</span>`;
+            deltaHTML = `<span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-cyber-neonEmerald/20 text-cyber-neonEmerald border border-cyber-neonEmerald/40 flex items-center gap-1">▲ +${item.delta}</span>`;
         } else if (item.delta < 0) {
-            deltaHTML = `<span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-operator-crimson/20 text-operator-crimson border border-operator-crimson/40 flex items-center gap-1">▼ ${item.delta}</span>`;
+            deltaHTML = `<span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-cyber-neonMagenta/20 text-cyber-neonMagenta border border-cyber-neonMagenta/40 flex items-center gap-1">▼ ${item.delta}</span>`;
         } else {
-            deltaHTML = `<span class="px-2 py-0.5 rounded text-xs font-mono text-slate-500 bg-black/40 border border-operator-border flex items-center gap-1">━ 0</span>`;
+            deltaHTML = `<span class="px-2 py-0.5 rounded text-xs font-mono text-slate-500 bg-black/40 border border-cyber-border flex items-center gap-1">━ 0</span>`;
         }
 
         const catLabel = getCategoryLabel(item.category);
 
         return `
             <div 
-                class="glass-panel rounded-xl p-4 transition-all duration-200 relative group flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border ${isOperator ? 'border-dashed border-operator-amber/50 hover:border-operator-amber' : 'border-operator-border hover:border-operator-cyan/40'}"
+                class="cyber-card rounded-2xl p-4 relative group flex flex-col justify-between ${isOperator ? 'border-dashed border-cyber-neonAmber/50 hover:border-cyber-neonAmber' : ''}"
                 draggable="${isOperator}"
                 ondragstart="handleDragStart(event, '${item.id}')"
                 ondragover="handleDragOver(event)"
                 ondrop="handleDrop(event, '${item.id}')"
                 ondragend="handleDragEnd(event)"
             >
-                <div class="flex items-start sm:items-center gap-4 w-full">
-                    
-                    ${isOperator ? `
-                        <div class="cursor-grab active:cursor-grabbing p-2 text-operator-amber hover:text-white rounded bg-operator-card border border-operator-border flex-shrink-0 self-center">
-                            <i data-lucide="grip-vertical" class="w-5 h-5"></i>
-                        </div>
-                    ` : ''}
-
-                    <div class="flex flex-col items-center justify-center min-w-[48px] h-12 rounded-xl border ${rankBadgeStyle} font-mono">
-                        <span class="text-[10px] opacity-60 leading-none">RANK</span>
-                        <span class="hud-font text-lg leading-none mt-0.5">#${item.currentRank}</span>
-                    </div>
-
-                    <div class="flex-1 min-w-0">
-                        <div class="flex flex-wrap items-center gap-2 mb-1">
-                            <h3 class="hud-font text-lg font-bold text-white truncate tracking-wide">${escapeHTML(item.title)}</h3>
-                            <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-operator-card text-slate-400 border border-operator-border">${catLabel}</span>
-                            ${deltaHTML}
-                        </div>
-                        <p class="text-xs text-slate-400 line-clamp-2 leading-relaxed">${escapeHTML(item.description || 'No specific tactical notes provided.')}</p>
-                        
-                        <div class="mt-2 flex items-center gap-2 max-w-xs">
-                            <div class="text-[10px] font-mono text-slate-500">ENJOYABILITY</div>
-                            <div class="flex-1 h-1.5 rounded-full bg-black/60 overflow-hidden border border-operator-border">
-                                <div class="h-full bg-gradient-to-r from-operator-cyan to-operator-green rounded-full" style="width: ${item.score || 80}%"></div>
+                <div>
+                    <div class="flex items-center justify-between gap-3 mb-3">
+                        <div class="flex items-center gap-2.5">
+                            <div class="flex flex-col items-center justify-center min-w-[44px] h-11 rounded-xl border ${rankBadgeStyle} font-mono">
+                                <span class="text-[9px] opacity-60 leading-none">RANK</span>
+                                <span class="font-hud text-base leading-none mt-0.5">#${item.currentRank}</span>
                             </div>
-                            <div class="text-[10px] font-mono font-bold text-operator-cyan">${item.score || 80}%</div>
+                            <span class="px-2.5 py-1 text-[10px] font-mono rounded-lg bg-cyber-card text-slate-300 border border-cyber-border">${catLabel}</span>
                         </div>
+                        ${deltaHTML}
                     </div>
+
+                    <h3 class="font-hud text-base font-bold text-white mb-1.5 tracking-wide leading-snug">${escapeHTML(item.title)}</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-4 line-clamp-3">${escapeHTML(item.description || 'No specific tactical details logged.')}</p>
                 </div>
 
-                ${isOperator ? `
-                    <div class="flex items-center gap-1.5 self-end sm:self-center w-full sm:w-auto justify-end pt-2 sm:pt-0 border-t sm:border-t-0 border-operator-border">
-                        <button onclick="moveItem('${item.id}', -1)" title="Move Up" class="p-2 rounded bg-operator-card border border-operator-border text-slate-300 hover:text-operator-green hover:border-operator-green transition-all">
-                            <i data-lucide="arrow-up" class="w-4 h-4"></i>
-                        </button>
-                        <button onclick="moveItem('${item.id}', 1)" title="Move Down" class="p-2 rounded bg-operator-card border border-operator-border text-slate-300 hover:text-operator-crimson hover:border-operator-crimson transition-all">
-                            <i data-lucide="arrow-down" class="w-4 h-4"></i>
-                        </button>
-                        <button onclick="openEditModal('${item.id}')" title="Edit Item" class="p-2 rounded bg-operator-card border border-operator-border text-slate-300 hover:text-operator-cyan hover:border-operator-cyan transition-all">
-                            <i data-lucide="edit-2" class="w-4 h-4"></i>
-                        </button>
+                <div>
+                    <div class="space-y-1 pt-3 border-t border-cyber-border/60">
+                        <div class="flex items-center justify-between text-[10px] font-mono">
+                            <span class="text-slate-500">ENJOYABILITY INDEX</span>
+                            <span class="font-bold text-cyber-neonCyan">${item.score || 85}%</span>
+                        </div>
+                        <div class="h-1.5 rounded-full bg-black/80 overflow-hidden border border-cyber-border">
+                            <div class="h-full bg-gradient-to-r from-cyber-neonCyan to-cyber-neonEmerald rounded-full" style="width: ${item.score || 85}%"></div>
+                        </div>
                     </div>
-                ` : ''}
+
+                    ${isOperator ? `
+                        <div class="flex items-center justify-between gap-1 pt-3 mt-3 border-t border-cyber-border/80">
+                            <div class="flex items-center gap-1">
+                                <button onclick="moveItem('${item.id}', -1)" title="Move Up" class="p-1.5 rounded-lg bg-cyber-card border border-cyber-border text-slate-300 hover:text-cyber-neonEmerald hover:border-cyber-neonEmerald">
+                                    <i data-lucide="arrow-up" class="w-4 h-4"></i>
+                                </button>
+                                <button onclick="moveItem('${item.id}', 1)" title="Move Down" class="p-1.5 rounded-lg bg-cyber-card border border-cyber-border text-slate-300 hover:text-cyber-neonMagenta hover:border-cyber-neonMagenta">
+                                    <i data-lucide="arrow-down" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                            <button onclick="openEditModal('${item.id}')" title="Edit Node" class="p-1.5 rounded-lg bg-cyber-card border border-cyber-border text-slate-300 hover:text-cyber-neonCyan hover:border-cyber-neonCyan">
+                                <i data-lucide="edit-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    ` : ''}
+                </div>
             </div>
         `;
     }
 
+    function setLayoutMode(mode) {
+        window.BubblesGB.layoutMode = mode;
+        const gridBtn = document.getElementById('viewGridBtn');
+        const listBtn = document.getElementById('viewListBtn');
+
+        if (mode === 'grid') {
+            gridBtn.className = 'p-1.5 rounded-lg text-cyber-neonCyan bg-cyber-panel border border-cyber-neonCyan/40';
+            listBtn.className = 'p-1.5 rounded-lg text-slate-500 hover:text-white';
+        } else {
+            listBtn.className = 'p-1.5 rounded-lg text-cyber-neonCyan bg-cyber-panel border border-cyber-neonCyan/40';
+            gridBtn.className = 'p-1.5 rounded-lg text-slate-500 hover:text-white';
+        }
+
+        renderApp();
+    }
+
     function toggleOperatorMode() {
         if (!window.BubblesGB.isOperatorMode) {
-            // Require password verification to enter operator mode
             document.getElementById('operatorPasswordInput').value = '';
             openModal('operatorAuthModal');
             setTimeout(() => document.getElementById('operatorPasswordInput').focus(), 100);
         } else {
-            // Toggle off directly if already active
             window.BubblesGB.isOperatorMode = false;
             renderApp();
-            showToast('LIVE MONITORING MODE ACTIVE', 'info');
+            showToast('LIVE MONITORING MODE ENGAGED', 'info');
         }
     }
 
@@ -882,9 +1016,9 @@
             window.BubblesGB.isOperatorMode = true;
             closeModal('operatorAuthModal');
             renderApp();
-            showToast('OPERATOR OVERRIDE ENGAGED', 'success');
+            showToast('OPERATOR OVERRIDE AUTHORIZED', 'success');
         } else {
-            showToast('ACCESS DENIED: INVALID SECURITY PASSWORD', 'error');
+            showToast('ACCESS DENIED: INVALID SECURITY PASSCODE', 'error');
             document.getElementById('operatorPasswordInput').value = '';
         }
     }
@@ -932,7 +1066,7 @@
 
             window.saveStateToCloudAndLocal();
             renderApp();
-            showToast('RANK POSITION REORDERED', 'success');
+            showToast('RANK MATRIX REORDERED', 'success');
         }
         return false;
     }
@@ -986,6 +1120,37 @@
         showToast(`MISSION LOG "${titleVal.toUpperCase()}" SAVED`, 'success');
     }
 
+    function openAnalyticsModal() {
+        const items = window.BubblesGB.items;
+        const counts = {};
+
+        items.forEach(i => {
+            counts[i.category] = (counts[i.category] || 0) + 1;
+        });
+
+        const catList = document.getElementById('analyticsCatList');
+        catList.innerHTML = Object.keys(counts).map(cat => {
+            const count = counts[cat];
+            const pct = Math.round((count / items.length) * 100);
+            return `
+                <div class="space-y-1">
+                    <div class="flex items-center justify-between text-xs font-mono">
+                        <span class="text-slate-300 font-bold">${getCategoryLabel(cat)}</span>
+                        <span class="text-cyber-neonCyan">${count} nodes (${pct}%)</span>
+                    </div>
+                    <div class="h-1.5 rounded-full bg-black/60 overflow-hidden border border-cyber-border">
+                        <div class="h-full bg-cyber-neonCyan rounded-full" style="width: ${pct}%"></div>
+                    </div>
+                </div>
+            `;
+        }).join('') || '<div class="text-xs text-slate-500 font-mono">No category telemetry available.</div>';
+
+        const topNode = [...items].sort((a, b) => (b.score || 0) - (a.score || 0))[0];
+        document.getElementById('analyticsTopNode').innerText = topNode ? `${topNode.title} (${topNode.score || 85}%)` : 'None';
+
+        openModal('analyticsModal');
+    }
+
     function updateElapsedTimer() {
         const lastTs = window.BubblesGB.lastSavedTimestamp;
         const el = document.getElementById('metricElapsedTime');
@@ -1021,32 +1186,29 @@
 
         if (history.length === 0) {
             listEl.innerHTML = `
-                <div class="text-center py-8 text-slate-500 font-mono text-xs">
-                    NO SAVED MISSION LOGS FOUND. CLICK "SAVE MISSION" TO CREATE YOUR FIRST SNAPSHOT.
+                <div class="text-center py-10 text-slate-500 font-mono text-xs">
+                    NO SAVED MISSION SNAPSHOTS FOUND. CLICK "SAVE LOG" TO CREATE YOUR FIRST RECORD.
                 </div>
             `;
         } else {
             const sorted = [...history].sort((a, b) => b.timestamp - a.timestamp);
             
-            listEl.innerHTML = sorted.map((mission, idx) => {
+            listEl.innerHTML = sorted.map(mission => {
                 const dateStr = new Date(mission.timestamp).toLocaleString();
                 return `
-                    <div class="p-4 rounded-xl bg-operator-card border border-operator-border hover:border-operator-cyan/50 transition-all flex flex-col gap-2">
+                    <div class="p-4 rounded-xl bg-cyber-card border border-cyber-border hover:border-cyber-neonCyan/50 transition-all flex flex-col gap-2">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2">
-                                <span class="w-2 h-2 rounded-full bg-operator-green"></span>
-                                <h4 class="hud-font font-bold text-white text-base">${escapeHTML(mission.title)}</h4>
+                                <span class="w-2 h-2 rounded-full bg-cyber-neonEmerald"></span>
+                                <h4 class="font-hud font-bold text-white text-base">${escapeHTML(mission.title)}</h4>
                             </div>
-                            <span class="text-xs font-mono text-operator-cyan">${dateStr}</span>
+                            <span class="text-xs font-mono text-cyber-neonCyan">${dateStr}</span>
                         </div>
                         
-                        ${mission.notes ? `<p class="text-xs text-slate-300 italic bg-black/30 p-2 rounded">${escapeHTML(mission.notes)}</p>` : ''}
+                        ${mission.notes ? `<p class="text-xs text-slate-300 italic bg-black/40 p-2.5 rounded-lg border border-cyber-border">${escapeHTML(mission.notes)}</p>` : ''}
                         
-                        <div class="flex items-center justify-between text-[11px] font-mono text-slate-400 pt-2 border-t border-operator-border/50">
-                            <span>ITEMS TRACKED: ${mission.itemCount || Object.keys(mission.snapshotRanks || {}).length}</span>
-                            <button onclick="loadMissionSnapshot('${mission.id}')" class="text-operator-green hover:underline">
-                                INSPECT SNAPSHOT
-                            </button>
+                        <div class="flex items-center justify-between text-[11px] font-mono text-slate-400 pt-2 border-t border-cyber-border/50">
+                            <span>NODES TRACKED: ${mission.itemCount || Object.keys(mission.snapshotRanks || {}).length}</span>
                         </div>
                     </div>
                 `;
@@ -1056,17 +1218,9 @@
         openModal('vaultModal');
     }
 
-    function loadMissionSnapshot(missionId) {
-        const mission = window.BubblesGB.missionHistory.find(m => m.id === missionId);
-        if (!mission) return;
-
-        showToast(`LOADED HISTORICAL SNAPSHOT: ${mission.title}`, 'info');
-        closeModal('vaultModal');
-    }
-
     function openAddModal() {
         document.getElementById('editItemId').value = '';
-        document.getElementById('editModalHeader').innerText = 'ADD NEW INTEREST';
+        document.getElementById('editModalHeader').innerText = 'ADD NEW INTEREST NODE';
         document.getElementById('itemTitleInput').value = '';
         document.getElementById('itemCategoryInput').value = 'ATHLETICS';
         document.getElementById('itemDescInput').value = '';
@@ -1082,7 +1236,7 @@
         if (!item) return;
 
         document.getElementById('editItemId').value = item.id;
-        document.getElementById('editModalHeader').innerText = 'EDIT INTEREST';
+        document.getElementById('editModalHeader').innerText = 'EDIT INTEREST NODE';
         document.getElementById('itemTitleInput').value = item.title;
         document.getElementById('itemCategoryInput').value = item.category || 'OTHER';
         document.getElementById('itemDescInput').value = item.description || '';
@@ -1110,7 +1264,7 @@
                     ...window.BubblesGB.items[index],
                     title, category, description, score
                 };
-                showToast('INTEREST UPDATED', 'success');
+                showToast('INTEREST NODE UPDATED', 'success');
             }
         } else {
             const newItem = {
@@ -1118,7 +1272,7 @@
                 title, category, description, score
             };
             window.BubblesGB.items.push(newItem);
-            showToast('NEW INTEREST ADDED TO BOARD', 'success');
+            showToast('NEW NODE ADDED TO MATRIX', 'success');
         }
 
         window.saveStateToCloudAndLocal();
@@ -1134,7 +1288,7 @@
         window.saveStateToCloudAndLocal();
         closeModal('editInterestModal');
         renderApp();
-        showToast('ITEM REMOVED FROM DASHBOARD', 'info');
+        showToast('NODE REMOVED FROM MATRIX', 'info');
     }
 
     function openExportModal() {
@@ -1156,7 +1310,7 @@
         dlAnchor.click();
         dlAnchor.remove();
 
-        showToast('JSON DATA BACKUP DOWNLOADED', 'success');
+        showToast('JSON MATRIX BACKUP DOWNLOADED', 'success');
     }
 
     function importJsonBackup() {
@@ -1180,7 +1334,7 @@
                     window.saveStateToCloudAndLocal();
                     closeModal('exportModal');
                     renderApp();
-                    showToast('DATA SNAPSHOT IMPORTED SUCCESSFULLY', 'success');
+                    showToast('DATA MATRIX IMPORTED SUCCESSFULLY', 'success');
                 } else {
                     showToast('INVALID DATA FORMAT', 'error');
                 }
@@ -1193,18 +1347,14 @@
     }
 
     function confirmResetDefaults() {
-        window.BubblesGB.items = [
-            { id: 'hobby-1', title: 'Calisthenics & Strength Training', category: 'ATHLETICS', description: 'Weighted muscle-ups, handstands, ring workouts.', score: 95 },
-            { id: 'hobby-2', title: 'Grand Strategy & Geopolitical Sims', category: 'GAMING', description: 'Hearts of Iron, Stellaris tactical simulations.', score: 91 },
-            { id: 'hobby-3', title: 'Web Development & UI Architecture', category: 'TECH', description: 'Building interactive web apps and engines.', score: 88 }
-        ];
+        window.BubblesGB.items = DEFAULT_SEED_ITEMS;
         window.BubblesGB.missionHistory = [];
         window.BubblesGB.lastSavedTimestamp = null;
 
         window.saveStateToCloudAndLocal();
         closeModal('exportModal');
         renderApp();
-        showToast('RESET TO DEFAULT INITIAL SEED', 'info');
+        showToast('RESET TO DEFAULT SEED NODES', 'info');
     }
 
     function handleSearch() {
@@ -1266,21 +1416,21 @@
         if (!container) return;
 
         const toast = document.createElement('div');
-        let typeStyle = 'bg-operator-card border-operator-cyan text-operator-cyan';
+        let typeStyle = 'bg-cyber-card border-cyber-neonCyan text-cyber-neonCyan';
         let icon = 'info';
 
         if (type === 'success') {
-            typeStyle = 'bg-operator-card border-operator-green text-operator-green';
+            typeStyle = 'bg-cyber-card border-cyber-neonEmerald text-cyber-neonEmerald';
             icon = 'check-circle';
         } else if (type === 'warning') {
-            typeStyle = 'bg-operator-card border-operator-amber text-operator-amber';
+            typeStyle = 'bg-cyber-card border-cyber-neonAmber text-cyber-neonAmber';
             icon = 'alert-triangle';
         } else if (type === 'error') {
-            typeStyle = 'bg-operator-card border-operator-crimson text-operator-crimson';
+            typeStyle = 'bg-cyber-card border-cyber-neonMagenta text-cyber-neonMagenta';
             icon = 'alert-octagon';
         }
 
-        toast.className = `p-3 rounded-xl border ${typeStyle} font-mono text-xs shadow-xl flex items-center gap-2 transform transition-all duration-300 translate-y-2 opacity-0 pointer-events-auto`;
+        toast.className = `p-3 rounded-xl border ${typeStyle} font-mono text-xs shadow-2xl flex items-center gap-2 transform transition-all duration-300 translate-y-2 opacity-0 pointer-events-auto`;
         toast.innerHTML = `<i data-lucide="${icon}" class="w-4 h-4"></i> <span>${escapeHTML(message)}</span>`;
 
         container.appendChild(toast);
