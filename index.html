@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Bubbles GB — Cybernetic Matrix & Tactical Interest Leaderboard</title>
+    <title>Bubbles GB — Obsidian Telemetry & Tactical Interest Matrix</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Orbitron for Sci-Fi HUD headers, Inter for crisp data readability -->
+    <!-- Google Fonts: Space Grotesk, Plus Jakarta Sans & JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@500;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
@@ -18,22 +18,27 @@
             theme: {
                 extend: {
                     colors: {
-                        cyber: {
-                            bg: '#030712',
-                            panel: '#0B101D',
-                            card: '#111827',
-                            border: '#1F293D',
-                            neonCyan: '#00F0FF',
-                            neonMagenta: '#FF007A',
-                            neonEmerald: '#00FF88',
-                            neonAmber: '#FFB800',
-                            neonPurple: '#A855F7',
-                            glass: 'rgba(11, 16, 29, 0.75)',
+                        obsidian: {
+                            950: '#09090B',
+                            900: '#0E0E12',
+                            850: '#121216',
+                            800: '#18181D',
+                            700: '#27272F',
+                            border: 'rgba(255, 255, 255, 0.08)',
+                            borderHover: 'rgba(255, 255, 255, 0.18)',
+                        },
+                        accent: {
+                            indigo: '#6366F1',
+                            violet: '#8B5CF6',
+                            emerald: '#10B981',
+                            amber: '#F59E0B',
+                            rose: '#F43F5E',
+                            sky: '#38BDF8',
                         }
                     },
                     fontFamily: {
-                        orbitron: ['Orbitron', 'sans-serif'],
-                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
                         mono: ['JetBrains Mono', 'monospace'],
                     }
                 }
@@ -41,70 +46,63 @@
         }
     </script>
     <style>
+        :root {
+            color-scheme: dark;
+        }
+
         body {
-            background-color: #030712;
+            background-color: #09090B;
             background-image: 
-                radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.08) 0%, transparent 65%),
-                radial-gradient(circle at 100% 100%, rgba(255, 0, 122, 0.05) 0%, transparent 50%),
-                linear-gradient(rgba(31, 41, 61, 0.3) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(31, 41, 61, 0.3) 1px, transparent 1px);
-            background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
-            color: #F3F4F6;
-            font-family: 'Inter', sans-serif;
+                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.14), transparent),
+                radial-gradient(ellipse 60% 40% at 100% 0%, rgba(16, 185, 129, 0.06), transparent),
+                radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.035) 1px, transparent 0);
+            background-size: 100% 100%, 100% 100%, 24px 24px;
+            color: #FAFAFA;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
         .font-hud {
-            font-family: 'Orbitron', sans-serif;
-            letter-spacing: 0.08em;
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: -0.02em;
         }
 
-        /* Holographic & Glow Effects */
-        .glow-cyan {
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
-            text-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
+        /* Refined Bento Surface Architecture */
+        .bento-shell {
+            background: linear-gradient(180deg, rgba(24, 24, 29, 0.72) 0%, rgba(14, 14, 18, 0.85) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 
+                0 1px 0 0 rgba(255, 255, 255, 0.06) inset,
+                0 20px 40px -15px rgba(0, 0, 0, 0.7);
         }
 
-        .glow-magenta {
-            box-shadow: 0 0 20px rgba(255, 0, 122, 0.3);
-            text-shadow: 0 0 10px rgba(255, 0, 122, 0.6);
-        }
-
-        .glow-emerald {
-            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
-            text-shadow: 0 0 10px rgba(0, 255, 136, 0.6);
-        }
-
-        .glow-amber {
-            box-shadow: 0 0 20px rgba(255, 184, 0, 0.3);
-            text-shadow: 0 0 10px rgba(255, 184, 0, 0.6);
-        }
-
-        .cyber-panel {
-            background: rgba(11, 16, 29, 0.8);
+        .bento-card {
+            background: linear-gradient(165deg, rgba(26, 26, 32, 0.85) 0%, rgba(15, 15, 19, 0.92) 100%);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(0, 240, 255, 0.2);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            box-shadow: 
+                0 1px 0 0 rgba(255, 255, 255, 0.05) inset,
+                0 10px 30px -10px rgba(0, 0, 0, 0.6);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .cyber-card {
-            background: rgba(17, 24, 39, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(31, 41, 61, 0.8);
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .cyber-card:hover {
-            border-color: rgba(0, 240, 255, 0.5);
+        .bento-card:hover {
+            border-color: rgba(99, 102, 241, 0.45);
             transform: translateY(-2px);
-            box-shadow: 0 12px 28px rgba(0, 240, 255, 0.12);
+            box-shadow: 
+                0 1px 0 0 rgba(255, 255, 255, 0.1) inset,
+                0 20px 35px -12px rgba(99, 102, 241, 0.16);
         }
 
+        /* Matrix & List Layout Grids */
         .cyber-card-matrix {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 1.25rem;
+            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+            gap: 1.15rem;
         }
 
         .cyber-card-compact {
@@ -113,187 +111,177 @@
             gap: 0.75rem;
         }
 
-        /* Custom Animated Grid Scanlines */
-        .scanline-overlay {
-            position: relative;
-            overflow: hidden;
-        }
-        .scanline-overlay::after {
-            content: " ";
-            display: block;
-            position: absolute;
-            top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%);
-            background-size: 100% 4px;
-            z-index: 2;
-            pointer-events: none;
-            opacity: 0.4;
+        /* Ambient Glow Utilities */
+        .glow-indigo {
+            box-shadow: 0 0 24px rgba(99, 102, 241, 0.25);
         }
 
-        /* Drag & Drop Feedback */
+        .glow-emerald {
+            box-shadow: 0 0 24px rgba(16, 185, 129, 0.22);
+        }
+
+        .glow-amber {
+            box-shadow: 0 0 24px rgba(245, 158, 11, 0.25);
+        }
+
+        /* Drag & Drop Visual Cue */
         .dragging {
-            opacity: 0.3;
-            transform: scale(0.97);
-            border: 2px dashed #FFB800 !important;
+            opacity: 0.45;
+            transform: scale(0.98);
+            border: 1.5px dashed #F59E0B !important;
+            background: rgba(245, 158, 11, 0.06) !important;
         }
 
-        /* Radial Radar Target Circle */
-        .radar-sweep {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: conic-gradient(from 0deg, transparent 0deg, transparent 300deg, rgba(0, 240, 255, 0.15) 360deg);
-            border-radius: 50%;
-            animation: radarSpin 4s linear infinite;
-        }
-
-        @keyframes radarSpin {
+        /* Subtle Orbital Ring Animation */
+        @keyframes orbitSlow {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
+        .orbit-ring {
+            animation: orbitSlow 16s linear infinite;
+        }
 
-        /* Custom Scrollbar */
+        /* Custom Precision Scrollbar */
         ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
+            width: 5px;
+            height: 5px;
         }
         ::-webkit-scrollbar-track {
-            background: #030712;
+            background: #09090B;
         }
         ::-webkit-scrollbar-thumb {
-            background: #1F293D;
-            border-radius: 3px;
+            background: #27272F;
+            border-radius: 9999px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #00F0FF;
-        }
-
-        /* Pulse Animations */
-        @keyframes cyberPulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.6; transform: scale(0.98); }
-        }
-        .pulse-subtle {
-            animation: cyberPulse 3s infinite ease-in-out;
+            background: #6366F1;
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between selection:bg-cyber-neonCyan selection:text-black">
-<div id="app" class="scanline-overlay min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col justify-between selection:bg-accent-indigo selection:text-white">
+<div id="app" class="min-h-screen flex flex-col">
     
-    <!-- Cybernetic Header HUD -->
-    <header class="border-b border-cyber-neonCyan/30 bg-cyber-bg/95 backdrop-blur-2xl sticky top-0 z-40 px-4 py-3 sm:px-8 shadow-2xl">
-        <div class="max-w-7xl mx-auto flex flex-col gap-3">
+    <!-- Top Obsidian Glass Navigation & Telemetry Dock -->
+    <header class="sticky top-0 z-40 border-b border-white/[0.07] bg-obsidian-950/80 backdrop-blur-2xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col gap-3">
+            
+            <!-- Primary Header Bar -->
             <div class="flex flex-col lg:flex-row items-center justify-between gap-4">
                 
-                <!-- Branding & Core Status Indicator -->
+                <!-- Brand Identity & Core Status Pill -->
                 <div class="flex items-center justify-between w-full lg:w-auto">
                     <div class="flex items-center gap-3.5">
-                        <div class="relative flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-cyber-panel to-black border border-cyber-neonCyan text-cyber-neonCyan glow-cyan shadow-inner overflow-hidden">
-                            <div class="radar-sweep"></div>
-                            <i data-lucide="crosshair" class="w-6 h-6 z-10 animate-spin-slow"></i>
+                        <!-- Geometric Emblem -->
+                        <div class="relative flex items-center justify-center w-11 h-11 rounded-2xl bg-gradient-to-br from-obsidian-800 to-obsidian-950 border border-white/10 shadow-lg">
+                            <div class="absolute inset-1 rounded-xl border border-dashed border-accent-indigo/40 orbit-ring"></div>
+                            <i data-lucide="layers" class="w-5 h-5 text-accent-indigo relative z-10"></i>
                         </div>
                         <div>
                             <div class="flex items-center gap-2.5">
-                                <h1 class="font-hud text-2xl sm:text-3xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-white via-cyber-neonCyan to-cyber-neonMagenta">BUBBLES GB</h1>
-                                <span id="statusBadge" class="text-[9px] px-2.5 py-0.5 rounded-full font-mono uppercase bg-cyber-neonEmerald/15 text-cyber-neonEmerald border border-cyber-neonEmerald/40 tracking-widest font-bold">
+                                <h1 class="font-hud text-xl sm:text-2xl font-bold tracking-tight text-white">
+                                    Bubbles <span class="text-accent-indigo">GB</span>
+                                </h1>
+                                <span id="statusBadge" class="inline-flex items-center gap-1.5 text-[10px] px-2.5 py-0.5 rounded-full font-mono uppercase bg-accent-emerald/10 text-accent-emerald border border-accent-emerald/25 tracking-wider font-semibold">
                                     CORE ONLINE
                                 </span>
                             </div>
-                            <p class="text-[11px] text-slate-400 font-mono tracking-wider flex items-center gap-2">
-                                <span class="text-cyber-neonCyan font-bold">TACTICAL MATRIX v3.0</span>
-                                <span class="text-slate-600">|</span>
-                                <span>HOBBY RANKING PROTOCOL</span>
+                            <p class="text-[11px] text-zinc-400 font-mono tracking-wide flex items-center gap-2 mt-0.5">
+                                <span class="text-zinc-300 font-medium">TELEMETRY MATRIX v3.0</span>
+                                <span class="text-zinc-700">•</span>
+                                <span>INTEREST LEADERBOARD</span>
                             </p>
                         </div>
                     </div>
 
-                    <!-- Mobile Operator Mode Toggle Button -->
+                    <!-- Mobile Operator Override Pill -->
                     <div class="lg:hidden">
-                        <button id="mobileOperatorToggle" onclick="toggleOperatorMode()" class="px-3 py-1.5 rounded-lg text-xs font-mono font-bold flex items-center gap-1.5 bg-cyber-card border border-cyber-border text-slate-200">
-                            <i data-lucide="shield-alert" class="w-4 h-4 text-cyber-neonAmber"></i>
+                        <button id="mobileOperatorToggle" onclick="toggleOperatorMode()" class="px-3 py-1.5 rounded-xl text-xs font-mono font-semibold flex items-center gap-1.5 bg-obsidian-800 border border-white/10 text-zinc-200 hover:border-accent-amber/50 transition-all">
+                            <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-accent-amber"></i>
                             <span id="mobileOpBtnText">OVERRIDE</span>
                         </button>
                     </div>
                 </div>
 
-                <!-- Live Matrix Telemetry Display -->
-                <div class="grid grid-cols-3 gap-2 sm:flex sm:items-center w-full lg:w-auto p-2 rounded-xl bg-cyber-panel/90 border border-cyber-border font-mono text-xs shadow-lg">
-                    <div class="px-3 py-1 text-center sm:text-left">
-                        <div class="text-slate-500 text-[9px] uppercase tracking-wider font-bold">TRACKED NODES</div>
-                        <div id="metricTotalCount" class="text-cyber-neonCyan font-black text-sm">0</div>
+                <!-- Bento Telemetry Strip -->
+                <div class="grid grid-cols-3 gap-2 sm:flex sm:items-center w-full lg:w-auto p-1.5 rounded-2xl bg-obsidian-900/90 border border-white/[0.07] font-mono text-xs shadow-inner">
+                    <div class="px-3.5 py-1.5 rounded-xl bg-white/[0.02] text-center sm:text-left">
+                        <div class="text-zinc-500 text-[9px] uppercase tracking-wider font-semibold">TRACKED NODES</div>
+                        <div id="metricTotalCount" class="text-white font-bold text-sm mt-0.5">0</div>
                     </div>
-                    <div class="hidden sm:block h-6 w-px bg-cyber-border"></div>
-                    <div class="px-3 py-1 text-center sm:text-left border-l sm:border-l-0 border-cyber-border">
-                        <div class="text-slate-500 text-[9px] uppercase tracking-wider font-bold">LAST SNAPSHOT</div>
-                        <div id="metricLastSaved" class="text-slate-200 font-semibold text-xs truncate max-w-[120px]">NEVER</div>
+                    <div class="px-3.5 py-1.5 rounded-xl bg-white/[0.02] text-center sm:text-left">
+                        <div class="text-zinc-500 text-[9px] uppercase tracking-wider font-semibold">LAST SNAPSHOT</div>
+                        <div id="metricLastSaved" class="text-zinc-200 font-medium text-xs truncate max-w-[130px] mt-0.5">NEVER</div>
                     </div>
-                    <div class="hidden sm:block h-6 w-px bg-cyber-border"></div>
-                    <div class="px-3 py-1 text-center sm:text-left border-l sm:border-l-0 border-cyber-border">
-                        <div class="text-slate-500 text-[9px] uppercase tracking-wider font-bold">ELAPSED CLOCK</div>
-                        <div id="metricElapsedTime" class="text-cyber-neonEmerald font-semibold text-xs">--:--:--</div>
+                    <div class="px-3.5 py-1.5 rounded-xl bg-white/[0.02] text-center sm:text-left">
+                        <div class="text-zinc-500 text-[9px] uppercase tracking-wider font-semibold">ELAPSED CLOCK</div>
+                        <div id="metricElapsedTime" class="text-accent-emerald font-semibold text-xs mt-0.5">--:--:--</div>
                     </div>
                 </div>
 
-                <!-- Action Toolbar (Desktop) -->
+                <!-- Desktop Tactical Command Bar -->
                 <div class="hidden lg:flex items-center gap-2">
-                    <button id="operatorToggleBtn" onclick="toggleOperatorMode()" class="px-3.5 py-2 rounded-xl font-mono text-xs font-bold flex items-center gap-2 bg-cyber-card border border-cyber-border hover:border-cyber-neonAmber text-slate-200 transition-all shadow">
-                        <i data-lucide="shield-alert" class="w-4 h-4 text-cyber-neonAmber"></i>
+                    <button id="operatorToggleBtn" onclick="toggleOperatorMode()" class="px-3.5 py-2 rounded-xl font-mono text-xs font-semibold flex items-center gap-2 bg-obsidian-800/90 border border-white/10 hover:border-accent-amber/50 text-zinc-200 transition-all">
+                        <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-accent-amber"></i>
                         <span>OPERATOR</span>
                     </button>
 
-                    <button onclick="openSaveMissionModal()" class="px-3.5 py-2 rounded-xl font-mono text-xs font-bold flex items-center gap-2 bg-cyber-neonEmerald/15 border border-cyber-neonEmerald/60 text-cyber-neonEmerald hover:bg-cyber-neonEmerald hover:text-black transition-all glow-emerald shadow">
-                        <i data-lucide="save" class="w-4 h-4"></i>
+                    <button onclick="openSaveMissionModal()" class="px-3.5 py-2 rounded-xl font-mono text-xs font-semibold flex items-center gap-2 bg-accent-emerald text-zinc-950 hover:bg-emerald-400 transition-all glow-emerald shadow-sm">
+                        <i data-lucide="save" class="w-3.5 h-3.5"></i>
                         <span>SAVE LOG</span>
                     </button>
 
-                    <button onclick="openAnalyticsModal()" class="px-3.5 py-2 rounded-xl font-mono text-xs font-bold flex items-center gap-2 bg-cyber-card border border-cyber-border hover:border-cyber-neonMagenta text-cyber-neonMagenta transition-all shadow">
-                        <i data-lucide="activity" class="w-4 h-4"></i>
+                    <button onclick="openAnalyticsModal()" class="px-3.5 py-2 rounded-xl font-mono text-xs font-semibold flex items-center gap-2 bg-obsidian-800/90 border border-white/10 hover:border-accent-violet/50 text-zinc-200 hover:text-white transition-all">
+                        <i data-lucide="bar-chart-2" class="w-3.5 h-3.5 text-accent-violet"></i>
                         <span>ANALYTICS</span>
                     </button>
 
-                    <button onclick="openVaultModal()" class="px-3.5 py-2 rounded-xl font-mono text-xs font-bold flex items-center gap-2 bg-cyber-card border border-cyber-border hover:border-cyber-neonCyan text-slate-200 transition-all shadow">
-                        <i data-lucide="archive" class="w-4 h-4 text-cyber-neonCyan"></i>
+                    <button onclick="openVaultModal()" class="px-3.5 py-2 rounded-xl font-mono text-xs font-semibold flex items-center gap-2 bg-obsidian-800/90 border border-white/10 hover:border-accent-sky/50 text-zinc-200 hover:text-white transition-all">
+                        <i data-lucide="archive" class="w-3.5 h-3.5 text-accent-sky"></i>
                         <span>VAULT</span>
                     </button>
 
-                    <button onclick="openExportModal()" class="px-3.5 py-2 rounded-xl font-mono text-xs font-bold flex items-center gap-2 bg-cyber-card border border-cyber-border hover:border-slate-300 text-slate-200 transition-all shadow">
-                        <i data-lucide="database" class="w-4 h-4 text-cyber-neonAmber"></i>
+                    <button onclick="openExportModal()" class="px-3.5 py-2 rounded-xl font-mono text-xs font-semibold flex items-center gap-2 bg-obsidian-800/90 border border-white/10 hover:border-white/25 text-zinc-200 hover:text-white transition-all">
+                        <i data-lucide="database" class="w-3.5 h-3.5 text-zinc-400"></i>
                         <span>DATA</span>
                     </button>
                 </div>
             </div>
 
-            <!-- Pro Tip Telemetry Banner -->
-            <div class="flex items-center justify-between gap-3 px-3.5 py-1.5 rounded-lg bg-cyber-neonCyan/10 border border-cyber-neonCyan/30 text-xs font-mono text-slate-300 shadow-sm">
+            <!-- Subtle Tactical Telemetry Notice -->
+            <div class="flex items-center justify-between gap-3 px-3.5 py-2 rounded-xl bg-accent-indigo/[0.07] border border-accent-indigo/20 text-xs text-zinc-300">
                 <div class="flex items-center gap-2.5 truncate">
-                    <div class="p-1 rounded bg-cyber-neonCyan/20 text-cyber-neonCyan shrink-0">
-                        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
-                    </div>
-                    <span class="truncate"><strong class="text-cyber-neonCyan">TACTICAL TIP:</strong> Toggle <span class="text-cyber-neonAmber font-bold">OPERATOR</span> mode with passcode <code class="px-1 py-0.5 rounded bg-black text-cyber-neonAmber border border-cyber-neonAmber/30 font-bold">boogieis15</code> to drag, re-rank, or add custom nodes!</span>
+                    <span class="flex items-center justify-center w-5 h-5 rounded-md bg-accent-indigo/20 text-accent-indigo shrink-0">
+                        <i data-lucide="terminal" class="w-3 h-3"></i>
+                    </span>
+                    <span class="truncate text-[11px] sm:text-xs">
+                        <span class="font-mono font-semibold text-accent-indigo">OPERATOR HINT:</span> Engage <span class="font-mono text-accent-amber font-semibold">OPERATOR</span> mode with passcode <code class="px-1.5 py-0.5 rounded-md bg-obsidian-950 text-accent-amber border border-white/10 font-mono font-semibold">boogieis15</code> to drag, re-rank, or add custom nodes.
+                    </span>
                 </div>
-                <div class="hidden md:flex items-center gap-2 text-[10px] text-slate-400 shrink-0">
-                    <span class="w-2 h-2 rounded-full bg-cyber-neonEmerald animate-ping"></span>
-                    <span>ACTIVE SYNC</span>
+                <div class="hidden md:flex items-center gap-2 text-[10px] font-mono text-zinc-400 shrink-0">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-emerald opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-accent-emerald"></span>
+                    </span>
+                    <span>LIVE SYNC</span>
                 </div>
             </div>
 
-            <!-- Mobile Action Bar -->
-            <div class="flex lg:hidden items-center justify-between gap-1.5 pt-1 border-t border-cyber-border">
-                <button onclick="openSaveMissionModal()" class="flex-1 py-2 rounded-lg font-mono text-[11px] font-bold flex items-center justify-center gap-1 bg-cyber-neonEmerald/15 border border-cyber-neonEmerald/60 text-cyber-neonEmerald">
+            <!-- Mobile Action Dock -->
+            <div class="flex lg:hidden items-center justify-between gap-1.5 pt-1">
+                <button onclick="openSaveMissionModal()" class="flex-1 py-2 rounded-xl font-mono text-[11px] font-semibold flex items-center justify-center gap-1.5 bg-accent-emerald text-zinc-950">
                     <i data-lucide="save" class="w-3.5 h-3.5"></i>
                     <span>SAVE</span>
                 </button>
-                <button onclick="openAnalyticsModal()" class="flex-1 py-2 rounded-lg font-mono text-[11px] font-bold flex items-center justify-center gap-1 bg-cyber-card border border-cyber-border text-cyber-neonMagenta">
-                    <i data-lucide="activity" class="w-3.5 h-3.5"></i>
+                <button onclick="openAnalyticsModal()" class="flex-1 py-2 rounded-xl font-mono text-[11px] font-semibold flex items-center justify-center gap-1.5 bg-obsidian-800 border border-white/10 text-zinc-200">
+                    <i data-lucide="bar-chart-2" class="w-3.5 h-3.5 text-accent-violet"></i>
                     <span>STATS</span>
                 </button>
-                <button onclick="openVaultModal()" class="flex-1 py-2 rounded-lg font-mono text-[11px] font-bold flex items-center justify-center gap-1 bg-cyber-card border border-cyber-border text-cyber-neonCyan">
-                    <i data-lucide="archive" class="w-3.5 h-3.5"></i>
+                <button onclick="openVaultModal()" class="flex-1 py-2 rounded-xl font-mono text-[11px] font-semibold flex items-center justify-center gap-1.5 bg-obsidian-800 border border-white/10 text-zinc-200">
+                    <i data-lucide="archive" class="w-3.5 h-3.5 text-accent-sky"></i>
                     <span>VAULT</span>
                 </button>
-                <button onclick="openExportModal()" class="flex-1 py-2 rounded-lg font-mono text-[11px] font-bold flex items-center justify-center gap-1 bg-cyber-card border border-cyber-border text-cyber-neonAmber">
-                    <i data-lucide="database" class="w-3.5 h-3.5"></i>
+                <button onclick="openExportModal()" class="flex-1 py-2 rounded-xl font-mono text-[11px] font-semibold flex items-center justify-center gap-1.5 bg-obsidian-800 border border-white/10 text-zinc-200">
+                    <i data-lucide="database" class="w-3.5 h-3.5 text-zinc-400"></i>
                     <span>DATA</span>
                 </button>
             </div>
@@ -301,36 +289,39 @@
     </header>
 
     <!-- Main Operational Workspace -->
-    <main class="max-w-7xl mx-auto px-4 py-6 sm:px-6 flex-1 w-full flex flex-col gap-6">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-7 flex-1 w-full flex flex-col gap-6">
         
-        <!-- Operator Override Banner -->
-        <div id="operatorBanner" class="hidden rounded-2xl p-4 bg-cyber-neonAmber/10 border border-cyber-neonAmber/50 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
+        <!-- Operator Override Alert Banner -->
+        <div id="operatorBanner" class="hidden rounded-2xl p-4 sm:p-5 bg-gradient-to-r from-accent-amber/15 via-obsidian-850 to-obsidian-900 border border-accent-amber/35 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
             <div class="flex items-center gap-3.5">
-                <div class="p-2.5 rounded-xl bg-cyber-neonAmber/20 text-cyber-neonAmber glow-amber animate-bounce">
-                    <i data-lucide="wrench" class="w-6 h-6"></i>
+                <div class="p-2.5 rounded-xl bg-accent-amber/20 border border-accent-amber/30 text-accent-amber">
+                    <i data-lucide="sliders" class="w-5 h-5"></i>
                 </div>
                 <div>
-                    <h2 class="font-hud font-bold text-cyber-neonAmber text-lg tracking-wider">OPERATOR OVERRIDE ACTIVE</h2>
-                    <p class="text-xs text-slate-300">Drag items to adjust ranks, use movement arrows, or add custom nodes. Remember to hit <span class="text-cyber-neonEmerald font-mono font-bold">SAVE LOG</span> when done.</p>
+                    <h2 class="font-hud font-bold text-white text-base sm:text-lg flex items-center gap-2">
+                        <span>Operator Override Active</span>
+                        <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-accent-amber/20 text-accent-amber border border-accent-amber/30">UNLOCKED</span>
+                    </h2>
+                    <p class="text-xs text-zinc-300 mt-0.5">Drag cards to reorder ranks, use quick-shift arrows, or create new nodes. Click <span class="text-accent-emerald font-mono font-semibold">SAVE LOG</span> to commit a snapshot.</p>
                 </div>
             </div>
-            <button onclick="openAddModal()" class="w-full sm:w-auto px-4 py-2.5 rounded-xl font-mono text-xs font-bold bg-cyber-neonAmber text-black hover:bg-yellow-400 flex items-center justify-center gap-2 transition-all glow-amber shrink-0">
-                <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            <button onclick="openAddModal()" class="w-full sm:w-auto px-4 py-2.5 rounded-xl font-mono text-xs font-bold bg-accent-amber text-zinc-950 hover:bg-amber-400 flex items-center justify-center gap-2 transition-all glow-amber shrink-0">
+                <i data-lucide="plus" class="w-4 h-4"></i>
                 <span>ADD NEW NODE</span>
             </button>
         </div>
 
-        <!-- Controls, Filters & Layout Toggle Matrix -->
-        <div class="flex flex-col md:flex-row items-center justify-between gap-4 pb-3 border-b border-cyber-border">
+        <!-- Filter, Search & Layout Control Bar -->
+        <div class="bento-shell rounded-2xl p-3 flex flex-col md:flex-row items-center justify-between gap-3">
             
-            <!-- Search & Category Filters -->
-            <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
-                <div class="relative flex-1 sm:w-64">
-                    <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2.5 text-slate-500"></i>
-                    <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Search interest matrix..." class="w-full bg-cyber-card border border-cyber-border rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyber-neonCyan font-mono">
+            <!-- Search Input & Category Selector -->
+            <div class="flex flex-col sm:flex-row items-center gap-2.5 w-full md:w-auto">
+                <div class="relative w-full sm:w-72">
+                    <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-2.5 text-zinc-500"></i>
+                    <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Filter matrix by title or notes..." class="w-full bg-obsidian-950/80 border border-white/10 rounded-xl pl-10 pr-3.5 py-2 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-accent-indigo transition-colors font-sans">
                 </div>
                 
-                <select id="categoryFilter" onchange="handleFilter()" class="bg-cyber-card border border-cyber-border rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyber-neonCyan font-mono">
+                <select id="categoryFilter" onchange="handleFilter()" class="w-full sm:w-auto bg-obsidian-950/80 border border-white/10 rounded-xl px-3.5 py-2 text-xs text-zinc-200 focus:outline-none focus:border-accent-indigo font-mono cursor-pointer">
                     <option value="ALL">ALL CATEGORIES</option>
                     <option value="ATHLETICS">ATHLETICS & FITNESS</option>
                     <option value="GAMING">GAMING & STRATEGY</option>
@@ -341,22 +332,22 @@
                 </select>
             </div>
 
-            <!-- Layout Options, Sort & View Modes -->
-            <div class="flex flex-wrap items-center justify-between md:justify-end w-full md:w-auto gap-3 text-xs font-mono text-slate-400">
+            <!-- View Switcher & Sort Controls -->
+            <div class="flex items-center justify-between md:justify-end w-full md:w-auto gap-3 text-xs font-mono text-zinc-400">
                 
-                <!-- View Mode Toggle (Grid vs Compact List) -->
-                <div class="flex items-center bg-cyber-card border border-cyber-border rounded-xl p-1">
-                    <button id="viewGridBtn" onclick="setLayoutMode('grid')" title="Grid View" class="p-1.5 rounded-lg text-cyber-neonCyan bg-cyber-panel border border-cyber-neonCyan/40">
-                        <i data-lucide="grid" class="w-4 h-4"></i>
+                <!-- Grid / List Segmented Toggle -->
+                <div class="flex items-center bg-obsidian-950/90 border border-white/10 rounded-xl p-1 gap-1">
+                    <button id="viewGridBtn" onclick="setLayoutMode('grid')" title="Grid View" class="p-1.5 rounded-lg text-white bg-accent-indigo/20 border border-accent-indigo/40 transition-all">
+                        <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
                     </button>
-                    <button id="viewListBtn" onclick="setLayoutMode('list')" title="List View" class="p-1.5 rounded-lg text-slate-500 hover:text-white">
-                        <i data-lucide="list" class="w-4 h-4"></i>
+                    <button id="viewListBtn" onclick="setLayoutMode('list')" title="List View" class="p-1.5 rounded-lg text-zinc-500 hover:text-zinc-200 transition-all">
+                        <i data-lucide="list" class="w-3.5 h-3.5"></i>
                     </button>
                 </div>
 
                 <div class="flex items-center gap-2">
-                    <span class="text-slate-500">SORT:</span>
-                    <select id="sortSelect" onchange="handleSort()" class="bg-cyber-card border border-cyber-border rounded-xl px-2.5 py-1.5 text-xs text-cyber-neonCyan focus:outline-none font-mono">
+                    <span class="text-zinc-500 text-[11px]">SORT</span>
+                    <select id="sortSelect" onchange="handleSort()" class="bg-obsidian-950/80 border border-white/10 rounded-xl px-3 py-2 text-xs text-zinc-200 focus:outline-none focus:border-accent-indigo font-mono cursor-pointer">
                         <option value="RANK">RANK ORDER</option>
                         <option value="DELTA">BIGGEST CLIMBERS</option>
                         <option value="TITLE">ALPHABETICAL</option>
@@ -366,17 +357,19 @@
             </div>
         </div>
 
-        <!-- Dynamic Leaderboard Matrix Container -->
+        <!-- Dynamic Bento Leaderboard Matrix -->
         <div id="leaderboardList" class="cyber-card-matrix">
-            <!-- Populated via JavaScript -->
+            <!-- Populated dynamically via renderApp() -->
         </div>
 
-        <!-- Empty State Container -->
-        <div id="emptyState" class="hidden flex-col items-center justify-center py-20 text-center border border-dashed border-cyber-border rounded-2xl bg-cyber-panel/40">
-            <i data-lucide="ghost" class="w-12 h-12 text-slate-600 mb-3 animate-pulse"></i>
-            <h3 class="font-hud text-lg text-slate-300 font-bold">NO MATCHING MATRIX NODES</h3>
-            <p class="text-xs text-slate-500 max-w-sm mt-1 mb-4 font-mono">Adjust search terms or category filters to display node data.</p>
-            <button onclick="resetFilters()" class="px-4 py-2 rounded-xl bg-cyber-card border border-cyber-border text-xs text-cyber-neonCyan font-mono font-bold hover:border-cyber-neonCyan">
+        <!-- Empty Filter State -->
+        <div id="emptyState" class="hidden flex-col items-center justify-center py-20 px-4 text-center bento-shell rounded-3xl border-dashed border-white/15">
+            <div class="w-12 h-12 rounded-2xl bg-white/[0.04] border border-white/10 flex items-center justify-center text-zinc-500 mb-3">
+                <i data-lucide="search-x" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-hud text-lg text-white font-semibold">No Matching Matrix Nodes</h3>
+            <p class="text-xs text-zinc-400 max-w-sm mt-1.5 mb-5 font-sans">No tracked hobbies match your current search query or category filter.</p>
+            <button onclick="resetFilters()" class="px-4 py-2 rounded-xl bg-accent-indigo text-white text-xs font-mono font-semibold hover:bg-indigo-500 transition-colors">
                 RESET MATRIX FILTERS
             </button>
         </div>
@@ -384,30 +377,32 @@
 </div>
 
 <!-- Operator Authentication Modal -->
-<div id="operatorAuthModal" class="fixed inset-0 bg-black/85 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4">
-    <div class="cyber-panel border-cyber-neonAmber/50 rounded-2xl max-w-sm w-full p-6 shadow-2xl relative">
-        <div class="flex items-center justify-between border-b border-cyber-border pb-3 mb-4">
-            <div class="flex items-center gap-2 text-cyber-neonAmber">
-                <i data-lucide="shield-alert" class="w-5 h-5"></i>
-                <h3 class="font-hud font-bold text-lg text-white">OPERATOR CLEARANCE</h3>
+<div id="operatorAuthModal" class="fixed inset-0 bg-obsidian-950/80 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4">
+    <div class="bento-shell rounded-3xl max-w-sm w-full p-6 shadow-2xl relative">
+        <div class="flex items-center justify-between border-b border-white/[0.08] pb-4 mb-4">
+            <div class="flex items-center gap-2.5">
+                <div class="p-2 rounded-xl bg-accent-amber/15 text-accent-amber border border-accent-amber/25">
+                    <i data-lucide="shield-alert" class="w-4 h-4"></i>
+                </div>
+                <h3 class="font-hud font-bold text-base text-white">Operator Clearance</h3>
             </div>
-            <button onclick="closeModal('operatorAuthModal')" class="text-slate-400 hover:text-white">
-                <i data-lucide="x" class="w-5 h-5"></i>
+            <button onclick="closeModal('operatorAuthModal')" class="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/5 transition-colors">
+                <i data-lucide="x" class="w-4 h-4"></i>
             </button>
         </div>
 
         <div class="space-y-4">
-            <p class="text-xs text-slate-300 leading-relaxed font-sans">Enter security clearance password to engage Operator Mode override:</p>
+            <p class="text-xs text-zinc-400 leading-relaxed">Enter security clearance passcode to unlock Operator Mode matrix controls:</p>
             <div>
-                <input type="password" id="operatorPasswordInput" placeholder="Enter security passcode..." class="w-full bg-cyber-card border border-cyber-border rounded-xl px-3.5 py-2.5 text-sm text-white focus:border-cyber-neonAmber focus:outline-none font-mono" onkeypress="if(event.key==='Enter') verifyOperatorPassword()">
+                <input type="password" id="operatorPasswordInput" placeholder="Enter passcode..." class="w-full bg-obsidian-950 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:border-accent-amber focus:outline-none font-mono" onkeypress="if(event.key==='Enter') verifyOperatorPassword()">
             </div>
 
-            <div class="flex items-center justify-end gap-3 pt-2">
-                <button onclick="closeModal('operatorAuthModal')" class="px-3.5 py-2 rounded-xl text-xs font-mono text-slate-400 hover:text-white">
+            <div class="flex items-center justify-end gap-2.5 pt-2">
+                <button onclick="closeModal('operatorAuthModal')" class="px-3.5 py-2 rounded-xl text-xs font-mono text-zinc-400 hover:text-white transition-colors">
                     CANCEL
                 </button>
-                <button onclick="verifyOperatorPassword()" class="px-4 py-2 rounded-xl font-mono text-xs font-bold bg-cyber-neonAmber text-black hover:bg-yellow-400 flex items-center gap-1.5 glow-amber">
-                    <i data-lucide="key" class="w-4 h-4"></i>
+                <button onclick="verifyOperatorPassword()" class="px-4 py-2 rounded-xl font-mono text-xs font-bold bg-accent-amber text-zinc-950 hover:bg-amber-400 flex items-center gap-1.5 transition-all">
+                    <i data-lucide="key" class="w-3.5 h-3.5"></i>
                     <span>AUTHENTICATE</span>
                 </button>
             </div>
@@ -415,47 +410,49 @@
     </div>
 </div>
 
-<!-- Save Mission Modal -->
-<div id="saveMissionModal" class="fixed inset-0 bg-black/85 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4">
-    <div class="cyber-panel border-cyber-neonEmerald/50 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
-        <div class="flex items-center justify-between border-b border-cyber-border pb-3 mb-4">
-            <div class="flex items-center gap-2 text-cyber-neonEmerald">
-                <i data-lucide="shield-check" class="w-5 h-5"></i>
-                <h3 class="font-hud font-bold text-lg text-white">SAVE MISSION SNAPSHOT</h3>
+<!-- Save Mission Snapshot Modal -->
+<div id="saveMissionModal" class="fixed inset-0 bg-obsidian-950/80 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4">
+    <div class="bento-shell rounded-3xl max-w-md w-full p-6 shadow-2xl relative">
+        <div class="flex items-center justify-between border-b border-white/[0.08] pb-4 mb-4">
+            <div class="flex items-center gap-2.5">
+                <div class="p-2 rounded-xl bg-accent-emerald/15 text-accent-emerald border border-accent-emerald/25">
+                    <i data-lucide="bookmark-check" class="w-4 h-4"></i>
+                </div>
+                <h3 class="font-hud font-bold text-base text-white">Save Mission Snapshot</h3>
             </div>
-            <button onclick="closeModal('saveMissionModal')" class="text-slate-400 hover:text-white">
-                <i data-lucide="x" class="w-5 h-5"></i>
+            <button onclick="closeModal('saveMissionModal')" class="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/5 transition-colors">
+                <i data-lucide="x" class="w-4 h-4"></i>
             </button>
         </div>
 
         <div class="space-y-4">
             <div>
-                <label class="block text-xs font-mono text-slate-400 mb-1">MISSION DATE & TIME</label>
-                <input type="datetime-local" id="missionDatePicker" class="w-full bg-cyber-card border border-cyber-border rounded-xl px-3.5 py-2 text-sm text-white focus:border-cyber-neonEmerald focus:outline-none font-mono">
+                <label class="block text-[11px] font-mono text-zinc-400 mb-1.5">MISSION DATE & TIME</label>
+                <input type="datetime-local" id="missionDatePicker" class="w-full bg-obsidian-950 border border-white/10 rounded-xl px-3.5 py-2 text-xs text-white focus:border-accent-emerald focus:outline-none font-mono">
             </div>
 
             <div>
-                <label class="block text-xs font-mono text-slate-400 mb-1">MISSION CODENAME / TITLE</label>
-                <input type="text" id="missionTitleInput" placeholder="e.g. Operation Autumn Ascent" class="w-full bg-cyber-card border border-cyber-border rounded-xl px-3.5 py-2 text-sm text-white focus:border-cyber-neonEmerald focus:outline-none font-mono">
+                <label class="block text-[11px] font-mono text-zinc-400 mb-1.5">MISSION CODENAME / TITLE</label>
+                <input type="text" id="missionTitleInput" placeholder="e.g. Operation Autumn Ascent" class="w-full bg-obsidian-950 border border-white/10 rounded-xl px-3.5 py-2 text-xs text-white focus:border-accent-emerald focus:outline-none font-mono">
             </div>
 
             <div>
-                <label class="block text-xs font-mono text-slate-400 mb-1">MISSION LOG NOTES (OPTIONAL)</label>
-                <textarea id="missionNotesInput" rows="3" placeholder="Brief tactical notes regarding key rank shifts or focus changes..." class="w-full bg-cyber-card border border-cyber-border rounded-xl px-3.5 py-2 text-xs text-white focus:border-cyber-neonEmerald focus:outline-none font-sans"></textarea>
+                <label class="block text-[11px] font-mono text-zinc-400 mb-1.5">MISSION LOG NOTES (OPTIONAL)</label>
+                <textarea id="missionNotesInput" rows="3" placeholder="Brief tactical notes regarding key rank shifts or focus changes..." class="w-full bg-obsidian-950 border border-white/10 rounded-xl px-3.5 py-2 text-xs text-white focus:border-accent-emerald focus:outline-none font-sans"></textarea>
             </div>
 
-            <div class="bg-black/60 p-3.5 rounded-xl border border-cyber-border text-xs font-mono space-y-1">
-                <div class="text-slate-400">CURRENT TOP 3 HIGHLIGHTS:</div>
-                <div id="saveModalTop3" class="text-cyber-neonCyan font-semibold truncate">--</div>
+            <div class="bg-obsidian-950/90 p-3.5 rounded-xl border border-white/[0.07] text-xs font-mono space-y-1">
+                <div class="text-zinc-500 text-[10px]">CURRENT TOP 3 HIGHLIGHTS</div>
+                <div id="saveModalTop3" class="text-accent-emerald font-medium truncate">--</div>
             </div>
         </div>
 
-        <div class="flex items-center justify-end gap-3 mt-6 pt-3 border-t border-cyber-border">
-            <button onclick="closeModal('saveMissionModal')" class="px-4 py-2 rounded-xl font-mono text-xs text-slate-400 hover:text-white">
+        <div class="flex items-center justify-end gap-2.5 mt-6 pt-4 border-t border-white/[0.08]">
+            <button onclick="closeModal('saveMissionModal')" class="px-4 py-2 rounded-xl font-mono text-xs text-zinc-400 hover:text-white transition-colors">
                 CANCEL
             </button>
-            <button onclick="executeSaveMission()" class="px-4 py-2 rounded-xl font-mono text-xs font-bold bg-cyber-neonEmerald text-black hover:bg-emerald-400 flex items-center gap-2 glow-emerald">
-                <i data-lucide="check" class="w-4 h-4"></i>
+            <button onclick="executeSaveMission()" class="px-4 py-2 rounded-xl font-mono text-xs font-bold bg-accent-emerald text-zinc-950 hover:bg-emerald-400 flex items-center gap-1.5 transition-all">
+                <i data-lucide="check" class="w-3.5 h-3.5"></i>
                 <span>CONFIRM SNAPSHOT</span>
             </button>
         </div>
@@ -463,15 +460,17 @@
 </div>
 
 <!-- Edit / Add Node Modal -->
-<div id="editInterestModal" class="fixed inset-0 bg-black/85 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4">
-    <div class="cyber-panel border-cyber-neonCyan/50 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
-        <div class="flex items-center justify-between border-b border-cyber-border pb-3 mb-4">
-            <div class="flex items-center gap-2 text-cyber-neonCyan">
-                <i data-lucide="edit-3" class="w-5 h-5"></i>
-                <h3 id="editModalHeader" class="font-hud font-bold text-lg text-white">EDIT INTEREST NODE</h3>
+<div id="editInterestModal" class="fixed inset-0 bg-obsidian-950/80 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4">
+    <div class="bento-shell rounded-3xl max-w-md w-full p-6 shadow-2xl relative">
+        <div class="flex items-center justify-between border-b border-white/[0.08] pb-4 mb-4">
+            <div class="flex items-center gap-2.5">
+                <div class="p-2 rounded-xl bg-accent-indigo/15 text-accent-indigo border border-accent-indigo/25">
+                    <i data-lucide="edit-3" class="w-4 h-4"></i>
+                </div>
+                <h3 id="editModalHeader" class="font-hud font-bold text-base text-white">Edit Interest Node</h3>
             </div>
-            <button onclick="closeModal('editInterestModal')" class="text-slate-400 hover:text-white">
-                <i data-lucide="x" class="w-5 h-5"></i>
+            <button onclick="closeModal('editInterestModal')" class="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/5 transition-colors">
+                <i data-lucide="x" class="w-4 h-4"></i>
             </button>
         </div>
 
@@ -479,13 +478,13 @@
             <input type="hidden" id="editItemId">
 
             <div>
-                <label class="block text-xs font-mono text-slate-400 mb-1">INTEREST TITLE *</label>
-                <input type="text" id="itemTitleInput" required placeholder="e.g. Calisthenics & Strength" class="w-full bg-cyber-card border border-cyber-border rounded-xl px-3.5 py-2.5 text-sm text-white focus:border-cyber-neonCyan focus:outline-none">
+                <label class="block text-[11px] font-mono text-zinc-400 mb-1.5">INTEREST TITLE *</label>
+                <input type="text" id="itemTitleInput" required placeholder="e.g. Calisthenics & Strength" class="w-full bg-obsidian-950 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:border-accent-indigo focus:outline-none">
             </div>
 
             <div>
-                <label class="block text-xs font-mono text-slate-400 mb-1">CATEGORY</label>
-                <select id="itemCategoryInput" class="w-full bg-cyber-card border border-cyber-border rounded-xl px-3.5 py-2.5 text-xs text-white focus:border-cyber-neonCyan focus:outline-none font-mono">
+                <label class="block text-[11px] font-mono text-zinc-400 mb-1.5">CATEGORY</label>
+                <select id="itemCategoryInput" class="w-full bg-obsidian-950 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white focus:border-accent-indigo focus:outline-none font-mono">
                     <option value="ATHLETICS">ATHLETICS & FITNESS</option>
                     <option value="GAMING">GAMING & STRATEGY</option>
                     <option value="TECH">TECH & DEV</option>
@@ -496,29 +495,29 @@
             </div>
 
             <div>
-                <label class="block text-xs font-mono text-slate-400 mb-1">TACTICAL DESCRIPTION / NOTES</label>
-                <textarea id="itemDescInput" rows="3" placeholder="Why do you enjoy this? What are your active targets or milestones?" class="w-full bg-cyber-card border border-cyber-border rounded-xl px-3.5 py-2.5 text-xs text-white focus:border-cyber-neonCyan focus:outline-none"></textarea>
+                <label class="block text-[11px] font-mono text-zinc-400 mb-1.5">TACTICAL DESCRIPTION / NOTES</label>
+                <textarea id="itemDescInput" rows="3" placeholder="Why do you enjoy this? What are your active targets or milestones?" class="w-full bg-obsidian-950 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white focus:border-accent-indigo focus:outline-none"></textarea>
             </div>
 
             <div>
-                <label class="block text-xs font-mono text-slate-400 mb-1">ENJOYABILITY SCORE (1-100)</label>
-                <div class="flex items-center gap-3">
-                    <input type="range" id="itemScoreInput" min="1" max="100" value="85" oninput="document.getElementById('scoreVal').innerText = this.value" class="w-full accent-cyber-neonCyan">
-                    <span id="scoreVal" class="font-mono text-sm font-bold text-cyber-neonCyan w-8 text-right">85</span>
+                <label class="block text-[11px] font-mono text-zinc-400 mb-1.5">ENJOYABILITY SCORE (1-100)</label>
+                <div class="flex items-center gap-3 bg-obsidian-950 p-3 rounded-xl border border-white/10">
+                    <input type="range" id="itemScoreInput" min="1" max="100" value="85" oninput="document.getElementById('scoreVal').innerText = this.value" class="w-full accent-accent-indigo cursor-pointer">
+                    <span id="scoreVal" class="font-mono text-sm font-bold text-accent-indigo w-8 text-right">85</span>
                 </div>
             </div>
 
-            <div class="flex items-center justify-between pt-3 border-t border-cyber-border">
-                <button type="button" id="deleteItemBtn" onclick="handleDeleteItem()" class="px-3 py-1.5 rounded-lg text-xs font-mono text-cyber-neonMagenta hover:bg-cyber-neonMagenta/10 flex items-center gap-1">
-                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+            <div class="flex items-center justify-between pt-4 border-t border-white/[0.08]">
+                <button type="button" id="deleteItemBtn" onclick="handleDeleteItem()" class="px-3 py-1.5 rounded-xl text-xs font-mono text-accent-rose hover:bg-accent-rose/10 flex items-center gap-1.5 transition-colors">
+                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                     <span>DELETE</span>
                 </button>
                 <div class="flex items-center gap-2">
-                    <button type="button" onclick="closeModal('editInterestModal')" class="px-4 py-2 rounded-xl font-mono text-xs text-slate-400 hover:text-white">
+                    <button type="button" onclick="closeModal('editInterestModal')" class="px-4 py-2 rounded-xl font-mono text-xs text-zinc-400 hover:text-white transition-colors">
                         CANCEL
                     </button>
-                    <button type="submit" class="px-4 py-2 rounded-xl font-mono text-xs font-bold bg-cyber-neonCyan text-black hover:bg-cyan-400 flex items-center gap-1.5 glow-cyan">
-                        <i data-lucide="save" class="w-4 h-4"></i>
+                    <button type="submit" class="px-4 py-2 rounded-xl font-mono text-xs font-bold bg-accent-indigo text-white hover:bg-indigo-500 flex items-center gap-1.5 transition-all">
+                        <i data-lucide="save" class="w-3.5 h-3.5"></i>
                         <span>SAVE NODE</span>
                     </button>
                 </div>
@@ -528,34 +527,36 @@
 </div>
 
 <!-- Analytics & Category Breakdown Modal -->
-<div id="analyticsModal" class="fixed inset-0 bg-black/85 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4">
-    <div class="cyber-panel border-cyber-neonMagenta/50 rounded-2xl max-w-xl w-full p-6 shadow-2xl relative flex flex-col max-h-[85vh]">
-        <div class="flex items-center justify-between border-b border-cyber-border pb-3 mb-4">
-            <div class="flex items-center gap-2 text-cyber-neonMagenta">
-                <i data-lucide="activity" class="w-5 h-5"></i>
-                <h3 class="font-hud font-bold text-lg text-white">INTEREST MATRIX ANALYTICS</h3>
+<div id="analyticsModal" class="fixed inset-0 bg-obsidian-950/80 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4">
+    <div class="bento-shell rounded-3xl max-w-xl w-full p-6 shadow-2xl relative flex flex-col max-h-[85vh]">
+        <div class="flex items-center justify-between border-b border-white/[0.08] pb-4 mb-4">
+            <div class="flex items-center gap-2.5">
+                <div class="p-2 rounded-xl bg-accent-violet/15 text-accent-violet border border-accent-violet/25">
+                    <i data-lucide="bar-chart-2" class="w-4 h-4"></i>
+                </div>
+                <h3 class="font-hud font-bold text-base text-white">Interest Matrix Analytics</h3>
             </div>
-            <button onclick="closeModal('analyticsModal')" class="text-slate-400 hover:text-white">
-                <i data-lucide="x" class="w-5 h-5"></i>
+            <button onclick="closeModal('analyticsModal')" class="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/5 transition-colors">
+                <i data-lucide="x" class="w-4 h-4"></i>
             </button>
         </div>
 
         <div class="flex-1 overflow-y-auto space-y-4 pr-1">
-            <div class="p-4 rounded-xl bg-cyber-card border border-cyber-border space-y-3">
-                <h4 class="text-xs font-mono font-bold text-cyber-neonCyan uppercase tracking-wider">CATEGORY DISTRIBUTION</h4>
-                <div id="analyticsCatList" class="space-y-2">
+            <div class="p-4 rounded-2xl bg-obsidian-950/80 border border-white/[0.07] space-y-3.5">
+                <h4 class="text-[11px] font-mono font-semibold text-zinc-400 uppercase tracking-wider">CATEGORY DISTRIBUTION</h4>
+                <div id="analyticsCatList" class="space-y-3">
                     <!-- Populated dynamically -->
                 </div>
             </div>
 
-            <div class="p-4 rounded-xl bg-cyber-card border border-cyber-border space-y-2">
-                <h4 class="text-xs font-mono font-bold text-cyber-neonAmber uppercase tracking-wider">HIGHEST SCORE NODE</h4>
-                <div id="analyticsTopNode" class="text-sm font-bold text-white">--</div>
+            <div class="p-4 rounded-2xl bg-obsidian-950/80 border border-white/[0.07] space-y-1.5">
+                <h4 class="text-[11px] font-mono font-semibold text-accent-amber uppercase tracking-wider">HIGHEST SCORE NODE</h4>
+                <div id="analyticsTopNode" class="text-sm font-hud font-bold text-white">--</div>
             </div>
         </div>
 
-        <div class="pt-4 border-t border-cyber-border flex items-center justify-end">
-            <button onclick="closeModal('analyticsModal')" class="px-4 py-2 rounded-xl bg-cyber-card border border-cyber-border text-xs font-mono text-slate-200 hover:border-slate-400">
+        <div class="pt-4 mt-4 border-t border-white/[0.08] flex items-center justify-end">
+            <button onclick="closeModal('analyticsModal')" class="px-4 py-2 rounded-xl bg-obsidian-800 border border-white/10 text-xs font-mono text-zinc-200 hover:border-white/25 transition-colors">
                 CLOSE ANALYTICS
             </button>
         </div>
@@ -563,15 +564,17 @@
 </div>
 
 <!-- Mission Vault & Snapshot History Modal -->
-<div id="vaultModal" class="fixed inset-0 bg-black/85 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4">
-    <div class="cyber-panel border-cyber-neonCyan/50 rounded-2xl max-w-2xl w-full p-6 shadow-2xl relative flex flex-col max-h-[85vh]">
-        <div class="flex items-center justify-between border-b border-cyber-border pb-3 mb-4">
-            <div class="flex items-center gap-2 text-cyber-neonCyan">
-                <i data-lucide="archive" class="w-5 h-5"></i>
-                <h3 class="font-hud font-bold text-lg text-white">MISSION HISTORY VAULT</h3>
+<div id="vaultModal" class="fixed inset-0 bg-obsidian-950/80 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4">
+    <div class="bento-shell rounded-3xl max-w-2xl w-full p-6 shadow-2xl relative flex flex-col max-h-[85vh]">
+        <div class="flex items-center justify-between border-b border-white/[0.08] pb-4 mb-4">
+            <div class="flex items-center gap-2.5">
+                <div class="p-2 rounded-xl bg-accent-sky/15 text-accent-sky border border-accent-sky/25">
+                    <i data-lucide="archive" class="w-4 h-4"></i>
+                </div>
+                <h3 class="font-hud font-bold text-base text-white">Mission History Vault</h3>
             </div>
-            <button onclick="closeModal('vaultModal')" class="text-slate-400 hover:text-white">
-                <i data-lucide="x" class="w-5 h-5"></i>
+            <button onclick="closeModal('vaultModal')" class="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/5 transition-colors">
+                <i data-lucide="x" class="w-4 h-4"></i>
             </button>
         </div>
 
@@ -579,9 +582,9 @@
             <!-- Populated dynamically -->
         </div>
 
-        <div class="pt-4 border-t border-cyber-border flex items-center justify-between text-xs font-mono text-slate-400">
-            <span>TOTAL SAVED SNAPSHOTS: <span id="vaultTotalCount" class="text-white">0</span></span>
-            <button onclick="closeModal('vaultModal')" class="px-4 py-2 rounded-xl bg-cyber-card border border-cyber-border text-slate-200 hover:border-slate-400">
+        <div class="pt-4 mt-4 border-t border-white/[0.08] flex items-center justify-between text-xs font-mono text-zinc-400">
+            <span>TOTAL SAVED SNAPSHOTS: <span id="vaultTotalCount" class="text-white font-bold">0</span></span>
+            <button onclick="closeModal('vaultModal')" class="px-4 py-2 rounded-xl bg-obsidian-800 border border-white/10 text-zinc-200 hover:border-white/25 transition-colors">
                 CLOSE
             </button>
         </div>
@@ -589,44 +592,47 @@
 </div>
 
 <!-- Export / Import & Sync Modal -->
-<div id="exportModal" class="fixed inset-0 bg-black/85 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4">
-    <div class="cyber-panel border-slate-500/50 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative">
-        <div class="flex items-center justify-between border-b border-cyber-border pb-3 mb-4">
-            <div class="flex items-center gap-2 text-slate-200">
-                <i data-lucide="database" class="w-5 h-5 text-cyber-neonCyan"></i>
-                <h3 class="font-hud font-bold text-lg text-white">PORTABLE DATA SYNC</h3>
+<div id="exportModal" class="fixed inset-0 bg-obsidian-950/80 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4">
+    <div class="bento-shell rounded-3xl max-w-lg w-full p-6 shadow-2xl relative">
+        <div class="flex items-center justify-between border-b border-white/[0.08] pb-4 mb-4">
+            <div class="flex items-center gap-2.5">
+                <div class="p-2 rounded-xl bg-white/5 text-zinc-200 border border-white/10">
+                    <i data-lucide="database" class="w-4 h-4 text-accent-indigo"></i>
+                </div>
+                <h3 class="font-hud font-bold text-base text-white">Portable Data Sync</h3>
             </div>
-            <button onclick="closeModal('exportModal')" class="text-slate-400 hover:text-white">
-                <i data-lucide="x" class="w-5 h-5"></i>
+            <button onclick="closeModal('exportModal')" class="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/5 transition-colors">
+                <i data-lucide="x" class="w-4 h-4"></i>
             </button>
         </div>
 
         <div class="space-y-4">
-            <p class="text-xs text-slate-300 leading-relaxed font-sans">
-                Transfer your entire ranking system and mission snapshots to another browser or device using JSON data files.
+            <p class="text-xs text-zinc-400 leading-relaxed">
+                Transfer your entire ranking matrix and mission snapshots across browsers or devices using portable JSON archives.
             </p>
 
-            <div class="p-4 rounded-xl bg-cyber-card border border-cyber-border space-y-3">
-                <div class="flex items-center justify-between">
-                    <span class="text-xs font-mono font-bold text-slate-200">DOWNLOAD BACKUP FILE</span>
-                    <button onclick="downloadJsonBackup()" class="px-3.5 py-2 rounded-xl font-mono text-xs font-bold bg-cyber-neonCyan text-black hover:bg-cyan-400 flex items-center gap-1.5 glow-cyan">
-                        <i data-lucide="download" class="w-4 h-4"></i>
-                        <span>EXPORT .JSON</span>
-                    </button>
+            <div class="p-4 rounded-2xl bg-obsidian-950/80 border border-white/[0.07] flex items-center justify-between gap-3">
+                <div>
+                    <div class="text-xs font-mono font-semibold text-white">DOWNLOAD BACKUP</div>
+                    <div class="text-[11px] text-zinc-500 mt-0.5">Export all nodes and history logs</div>
                 </div>
+                <button onclick="downloadJsonBackup()" class="px-3.5 py-2 rounded-xl font-mono text-xs font-bold bg-accent-indigo text-white hover:bg-indigo-500 flex items-center gap-1.5 shrink-0 transition-all">
+                    <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                    <span>EXPORT .JSON</span>
+                </button>
             </div>
 
-            <div class="p-4 rounded-xl bg-cyber-card border border-cyber-border space-y-3">
-                <div class="text-xs font-mono font-bold text-slate-200">RESTORE / IMPORT DATA</div>
-                <input type="file" id="importFileInput" accept=".json" class="block w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-mono file:bg-cyber-panel file:text-cyber-neonCyan hover:file:bg-cyber-border">
-                <button onclick="importJsonBackup()" class="w-full py-2.5 rounded-xl font-mono text-xs font-bold bg-cyber-neonEmerald/20 border border-cyber-neonEmerald text-cyber-neonEmerald hover:bg-cyber-neonEmerald hover:text-black flex items-center justify-center gap-1.5 transition-all">
-                    <i data-lucide="upload" class="w-4 h-4"></i>
+            <div class="p-4 rounded-2xl bg-obsidian-950/80 border border-white/[0.07] space-y-3">
+                <div class="text-xs font-mono font-semibold text-white">RESTORE / IMPORT DATA</div>
+                <input type="file" id="importFileInput" accept=".json" class="block w-full text-xs text-zinc-400 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border file:border-white/10 file:text-xs file:font-mono file:bg-obsidian-800 file:text-zinc-200 hover:file:bg-obsidian-700 cursor-pointer">
+                <button onclick="importJsonBackup()" class="w-full py-2.5 rounded-xl font-mono text-xs font-bold bg-accent-emerald/15 border border-accent-emerald/40 text-accent-emerald hover:bg-accent-emerald hover:text-zinc-950 flex items-center justify-center gap-1.5 transition-all">
+                    <i data-lucide="upload" class="w-3.5 h-3.5"></i>
                     <span>IMPORT SNAPSHOT DATA FILE</span>
                 </button>
             </div>
 
             <div class="pt-2 text-center">
-                <button onclick="confirmResetDefaults()" class="text-xs font-mono text-cyber-neonMagenta hover:underline">
+                <button onclick="confirmResetDefaults()" class="text-[11px] font-mono text-accent-rose hover:underline">
                     RESET BOARD TO DEFAULT INITIAL SEED
                 </button>
             </div>
@@ -634,10 +640,10 @@
     </div>
 </div>
 
-<!-- Notification Toast Container -->
+<!-- Notification Toast Stack -->
 <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
-<!-- Firebase & Application Script -->
+<!-- Firebase & Application Core Script (100% Preserved Logic) -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
     import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -885,95 +891,161 @@
             }).join('');
         }
 
-        // Operator Mode Banner
+        // Operator Mode Banner & Status Pill
         const banner = document.getElementById('operatorBanner');
         const toggleBtn = document.getElementById('operatorToggleBtn');
         const statusBadge = document.getElementById('statusBadge');
 
         if (state.isOperatorMode) {
             banner.classList.remove('hidden');
-            toggleBtn.classList.add('glow-amber', 'bg-cyber-neonAmber/20', 'text-cyber-neonAmber', 'border-cyber-neonAmber');
+            toggleBtn.classList.add('bg-accent-amber/15', 'text-accent-amber', 'border-accent-amber/50');
             statusBadge.innerText = 'OVERRIDE ENGAGED';
-            statusBadge.className = 'text-[9px] px-2.5 py-0.5 rounded-full font-mono uppercase bg-cyber-neonAmber/20 text-cyber-neonAmber border border-cyber-neonAmber/40 animate-pulse tracking-widest font-bold';
+            statusBadge.className = 'inline-flex items-center gap-1.5 text-[10px] px-2.5 py-0.5 rounded-full font-mono uppercase bg-accent-amber/15 text-accent-amber border border-accent-amber/35 animate-pulse tracking-wider font-semibold';
         } else {
             banner.classList.add('hidden');
-            toggleBtn.classList.remove('glow-amber', 'bg-cyber-neonAmber/20', 'text-cyber-neonAmber', 'border-cyber-neonAmber');
+            toggleBtn.classList.remove('bg-accent-amber/15', 'text-accent-amber', 'border-accent-amber/50');
             statusBadge.innerText = 'CORE ONLINE';
-            statusBadge.className = 'text-[9px] px-2.5 py-0.5 rounded-full font-mono uppercase bg-cyber-neonEmerald/15 text-cyber-neonEmerald border border-cyber-neonEmerald/40 tracking-widest font-bold';
+            statusBadge.className = 'inline-flex items-center gap-1.5 text-[10px] px-2.5 py-0.5 rounded-full font-mono uppercase bg-accent-emerald/10 text-accent-emerald border border-accent-emerald/25 tracking-wider font-semibold';
         }
     }
 
     function renderCardHTML(item, isOperator, layoutMode) {
-        let rankBadgeStyle = "bg-black/60 border-cyber-border text-slate-300";
+        // Refined Rank Medal Styling
+        let rankBadgeStyle = "bg-obsidian-950 border-white/10 text-zinc-300";
+        let topAccentBar = "from-zinc-700/40 via-transparent to-transparent";
+
         if (item.currentRank === 1) {
-            rankBadgeStyle = "bg-cyber-neonEmerald/20 border-cyber-neonEmerald text-cyber-neonEmerald glow-emerald font-bold";
+            rankBadgeStyle = "bg-accent-emerald/15 border-accent-emerald/45 text-accent-emerald font-bold shadow-sm";
+            topAccentBar = "from-accent-emerald/50 via-accent-emerald/10 to-transparent";
         } else if (item.currentRank === 2) {
-            rankBadgeStyle = "bg-cyber-neonCyan/20 border-cyber-neonCyan text-cyber-neonCyan glow-cyan font-bold";
+            rankBadgeStyle = "bg-accent-indigo/15 border-accent-indigo/45 text-accent-indigo font-bold shadow-sm";
+            topAccentBar = "from-accent-indigo/50 via-accent-indigo/10 to-transparent";
         } else if (item.currentRank === 3) {
-            rankBadgeStyle = "bg-cyber-neonAmber/20 border-cyber-neonAmber text-cyber-neonAmber glow-amber font-bold";
+            rankBadgeStyle = "bg-accent-amber/15 border-accent-amber/45 text-accent-amber font-bold shadow-sm";
+            topAccentBar = "from-accent-amber/50 via-accent-amber/10 to-transparent";
         }
 
+        // Rank Shift Pill
         let deltaHTML = '';
         if (item.isNew) {
-            deltaHTML = `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyber-neonCyan/20 text-cyber-neonCyan border border-cyber-neonCyan/40">✨ NEW</span>`;
+            deltaHTML = `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-accent-sky/15 text-accent-sky border border-accent-sky/30">NEW</span>`;
         } else if (item.delta > 0) {
-            deltaHTML = `<span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-cyber-neonEmerald/20 text-cyber-neonEmerald border border-cyber-neonEmerald/40 flex items-center gap-1">▲ +${item.delta}</span>`;
+            deltaHTML = `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-semibold bg-accent-emerald/15 text-accent-emerald border border-accent-emerald/30 inline-flex items-center gap-1">▲ +${item.delta}</span>`;
         } else if (item.delta < 0) {
-            deltaHTML = `<span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-cyber-neonMagenta/20 text-cyber-neonMagenta border border-cyber-neonMagenta/40 flex items-center gap-1">▼ ${item.delta}</span>`;
+            deltaHTML = `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-semibold bg-accent-rose/15 text-accent-rose border border-accent-rose/30 inline-flex items-center gap-1">▼ ${item.delta}</span>`;
         } else {
-            deltaHTML = `<span class="px-2 py-0.5 rounded text-xs font-mono text-slate-500 bg-black/40 border border-cyber-border flex items-center gap-1">━ 0</span>`;
+            deltaHTML = `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-mono text-zinc-500 bg-white/[0.03] border border-white/[0.06] inline-flex items-center gap-1">— 0</span>`;
         }
 
         const catLabel = getCategoryLabel(item.category);
+        const isList = layoutMode === 'list';
+
+        if (isList) {
+            return `
+                <div 
+                    class="bento-card rounded-2xl p-4 relative group flex flex-col sm:flex-row sm:items-center justify-between gap-4 overflow-hidden ${isOperator ? 'border-dashed border-accent-amber/45 hover:border-accent-amber cursor-grab active:cursor-grabbing' : ''}"
+                    draggable="${isOperator}"
+                    ondragstart="handleDragStart(event, '${item.id}')"
+                    ondragover="handleDragOver(event)"
+                    ondrop="handleDrop(event, '${item.id}')"
+                    ondragend="handleDragEnd(event)"
+                >
+                    <div class="flex items-center gap-3.5 min-w-0 flex-1">
+                        <div class="flex flex-col items-center justify-center w-12 h-12 rounded-xl border ${rankBadgeStyle} font-mono shrink-0">
+                            <span class="text-[8px] opacity-60 uppercase leading-none">RANK</span>
+                            <span class="font-hud text-base leading-none mt-1">#${item.currentRank}</span>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <div class="flex flex-wrap items-center gap-2 mb-1">
+                                <h3 class="font-hud text-base font-bold text-white truncate">${escapeHTML(item.title)}</h3>
+                                <span class="px-2 py-0.5 text-[10px] font-mono rounded-md bg-white/[0.04] text-zinc-400 border border-white/[0.08]">${catLabel}</span>
+                                ${deltaHTML}
+                            </div>
+                            <p class="text-xs text-zinc-400 truncate">${escapeHTML(item.description || 'No specific tactical details logged.')}</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between sm:justify-end gap-4 pt-3 sm:pt-0 border-t sm:border-t-0 border-white/[0.06] shrink-0">
+                        <div class="w-32 space-y-1">
+                            <div class="flex items-center justify-between text-[10px] font-mono">
+                                <span class="text-zinc-500">INDEX</span>
+                                <span class="font-semibold text-white">${item.score || 85}%</span>
+                            </div>
+                            <div class="h-1.5 rounded-full bg-obsidian-950 overflow-hidden border border-white/[0.06]">
+                                <div class="h-full bg-gradient-to-r from-accent-indigo to-accent-emerald rounded-full" style="width: ${item.score || 85}%"></div>
+                            </div>
+                        </div>
+
+                        ${isOperator ? `
+                            <div class="flex items-center gap-1.5">
+                                <button onclick="moveItem('${item.id}', -1)" title="Move Up" class="p-1.5 rounded-lg bg-obsidian-950 border border-white/10 text-zinc-300 hover:text-accent-emerald hover:border-accent-emerald/50 transition-colors">
+                                    <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i>
+                                </button>
+                                <button onclick="moveItem('${item.id}', 1)" title="Move Down" class="p-1.5 rounded-lg bg-obsidian-950 border border-white/10 text-zinc-300 hover:text-accent-rose hover:border-accent-rose/50 transition-colors">
+                                    <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i>
+                                </button>
+                                <button onclick="openEditModal('${item.id}')" title="Edit Node" class="p-1.5 rounded-lg bg-obsidian-950 border border-white/10 text-zinc-300 hover:text-accent-indigo hover:border-accent-indigo/50 transition-colors">
+                                    <i data-lucide="edit-2" class="w-3.5 h-3.5"></i>
+                                </button>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
 
         return `
             <div 
-                class="cyber-card rounded-2xl p-4 relative group flex flex-col justify-between ${isOperator ? 'border-dashed border-cyber-neonAmber/50 hover:border-cyber-neonAmber' : ''}"
+                class="bento-card rounded-2xl p-5 relative group flex flex-col justify-between overflow-hidden ${isOperator ? 'border-dashed border-accent-amber/45 hover:border-accent-amber cursor-grab active:cursor-grabbing' : ''}"
                 draggable="${isOperator}"
                 ondragstart="handleDragStart(event, '${item.id}')"
                 ondragover="handleDragOver(event)"
                 ondrop="handleDrop(event, '${item.id}')"
                 ondragend="handleDragEnd(event)"
             >
+                <!-- Top Podium Accent Line -->
+                <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r ${topAccentBar}"></div>
+
                 <div>
-                    <div class="flex items-center justify-between gap-3 mb-3">
+                    <div class="flex items-center justify-between gap-3 mb-4">
                         <div class="flex items-center gap-2.5">
-                            <div class="flex flex-col items-center justify-center min-w-[44px] h-11 rounded-xl border ${rankBadgeStyle} font-mono">
-                                <span class="text-[9px] opacity-60 leading-none">RANK</span>
-                                <span class="font-hud text-base leading-none mt-0.5">#${item.currentRank}</span>
+                            <div class="flex flex-col items-center justify-center min-w-[46px] h-11 rounded-xl border ${rankBadgeStyle} font-mono">
+                                <span class="text-[8px] opacity-60 uppercase leading-none">RANK</span>
+                                <span class="font-hud text-base leading-none mt-1">#${item.currentRank}</span>
                             </div>
-                            <span class="px-2.5 py-1 text-[10px] font-mono rounded-lg bg-cyber-card text-slate-300 border border-cyber-border">${catLabel}</span>
+                            <span class="px-2.5 py-1 text-[10px] font-mono rounded-lg bg-white/[0.04] text-zinc-300 border border-white/[0.08] tracking-wide">${catLabel}</span>
                         </div>
                         ${deltaHTML}
                     </div>
 
-                    <h3 class="font-hud text-base font-bold text-white mb-1.5 tracking-wide leading-snug">${escapeHTML(item.title)}</h3>
-                    <p class="text-xs text-slate-400 leading-relaxed mb-4 line-clamp-3">${escapeHTML(item.description || 'No specific tactical details logged.')}</p>
+                    <h3 class="font-hud text-lg font-bold text-white mb-2 tracking-tight leading-snug group-hover:text-indigo-200 transition-colors">${escapeHTML(item.title)}</h3>
+                    <p class="text-xs text-zinc-400 leading-relaxed mb-5 line-clamp-3">${escapeHTML(item.description || 'No specific tactical details logged.')}</p>
                 </div>
 
                 <div>
-                    <div class="space-y-1 pt-3 border-t border-cyber-border/60">
+                    <div class="space-y-1.5 pt-3.5 border-t border-white/[0.07]">
                         <div class="flex items-center justify-between text-[10px] font-mono">
-                            <span class="text-slate-500">ENJOYABILITY INDEX</span>
-                            <span class="font-bold text-cyber-neonCyan">${item.score || 85}%</span>
+                            <span class="text-zinc-500 uppercase tracking-wider">ENJOYABILITY INDEX</span>
+                            <span class="font-semibold text-white">${item.score || 85}%</span>
                         </div>
-                        <div class="h-1.5 rounded-full bg-black/80 overflow-hidden border border-cyber-border">
-                            <div class="h-full bg-gradient-to-r from-cyber-neonCyan to-cyber-neonEmerald rounded-full" style="width: ${item.score || 85}%"></div>
+                        <div class="h-1.5 rounded-full bg-obsidian-950 overflow-hidden border border-white/[0.06]">
+                            <div class="h-full bg-gradient-to-r from-accent-indigo via-accent-violet to-accent-emerald rounded-full transition-all duration-500" style="width: ${item.score || 85}%"></div>
                         </div>
                     </div>
 
                     ${isOperator ? `
-                        <div class="flex items-center justify-between gap-1 pt-3 mt-3 border-t border-cyber-border/80">
-                            <div class="flex items-center gap-1">
-                                <button onclick="moveItem('${item.id}', -1)" title="Move Up" class="p-1.5 rounded-lg bg-cyber-card border border-cyber-border text-slate-300 hover:text-cyber-neonEmerald hover:border-cyber-neonEmerald">
-                                    <i data-lucide="arrow-up" class="w-4 h-4"></i>
+                        <div class="flex items-center justify-between gap-1.5 pt-3.5 mt-3.5 border-t border-white/[0.07]">
+                            <div class="flex items-center gap-1.5">
+                                <button onclick="moveItem('${item.id}', -1)" title="Move Up" class="p-1.5 rounded-lg bg-obsidian-950 border border-white/10 text-zinc-300 hover:text-accent-emerald hover:border-accent-emerald/50 transition-colors">
+                                    <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i>
                                 </button>
-                                <button onclick="moveItem('${item.id}', 1)" title="Move Down" class="p-1.5 rounded-lg bg-cyber-card border border-cyber-border text-slate-300 hover:text-cyber-neonMagenta hover:border-cyber-neonMagenta">
-                                    <i data-lucide="arrow-down" class="w-4 h-4"></i>
+                                <button onclick="moveItem('${item.id}', 1)" title="Move Down" class="p-1.5 rounded-lg bg-obsidian-950 border border-white/10 text-zinc-300 hover:text-accent-rose hover:border-accent-rose/50 transition-colors">
+                                    <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i>
                                 </button>
                             </div>
-                            <button onclick="openEditModal('${item.id}')" title="Edit Node" class="p-1.5 rounded-lg bg-cyber-card border border-cyber-border text-slate-300 hover:text-cyber-neonCyan hover:border-cyber-neonCyan">
-                                <i data-lucide="edit-2" class="w-4 h-4"></i>
+                            <button onclick="openEditModal('${item.id}')" title="Edit Node" class="px-2.5 py-1.5 rounded-lg bg-obsidian-950 border border-white/10 text-zinc-300 hover:text-accent-indigo hover:border-accent-indigo/50 text-[11px] font-mono flex items-center gap-1.5 transition-colors">
+                                <i data-lucide="edit-2" class="w-3 h-3"></i>
+                                <span>EDIT</span>
                             </button>
                         </div>
                     ` : ''}
@@ -988,11 +1060,11 @@
         const listBtn = document.getElementById('viewListBtn');
 
         if (mode === 'grid') {
-            gridBtn.className = 'p-1.5 rounded-lg text-cyber-neonCyan bg-cyber-panel border border-cyber-neonCyan/40';
-            listBtn.className = 'p-1.5 rounded-lg text-slate-500 hover:text-white';
+            gridBtn.className = 'p-1.5 rounded-lg text-white bg-accent-indigo/20 border border-accent-indigo/40 transition-all';
+            listBtn.className = 'p-1.5 rounded-lg text-zinc-500 hover:text-zinc-200 transition-all';
         } else {
-            listBtn.className = 'p-1.5 rounded-lg text-cyber-neonCyan bg-cyber-panel border border-cyber-neonCyan/40';
-            gridBtn.className = 'p-1.5 rounded-lg text-slate-500 hover:text-white';
+            listBtn.className = 'p-1.5 rounded-lg text-white bg-accent-indigo/20 border border-accent-indigo/40 transition-all';
+            gridBtn.className = 'p-1.5 rounded-lg text-zinc-500 hover:text-zinc-200 transition-all';
         }
 
         renderApp();
@@ -1083,7 +1155,7 @@
         document.getElementById('missionTitleInput').value = `Mission Snapshot #${window.BubblesGB.missionHistory.length + 1}`;
         document.getElementById('missionNotesInput').value = '';
 
-        const top3 = window.BubblesGB.items.slice(0, 3).map((item, i) => `#${i+1} ${item.title}`).join(' | ');
+        const top3 = window.BubblesGB.items.slice(0, 3).map((item, i) => `#${i+1} ${item.title}`).join(' • ');
         document.getElementById('saveModalTop3').innerText = top3 || 'None';
 
         openModal('saveMissionModal');
@@ -1133,17 +1205,17 @@
             const count = counts[cat];
             const pct = Math.round((count / items.length) * 100);
             return `
-                <div class="space-y-1">
+                <div class="space-y-1.5">
                     <div class="flex items-center justify-between text-xs font-mono">
-                        <span class="text-slate-300 font-bold">${getCategoryLabel(cat)}</span>
-                        <span class="text-cyber-neonCyan">${count} nodes (${pct}%)</span>
+                        <span class="text-zinc-200 font-semibold">${getCategoryLabel(cat)}</span>
+                        <span class="text-accent-indigo">${count} nodes (${pct}%)</span>
                     </div>
-                    <div class="h-1.5 rounded-full bg-black/60 overflow-hidden border border-cyber-border">
-                        <div class="h-full bg-cyber-neonCyan rounded-full" style="width: ${pct}%"></div>
+                    <div class="h-1.5 rounded-full bg-obsidian-900 overflow-hidden border border-white/[0.06]">
+                        <div class="h-full bg-gradient-to-r from-accent-indigo to-accent-violet rounded-full" style="width: ${pct}%"></div>
                     </div>
                 </div>
             `;
-        }).join('') || '<div class="text-xs text-slate-500 font-mono">No category telemetry available.</div>';
+        }).join('') || '<div class="text-xs text-zinc-500 font-mono">No category telemetry available.</div>';
 
         const topNode = [...items].sort((a, b) => (b.score || 0) - (a.score || 0))[0];
         document.getElementById('analyticsTopNode').innerText = topNode ? `${topNode.title} (${topNode.score || 85}%)` : 'None';
@@ -1186,7 +1258,7 @@
 
         if (history.length === 0) {
             listEl.innerHTML = `
-                <div class="text-center py-10 text-slate-500 font-mono text-xs">
+                <div class="text-center py-12 text-zinc-500 font-mono text-xs border border-dashed border-white/10 rounded-2xl">
                     NO SAVED MISSION SNAPSHOTS FOUND. CLICK "SAVE LOG" TO CREATE YOUR FIRST RECORD.
                 </div>
             `;
@@ -1196,19 +1268,19 @@
             listEl.innerHTML = sorted.map(mission => {
                 const dateStr = new Date(mission.timestamp).toLocaleString();
                 return `
-                    <div class="p-4 rounded-xl bg-cyber-card border border-cyber-border hover:border-cyber-neonCyan/50 transition-all flex flex-col gap-2">
-                        <div class="flex items-center justify-between">
+                    <div class="p-4 rounded-2xl bg-obsidian-950/80 border border-white/[0.08] hover:border-accent-sky/40 transition-all flex flex-col gap-2.5">
+                        <div class="flex items-center justify-between gap-2">
                             <div class="flex items-center gap-2">
-                                <span class="w-2 h-2 rounded-full bg-cyber-neonEmerald"></span>
-                                <h4 class="font-hud font-bold text-white text-base">${escapeHTML(mission.title)}</h4>
+                                <span class="w-2 h-2 rounded-full bg-accent-emerald"></span>
+                                <h4 class="font-hud font-bold text-white text-sm sm:text-base">${escapeHTML(mission.title)}</h4>
                             </div>
-                            <span class="text-xs font-mono text-cyber-neonCyan">${dateStr}</span>
+                            <span class="text-[11px] font-mono text-accent-sky">${dateStr}</span>
                         </div>
                         
-                        ${mission.notes ? `<p class="text-xs text-slate-300 italic bg-black/40 p-2.5 rounded-lg border border-cyber-border">${escapeHTML(mission.notes)}</p>` : ''}
+                        ${mission.notes ? `<p class="text-xs text-zinc-300 bg-white/[0.03] p-3 rounded-xl border border-white/[0.06]">${escapeHTML(mission.notes)}</p>` : ''}
                         
-                        <div class="flex items-center justify-between text-[11px] font-mono text-slate-400 pt-2 border-t border-cyber-border/50">
-                            <span>NODES TRACKED: ${mission.itemCount || Object.keys(mission.snapshotRanks || {}).length}</span>
+                        <div class="flex items-center justify-between text-[11px] font-mono text-zinc-500 pt-2 border-t border-white/[0.06]">
+                            <span>NODES TRACKED: <strong class="text-zinc-300">${mission.itemCount || Object.keys(mission.snapshotRanks || {}).length}</strong></span>
                         </div>
                     </div>
                 `;
@@ -1220,7 +1292,7 @@
 
     function openAddModal() {
         document.getElementById('editItemId').value = '';
-        document.getElementById('editModalHeader').innerText = 'ADD NEW INTEREST NODE';
+        document.getElementById('editModalHeader').innerText = 'Add New Interest Node';
         document.getElementById('itemTitleInput').value = '';
         document.getElementById('itemCategoryInput').value = 'ATHLETICS';
         document.getElementById('itemDescInput').value = '';
@@ -1236,7 +1308,7 @@
         if (!item) return;
 
         document.getElementById('editItemId').value = item.id;
-        document.getElementById('editModalHeader').innerText = 'EDIT INTEREST NODE';
+        document.getElementById('editModalHeader').innerText = 'Edit Interest Node';
         document.getElementById('itemTitleInput').value = item.title;
         document.getElementById('itemCategoryInput').value = item.category || 'OTHER';
         document.getElementById('itemDescInput').value = item.description || '';
@@ -1416,22 +1488,22 @@
         if (!container) return;
 
         const toast = document.createElement('div');
-        let typeStyle = 'bg-cyber-card border-cyber-neonCyan text-cyber-neonCyan';
+        let typeStyle = 'bg-obsidian-850/95 border-accent-indigo/50 text-indigo-300';
         let icon = 'info';
 
         if (type === 'success') {
-            typeStyle = 'bg-cyber-card border-cyber-neonEmerald text-cyber-neonEmerald';
+            typeStyle = 'bg-obsidian-850/95 border-accent-emerald/50 text-accent-emerald';
             icon = 'check-circle';
         } else if (type === 'warning') {
-            typeStyle = 'bg-cyber-card border-cyber-neonAmber text-cyber-neonAmber';
+            typeStyle = 'bg-obsidian-850/95 border-accent-amber/50 text-accent-amber';
             icon = 'alert-triangle';
         } else if (type === 'error') {
-            typeStyle = 'bg-cyber-card border-cyber-neonMagenta text-cyber-neonMagenta';
+            typeStyle = 'bg-obsidian-850/95 border-accent-rose/50 text-accent-rose';
             icon = 'alert-octagon';
         }
 
-        toast.className = `p-3 rounded-xl border ${typeStyle} font-mono text-xs shadow-2xl flex items-center gap-2 transform transition-all duration-300 translate-y-2 opacity-0 pointer-events-auto`;
-        toast.innerHTML = `<i data-lucide="${icon}" class="w-4 h-4"></i> <span>${escapeHTML(message)}</span>`;
+        toast.className = `px-4 py-3 rounded-2xl border backdrop-blur-xl ${typeStyle} font-mono text-xs shadow-2xl flex items-center gap-2.5 transform transition-all duration-300 translate-y-2 opacity-0 pointer-events-auto`;
+        toast.innerHTML = `<i data-lucide="${icon}" class="w-4 h-4 shrink-0"></i> <span>${escapeHTML(message)}</span>`;
 
         container.appendChild(toast);
         if (window.lucide) lucide.createIcons();
